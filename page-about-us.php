@@ -65,8 +65,9 @@ $ab_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 .ab-hero-title span{display:block;color:var(--ab-green-dark);}
 .ab-hero-desc{font-size:.98rem;line-height:1.75;color:var(--ab-text-light);max-width:480px;margin-bottom:30px;}
 
-.ab-hero-trust{display:flex;flex-direction:column;gap:16px;}
-.ab-trust-item{display:flex;align-items:center;gap:14px;}
+/* Trust row: 3 items side by side (desktop and mobile) */
+.ab-hero-trust{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.ab-trust-item{display:flex;flex-direction:column;align-items:flex-start;gap:10px;}
 .ab-trust-icon{
   width:42px;height:42px;border-radius:10px;flex-shrink:0;
   background:#fff;border:1.5px solid var(--ab-border);
@@ -101,6 +102,7 @@ $ab_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 .ab-story-text p{font-size:.92rem;line-height:1.8;color:var(--ab-text-light);margin:0 0 14px;}
 .ab-story-text p:last-child{margin-bottom:0;}
 
+/* Stats grid: 2 per row at all sizes (desktop and mobile) */
 .ab-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .ab-stat-card{
   background:var(--ab-bg-soft);border:1.5px solid var(--ab-border);border-radius:12px;
@@ -239,9 +241,19 @@ $ab_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
   .ab-hero-media-frame img{height:220px;}
   .ab-hero-desc{font-size:.88rem;}
   .ab-story,.ab-values,.ab-why,.ab-license{padding:40px 0;}
+
+  /* Trust row: keep 3 per row on mobile, shrink to fit */
+  .ab-hero-trust{gap:10px;}
+  .ab-trust-icon{width:34px;height:34px;border-radius:8px;}
+  .ab-trust-icon svg{width:15px;height:15px;}
+  .ab-trust-title{font-size:.72rem;}
+  .ab-trust-sub{font-size:.66rem;line-height:1.3;}
+
+  /* Stats grid: keep 2 per row on mobile */
   .ab-stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
   .ab-stat-card{padding:18px 14px;}
   .ab-stat-num{font-size:1.35rem;}
+
   .ab-license-card{padding:22px 20px;}
   .ab-license-num span{font-size:1.25rem;}
   .ab-why-grid{grid-template-columns:1fr;}
@@ -249,7 +261,16 @@ $ab_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
   .ab-cta-btn{width:100%;justify-content:center;}
 }
 @media(max-width:420px){
-  .ab-stats-grid{grid-template-columns:1fr;}
+  .ab-trust-icon{width:30px;height:30px;}
+  .ab-trust-icon svg{width:13px;height:13px;}
+  .ab-trust-title{font-size:.64rem;letter-spacing:0;}
+  .ab-trust-sub{font-size:.58rem;}
+  .ab-hero-trust{gap:8px;}
+
+  .ab-stat-card{padding:14px 10px;}
+  .ab-stat-num{font-size:1.15rem;}
+  .ab-stat-label{font-size:.72rem;}
+  .ab-stat-icon{width:34px;height:34px;margin-bottom:10px;}
 }
 </style>
 
@@ -308,7 +329,7 @@ $ab_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
         <div class="ab-stat-card">
           <div class="ab-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
           <div class="ab-stat-num" data-target="20" data-suffix=",000+">0</div>
-          <div class="ab-stat-label">Happy Customers BEN</div>
+          <div class="ab-stat-label">Happy Customers </div>
         </div>
         <div class="ab-stat-card">
           <div class="ab-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
