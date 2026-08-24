@@ -120,7 +120,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-pd-qty-input{width:48px;height:40px;border:none;border-left:1.5px solid var(--lp-border);border-right:1.5px solid var(--lp-border);text-align:center;font-family:var(--lp-font-head);font-weight:700;font-size:.95rem;color:var(--lp-text);}
 .lp-pd-qty-input:focus{outline:none;}
 
-.lp-pd-action-row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.lp-pd-action-row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;align-items:stretch;}
 .lp-pd-btn-cart,.lp-pd-btn-rx{flex:1;min-width:200px;display:flex;align-items:center;justify-content:center;gap:9px;font-family:var(--lp-font-head);font-weight:600;font-size:.84rem;text-transform:uppercase;letter-spacing:.03em;padding:14px 18px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;}
 .lp-pd-btn-cart{background:var(--lp-blue);color:#fff;}
 .lp-pd-btn-cart:hover{background:var(--lp-blue-dark);}
@@ -158,12 +158,45 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .woocommerce-tabs table.shop_attributes{width:100%;border-collapse:collapse;}
 .woocommerce-tabs table.shop_attributes th,.woocommerce-tabs table.shop_attributes td{padding:10px 14px;border:1px solid var(--lp-border);font-size:.84rem;}
 .woocommerce-tabs table.shop_attributes th{background:#f7f9fb;font-family:var(--lp-font-head);font-weight:600;text-align:left;color:var(--lp-text);width:220px;}
+
+/* REVIEW FORM */
 #reviews .comment-form input[type=text],#reviews .comment-form input[type=email],#reviews .comment-form textarea{border:1.5px solid var(--lp-border);border-radius:8px;padding:10px 14px;font-family:var(--lp-font-body);width:100%;box-sizing:border-box;}
 #reviews .comment-form p.form-submit input{background:var(--lp-blue);color:#fff;border:none;padding:12px 26px;border-radius:8px;font-family:var(--lp-font-head);font-weight:600;text-transform:uppercase;font-size:.8rem;letter-spacing:.03em;cursor:pointer;}
 #reviews .comment-form p.form-submit input:hover{background:var(--lp-blue-dark);}
 #reviews .star-rating{color:#f5a623;}
 #reviews .commentlist{list-style:none;padding:0;margin:0;}
 #reviews .commentlist li{border-bottom:1px solid var(--lp-border);padding:16px 0;}
+
+/* Star rating INPUT widget (the "Your rating" field in the review form).
+   Default WooCommerce markup renders each star via a font icon on ::before;
+   force yellow (#f5a623 — same yellow used for the display star-rating
+   elsewhere on the site) on hover and once selected/active, grey otherwise. */
+#reviews p.stars a{
+  color:#ccd3da;
+  text-decoration:none;
+}
+#reviews p.stars a::before{
+  color:inherit;
+  transition:color .15s;
+}
+#reviews p.stars a:hover,
+#reviews p.stars a:hover ~ a,
+#reviews p.stars:hover a,
+#reviews p.stars a.active,
+#reviews p.stars a.active ~ a{
+  color:#f5a623 !important;
+}
+#reviews p.stars.selected a.active,
+#reviews p.stars.selected a.active ~ a{
+  color:#ccd3da !important;
+}
+#reviews p.stars.selected a:not(.active):hover,
+#reviews p.stars.selected a:not(.active):hover ~ a{
+  color:#f5a623 !important;
+}
+#reviews p.stars.selected a.active:before{
+  color:#f5a623 !important;
+}
 
 /* RELATED PRODUCTS */
 .lp-pd-related{padding-bottom:56px;}
@@ -232,12 +265,33 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-pd-main-img{height:320px;}
 }
 @media(max-width:640px){
-  .lp-pd-action-row{flex-direction:column;}
-  .lp-pd-btn-cart,.lp-pd-btn-rx{min-width:100%;}
+  /* Keep Add to Cart / Submit Prescription on the SAME row as the
+     wishlist heart icon — the action button shrinks (flex:1 1 auto,
+     min-width:0) instead of the row wrapping to a new line. */
+  .lp-pd-action-row{flex-direction:row;flex-wrap:nowrap;align-items:stretch;gap:8px;}
+  .lp-pd-btn-cart,.lp-pd-btn-rx{
+    flex:1 1 auto;
+    min-width:0;
+    padding:13px 10px;
+    font-size:.72rem;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .lp-pd-btn-cart .lp-pd-atc-txt,.lp-pd-btn-rx span{
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .lp-pd-wish-btn{width:44px;height:auto;flex-shrink:0;}
   .lp-pd-related-grid{grid-template-columns:1fr;}
   .lp-pd-title{font-size:1.3rem;}
   .lp-pd-price-cur{font-size:1.5rem;}
   .lp-pd-trust-row{display:none;}
+}
+@media(max-width:380px){
+  .lp-pd-btn-cart,.lp-pd-btn-rx{font-size:.64rem;padding:12px 6px;gap:4px;}
+  .lp-pd-btn-cart svg,.lp-pd-btn-rx svg{width:13px;height:13px;}
+  .lp-pd-wish-btn{width:40px;}
+  .lp-pd-wish-btn svg{width:16px;height:16px;}
 }
 </style>
 
@@ -416,7 +470,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
       <div class="lp-pd-action-row">
         <?php if ($is_rx): ?>
           <a href="<?php echo esc_url(home_url('/submit-prescription')); ?>" class="lp-pd-btn-rx">
-            <?php echo leshavin_rx_svg(); ?> Submit Prescription
+            <?php echo leshavin_rx_svg(); ?> <span>Submit Prescription</span>
           </a>
         <?php elseif ($is_simple): ?>
           <button type="button"
@@ -428,7 +482,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
             <?php echo leshavin_cart_svg(); ?> <span class="lp-pd-atc-txt">Add to Cart</span>
           </button>
         <?php else: ?>
-          <div style="flex:1;min-width:200px;">
+          <div style="flex:1;min-width:0;">
             <?php woocommerce_template_single_add_to_cart(); ?>
           </div>
         <?php endif; ?>
