@@ -52,12 +52,13 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-sec-hdr .lp-sec-title{margin:0;}
 .lp-viewall{font-family:var(--lp-font-head);font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--lp-green-dark);text-decoration:none;white-space:nowrap;}
 
-/* HERO */
+/* HERO — height matched to About Us page's hero media frame (340px desktop /
+   280px tablet / 220px mobile), instead of the previous viewport-height slider */
 .lp-hero2{
   position:relative;
   margin:24px 40px 36px;
-  height:min(80vh,660px);
-  min-height:480px;
+  height:340px;
+  min-height:340px;
   overflow:hidden;
   background:var(--lp-blue-dark);
   border-radius:20px;
@@ -66,7 +67,9 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-hero2-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;}
 .lp-hero2-slide.active{opacity:1;}
 .lp-hero2-slide img{width:100%;height:100%;object-fit:cover;object-position:var(--lp-obj-pos,center);display:block;}
-.lp-hero2-overlay{position:absolute;inset:0;background:linear-gradient(100deg, rgba(18,90,148,.94) 0%, rgba(18,90,148,.78) 24%, rgba(18,90,148,.4) 44%, rgba(18,90,148,.08) 60%, rgba(18,90,148,0) 74%);}
+/* Overlay opacity reduced so the background image (e.g. product/bag imagery)
+   reads more clearly, while keeping enough contrast for the text on top */
+.lp-hero2-overlay{position:absolute;inset:0;background:linear-gradient(100deg, rgba(18,90,148,.68) 0%, rgba(18,90,148,.52) 24%, rgba(18,90,148,.26) 44%, rgba(18,90,148,.05) 60%, rgba(18,90,148,0) 74%);}
 .lp-hero2-content{position:absolute;top:0;left:0;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 56px;max-width:540px;z-index:3;box-sizing:border-box;}
 .lp-hero2-label{font-family:var(--lp-font-head);color:#d5efb2;font-weight:600;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;}
 .lp-hero2-content h1{font-family:var(--lp-font-head);text-transform:uppercase;letter-spacing:.01em;color:#fff;font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:700;margin:0 0 16px;line-height:1.2;text-shadow:0 2px 14px rgba(0,0,0,.25);}
@@ -347,9 +350,9 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 }
 @media(max-width:900px){
   .lp-wrap{padding:0 20px;}
-  .lp-hero2{margin:14px 16px 24px;height:64vh;min-height:420px;border-radius:16px;}
+  .lp-hero2{margin:14px 16px 24px;height:280px;min-height:280px;border-radius:16px;}
   .lp-hero2-content{padding:0 22px;max-width:100%;}
-  .lp-hero2-overlay{background:linear-gradient(180deg, rgba(18,90,148,.5) 0%, rgba(18,90,148,.9) 65%);}
+  .lp-hero2-overlay{background:linear-gradient(180deg, rgba(18,90,148,.32) 0%, rgba(18,90,148,.62) 65%);}
   .lp-strip{display:none;}
   .lp-test-grid{grid-template-columns:1fr;}
   .lp-trend-left{grid-template-columns:repeat(2,1fr);}
@@ -363,6 +366,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-news-form{max-width:100%;flex:1 1 100%;}
 }
 @media(max-width:640px){
+  .lp-hero2{height:220px;min-height:220px;}
   .lp-popcat-grid{grid-template-columns:1fr;}
   .lp-popcat-card{padding:12px;gap:10px;}
   .lp-popcat-img{width:48px;height:48px;}
@@ -376,13 +380,13 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-hero2-prev{left:16px;}
   .lp-hero2-next{right:16px;}
   .lp-hero2-dots{bottom:26px;}
-  .lp-hero2-content{padding:0 20px;justify-content:flex-start;padding-top:34px;}
-  .lp-hero2-btns{margin-bottom:56px;}
+  .lp-hero2-content{padding:0 20px;justify-content:flex-start;padding-top:24px;}
+  .lp-hero2-btns{margin-bottom:20px;}
 
-  .lp-hero2-label{font-size:.68rem;letter-spacing:.14em;margin-bottom:12px;}
-  .lp-hero2-content h1{font-size:clamp(1.3rem,5.4vw,1.7rem);margin-bottom:12px;}
-  .lp-hero2-sub{font-size:.85rem;margin-bottom:20px;}
-  .lp-hero2-btn-white,.lp-hero2-btn-ghost{font-size:.76rem;padding:11px 22px;}
+  .lp-hero2-label{font-size:.68rem;letter-spacing:.14em;margin-bottom:10px;}
+  .lp-hero2-content h1{font-size:clamp(1.2rem,5.4vw,1.5rem);margin-bottom:8px;}
+  .lp-hero2-sub{font-size:.8rem;margin-bottom:14px;}
+  .lp-hero2-btn-white,.lp-hero2-btn-ghost{font-size:.72rem;padding:9px 18px;}
 
   .lp-sec-title{font-size:1.35rem;}
   .lp-sec-tag{font-size:.66rem;padding:5px 13px;}
@@ -418,8 +422,8 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 }
 @media(max-width:480px){
   .lp-prod-grid{grid-template-columns:1fr;}
-  .lp-hero2{height:58vh;min-height:380px;margin:12px 12px 20px;}
-  .lp-hero2-btn-white,.lp-hero2-btn-ghost{padding:10px 18px;font-size:.72rem;}
+  .lp-hero2{height:200px;min-height:200px;margin:12px 12px 20px;}
+  .lp-hero2-btn-white,.lp-hero2-btn-ghost{padding:8px 16px;font-size:.68rem;}
   .lp-disc-card{padding:12px;}
   .lp-trend-left{grid-template-columns:repeat(2,1fr);gap:10px;}
   .lp-trend-card{padding:8px;}
@@ -610,7 +614,7 @@ if ( ! function_exists('leshavin_product_grid') ) {
               </div>
               <div class="lp-p-btn-stack">
                 <?php if ( $is_rx ) : ?>
-                  <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="lp-p-btn-rx">
+                  <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lp-p-btn-rx">
                     <?php echo leshavin_rx_svg(); ?>
                     Submit Prescription
                   </a>
@@ -668,7 +672,7 @@ $lp_hero_slides = [
           Shop Now
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
-        <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="lp-hero2-btn-ghost">Upload Prescription</a>
+        <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lp-hero2-btn-ghost">Upload Prescription</a>
       </div>
     </div>
   </div>
@@ -833,7 +837,7 @@ $lp_sale_ids = wc_get_product_ids_on_sale();
                   <div class="lp-disc-price">KSh <?php echo number_format( (float) $cur, 2 ); ?></div>
                   <div class="lp-disc-btn-stack">
                     <?php if ( $is_rx ) : ?>
-                      <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="lp-disc-btn-rx">
+                      <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lp-disc-btn-rx">
                         <?php echo leshavin_rx_svg(); ?> Submit Prescription
                       </a>
                     <?php elseif ( $product->is_type('simple') ) : ?>
@@ -946,7 +950,7 @@ $lp_sale_ids = wc_get_product_ids_on_sale();
               <div class="lp-trend-price">KSh <?php echo number_format( (float) $product->get_price(), 2 ); ?></div>
               <div class="lp-trend-btn-stack">
                 <?php if ( $is_rx ) : ?>
-                  <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="lp-trend-btn-rx">
+                  <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lp-trend-btn-rx">
                     <?php echo leshavin_rx_svg(); ?> Submit Prescription
                   </a>
                 <?php elseif ( $product->is_type('simple') ) : ?>
