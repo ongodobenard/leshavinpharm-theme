@@ -260,7 +260,7 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
           <li><a href="<?php echo esc_url( get_permalink( wc_get_page_id('shop') ) ); ?>">Shop</a></li>
           <li><a href="<?php echo esc_url( home_url('/about-us') ); ?>">About Us</a></li>
           <li><a href="<?php echo esc_url( home_url('/contact') ); ?>">Contact</a></li>
-          <li><a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>">Submit submit-prescription</a></li>
+          <li><a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>">Submit Prescription</a></li>
           <li><a href="<?php echo esc_url( home_url('/return-policy') ); ?>">Return Policy</a></li>
           <!-- Mobile-only: Terms & Conditions moves here below 600px, hidden on desktop/tablet -->
           <li class="foot-links-mobile-terms"><a href="<?php echo esc_url( home_url('/terms') ); ?>">Terms &amp; Conditions</a></li>
