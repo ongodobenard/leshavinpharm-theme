@@ -270,14 +270,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-trend-banner-title{font-family:var(--lp-font-head);text-transform:uppercase;font-size:1.4rem;font-weight:700;margin:0 0 8px;position:relative;z-index:2;}
 .lp-trend-banner-price{font-size:.95rem;font-weight:700;position:relative;z-index:2;}
 
-/* STATS BAR */
-.lp-stats{background:#f7f9fb;padding:40px 0;width:100%;}
-.lp-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;justify-items:center;align-items:center;}
-.lp-stat-item{display:flex;align-items:center;gap:14px;justify-content:center;}
-.lp-stat-item svg{width:38px;height:38px;color:var(--lp-green-dark);flex-shrink:0;}
-.lp-stat-num{font-family:var(--lp-font-head);font-size:1.4rem;font-weight:700;color:var(--lp-blue-dark);line-height:1.1;white-space:nowrap;}
-.lp-stat-label{font-size:.8rem;color:var(--lp-text-light);white-space:nowrap;}
-
 /* TESTIMONIALS */
 .lp-test{padding:52px 0;}
 .lp-test-hdr{text-align:center;margin-bottom:34px;}
@@ -347,7 +339,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-trend-wrap{grid-template-columns:1fr;}
   .lp-trend-left{height:auto;grid-template-columns:repeat(4,1fr);}
   .lp-trend-banner{height:auto;min-height:180px;}
-  .lp-stats-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:900px){
   .lp-wrap{padding:0 20px;}
@@ -374,7 +365,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-popcat-name{font-size:.78rem;}
   .lp-popcat-count{font-size:.72rem;}
   .lp-prod-grid{grid-template-columns:repeat(2,1fr);}
-  .lp-stats-grid{grid-template-columns:1fr;}
   .lp-trend-left{grid-template-columns:repeat(2,1fr);}
 
   .lp-hero2-nav{top:auto;bottom:16px;transform:none;width:32px;height:32px;font-size:16px;}
@@ -401,9 +391,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-p-price{font-size:.9rem;}
   .lp-p-price-old{font-size:.7rem;}
   .lp-p-btn-cart,.lp-p-btn-rx,.lp-p-btn-wa{font-size:.66rem;padding:9px;}
-
-  .lp-stat-num{font-size:1.25rem;}
-  .lp-stat-label{font-size:.74rem;}
 
   .lp-disc-title{font-size:1.2rem;}
   .lp-disc-cat{font-size:.58rem;}
@@ -984,28 +971,6 @@ $lp_sale_ids = wc_get_product_ids_on_sale();
         <div class="lp-trend-banner-title">Leshavin<br>Deals</div>
         <div class="lp-trend-banner-price">Trusted brands, honest prices</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS BAR -->
-<section class="lp-stats">
-  <div class="lp-wrap lp-stats-grid">
-    <div class="lp-stat-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-      <div><div class="lp-stat-num">50,000+</div><div class="lp-stat-label">Families Served</div></div>
-    </div>
-    <div class="lp-stat-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      <div><div class="lp-stat-num">150,000+</div><div class="lp-stat-label">Orders Delivered</div></div>
-    </div>
-    <div class="lp-stat-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <div><div class="lp-stat-num">500+</div><div class="lp-stat-label">Locations Served</div></div>
-    </div>
-    <div class="lp-stat-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <div><div class="lp-stat-num">10,000+</div><div class="lp-stat-label">Medicines Available</div></div>
     </div>
   </div>
 </section>
