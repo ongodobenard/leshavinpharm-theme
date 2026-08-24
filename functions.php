@@ -29,7 +29,14 @@ function leshavin_enqueue() {
         'ajaxUrl'  => admin_url('admin-ajax.php'),
         'nonce'    => wp_create_nonce('leshavin_nonce'),
         'waNumber' => leshavin_wa(),
-        'shopUrl'  => get_permalink(wc_get_page_id('shop')),
+        // FIX: wc_get_page_id() is a WooCommerce function that isn't always
+        // guaranteed to be loaded yet when this hook fires (e.g. WooCommerce
+        // briefly unavailable, plugin update in progress, etc). Calling it
+        // unguarded caused a fatal error on every single page load. Now it
+        // falls back to a plain /shop URL instead of crashing the site.
+        'shopUrl'  => function_exists('wc_get_page_id')
+            ? get_permalink( wc_get_page_id('shop') )
+            : home_url('/shop'),
     ]);
 }
 add_action('wp_enqueue_scripts', 'leshavin_enqueue');
