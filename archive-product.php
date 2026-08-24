@@ -298,19 +298,14 @@ $lp_current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslas
   <!-- TOOLBAR -->
   <div class="lp-shop-toolbar">
     <div class="lp-shop-filters">
-      <select class="lp-shop-select" onchange="if(this.value)window.location.href=this.value;">
+      <select class="lp-shop-select" id="lpCatSelect">
         <option value="">All Categories</option>
         <?php if ( $lp_shop_cats && ! is_wp_error( $lp_shop_cats ) ) : foreach ( $lp_shop_cats as $lp_c ) : ?>
           <option value="<?php echo esc_url( get_term_link( $lp_c ) ); ?>" <?php selected( is_tax('product_cat', $lp_c->slug) ); ?>><?php echo esc_html( $lp_c->name ); ?></option>
         <?php endforeach; endif; ?>
       </select>
 
-      <select class="lp-shop-select" id="lpSortSelect" onchange="
-        var u = new URL(window.location.href);
-        u.searchParams.set('orderby', this.value);
-        u.searchParams.delete('paged');
-        window.location.href = u.toString();
-      ">
+      <select class="lp-shop-select" id="lpSortSelect">
         <?php foreach ( $lp_orderby_options as $lp_val => $lp_label ) : ?>
           <option value="<?php echo esc_attr( $lp_val ); ?>" <?php selected( $lp_current_orderby, $lp_val ); ?>><?php echo esc_html( $lp_label ); ?></option>
         <?php endforeach; ?>
@@ -488,6 +483,32 @@ $lp_current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslas
     listBtn.classList.add('active');
     gridBtn.classList.remove('active');
   });
+})();
+</script>
+
+<!-- TOOLBAR SELECTS: category filter + sorting, wired up with addEventListener
+     instead of inline onchange="" attributes (some security headers /
+     plugins strip inline event-handler attributes, which silently breaks
+     inline onchange while leaving script-based listeners like this one
+     working fine). -->
+<script>
+(function(){
+  var catSelect = document.getElementById('lpCatSelect');
+  if (catSelect) {
+    catSelect.addEventListener('change', function(){
+      if (this.value) window.location.href = this.value;
+    });
+  }
+
+  var sortSelect = document.getElementById('lpSortSelect');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function(){
+      var u = new URL(window.location.href);
+      u.searchParams.set('orderby', this.value);
+      u.searchParams.delete('paged');
+      window.location.href = u.toString();
+    });
+  }
 })();
 </script>
 
