@@ -53,7 +53,8 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-viewall{font-family:var(--lp-font-head);font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--lp-green-dark);text-decoration:none;white-space:nowrap;}
 
 /* HERO — height matched to About Us page's hero media frame (340px desktop /
-   280px tablet / 220px mobile), instead of the previous viewport-height slider */
+   280px tablet / 260px mobile / 230px small mobile), giving a little extra
+   room so the buttons don't sit flush against the bottom edge/dots */
 .lp-hero2{
   position:relative;
   margin:24px 40px 36px;
@@ -350,7 +351,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 }
 @media(max-width:900px){
   .lp-wrap{padding:0 20px;}
-  .lp-hero2{margin:14px 16px 24px;height:280px;min-height:280px;border-radius:16px;}
+  .lp-hero2{margin:14px 16px 24px;height:300px;min-height:300px;border-radius:16px;}
   .lp-hero2-content{padding:0 22px;max-width:100%;}
   .lp-hero2-overlay{background:linear-gradient(180deg, rgba(18,90,148,.32) 0%, rgba(18,90,148,.62) 65%);}
   .lp-strip{display:none;}
@@ -366,7 +367,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-news-form{max-width:100%;flex:1 1 100%;}
 }
 @media(max-width:640px){
-  .lp-hero2{height:220px;min-height:220px;}
+  .lp-hero2{height:260px;min-height:260px;}
   .lp-popcat-grid{grid-template-columns:1fr;}
   .lp-popcat-card{padding:12px;gap:10px;}
   .lp-popcat-img{width:48px;height:48px;}
@@ -422,7 +423,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 }
 @media(max-width:480px){
   .lp-prod-grid{grid-template-columns:1fr;}
-  .lp-hero2{height:200px;min-height:200px;margin:12px 12px 20px;}
+  .lp-hero2{height:230px;min-height:230px;margin:12px 12px 20px;}
   .lp-hero2-btn-white,.lp-hero2-btn-ghost{padding:8px 16px;font-size:.68rem;}
   .lp-disc-card{padding:12px;}
   .lp-trend-left{grid-template-columns:repeat(2,1fr);gap:10px;}

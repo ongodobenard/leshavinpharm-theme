@@ -237,6 +237,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-pd-related-grid{grid-template-columns:1fr;}
   .lp-pd-title{font-size:1.3rem;}
   .lp-pd-price-cur{font-size:1.5rem;}
+  .lp-pd-trust-row{display:none;}
 }
 </style>
 
@@ -375,7 +376,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
         <div class="lp-pd-desc"><?php echo wpautop(wp_kses_post(wp_trim_words($raw_desc, 34))); ?></div>
       <?php endif; ?>
 
-      <!-- TRUST STRIP -->
+      <!-- TRUST STRIP (hidden on mobile ≤640px) -->
       <div class="lp-pd-trust-row">
         <div class="lp-pd-trust-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
@@ -414,7 +415,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
       <!-- ACTIONS -->
       <div class="lp-pd-action-row">
         <?php if ($is_rx): ?>
-          <a href="<?php echo esc_url(home_url('/prescription')); ?>" class="lp-pd-btn-rx">
+          <a href="<?php echo esc_url(home_url('/submit-prescription')); ?>" class="lp-pd-btn-rx">
             <?php echo leshavin_rx_svg(); ?> Submit Prescription
           </a>
         <?php elseif ($is_simple): ?>
