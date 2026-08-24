@@ -281,7 +281,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
         <div class="tc-num">1</div>
         <h2>General Terms</h2>
       </div>
-      <p>By accessing and using the Leshavin Pharmacy website, you agree to be bound by these Terms &amp; Conditions, our <a href="<?php echo esc_url( home_url('/return-policy') ); ?>" style="color:var(--tc-blue-dark);font-weight:700;text-decoration:none;">Privacy Policy</a>, and any other policies or notices displayed on this site from time to time.</p>
+      <p>By accessing and using the Leshavin Pharmacy website, you agree to be bound by these Terms &amp; Conditions and any other policies or notices displayed on this site from time to time.</p>
     </div>
   </section>
 
