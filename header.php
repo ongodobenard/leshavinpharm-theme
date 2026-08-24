@@ -550,7 +550,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
   </details>
   <?php endif; ?>
 
-  <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="lph-mnav-link<?php echo is_page('prescription') ? ' active' : ''; ?>">Submit Prescription</a>
+  <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lph-mnav-link<?php echo is_page('submit-prescription') ? ' active' : ''; ?>">Submit submit-prescription</a>
   <a href="<?php echo esc_url( home_url('/about-us') ); ?>" class="lph-mnav-link<?php echo is_page('about-us') ? ' active' : ''; ?>">About Us</a>
   <a href="<?php echo esc_url( home_url('/return-policy') ); ?>" class="lph-mnav-link<?php echo is_page('return-policy') ? ' active' : ''; ?>">Return Policy</a>
 
@@ -744,7 +744,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
       </li>
       <?php endif; ?>
 
-      <li><a href="<?php echo esc_url( home_url('/prescription') ); ?>"<?php echo is_page('prescription') ? ' class="active"' : ''; ?>>Submit Prescription</a></li>
+      <li><a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>"<?php echo is_page('submit-prescription') ? ' class="active"' : ''; ?>>Submit submit-prescription</a></li>
       <li><a href="<?php echo esc_url( home_url('/about-us') ); ?>"<?php echo is_page('about-us') ? ' class="active"' : ''; ?>>About Us</a></li>
       <li><a href="<?php echo esc_url( home_url('/return-policy') ); ?>"<?php echo is_page('return-policy') ? ' class="active"' : ''; ?>>Return Policy</a></li>
 
