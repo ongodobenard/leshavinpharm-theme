@@ -167,8 +167,8 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
   .foot-h{margin-bottom:8px;padding-bottom:6px;}
   .foot-contact{gap:10px;}
   .foot-links{gap:8px;}
-  .foot-map{height:110px;}
-  .foot-map-wrap{margin-top:12px;}
+  .foot-map{height:190px;}
+  .foot-map-wrap{margin-top:14px;}
 
   /* Show Terms & Conditions inside Quick Links on mobile only */
   .foot-links-mobile-terms{display:block;}
