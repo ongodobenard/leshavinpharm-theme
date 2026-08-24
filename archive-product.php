@@ -405,7 +405,7 @@ $lp_current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslas
                 </div>
                 <div class="lp-shop-btn-stack">
                   <?php if ( $is_rx ) : ?>
-                    <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="lp-shop-btn-rx">
+                    <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lp-shop-btn-rx">
                       <?php echo leshavin_rx_svg(); ?> Submit Prescription
                     </a>
                   <?php elseif ( $product->is_type('simple') ) : ?>

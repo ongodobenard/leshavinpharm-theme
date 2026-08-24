@@ -211,7 +211,7 @@ function leshavin_filter_products() {
                     </div>
                     <div class="p-btns">
                         <?php if ($is_rx): ?>
-                            <a href="<?php echo esc_url( home_url('/prescription') ); ?>" class="p-btn-cart">
+                            <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="p-btn-cart">
                                 <span class="p-btn-ico"><?php echo leshavin_rx_svg(); ?></span>Submit Prescription
                             </a>
                         <?php else: ?>

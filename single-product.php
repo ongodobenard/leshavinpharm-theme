@@ -503,7 +503,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
           <div class="lp-pd-r-price"><?php echo $r_price_text; ?></div>
           <div class="lp-pd-r-btn-stack">
             <?php if ($r_is_rx): ?>
-              <a href="<?php echo esc_url(home_url('/prescription')); ?>" class="lp-pd-r-btn-rx">
+              <a href="<?php echo esc_url(home_url('/submit-prescription')); ?>" class="lp-pd-r-btn-rx">
                 <?php echo leshavin_rx_svg(); ?> Submit Prescription
               </a>
             <?php elseif ($rp->is_type('simple')): ?>
