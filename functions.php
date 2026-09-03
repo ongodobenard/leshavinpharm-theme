@@ -257,6 +257,73 @@ function leshavin_contact_handler() {
 add_action('wp_ajax_leshavin_contact',        'leshavin_contact_handler');
 add_action('wp_ajax_nopriv_leshavin_contact', 'leshavin_contact_handler');
 
+// ─── AJAX: SUBMIT PRESCRIPTION ────────────────
+// This is the handler page-prescription.php's form was missing — the
+// form posts action=leshavin_submit_prescription, but until now there
+// was no wp_ajax_/wp_ajax_nopriv_ hook registered for that action, so
+// admin-ajax.php returned the bare string "0" instead of JSON. The
+// front-end JS then failed JSON.parse("0") and fell into its generic
+// "Server error" toast. Registering the matching handler below fixes it.
+function leshavin_submit_prescription_handler() {
+    // Matches wp_nonce_field('leshavin_rx_nonce', 'rx_nonce') in the template.
+    check_ajax_referer('leshavin_rx_nonce', 'rx_nonce');
+
+    $name  = sanitize_text_field($_POST['rx_name']  ?? '');
+    $phone = sanitize_text_field($_POST['rx_phone'] ?? '');
+    $notes = sanitize_textarea_field($_POST['rx_notes'] ?? '');
+
+    if (empty($name) || empty($phone)) {
+        wp_send_json_error(['msg' => 'Please fill in your name and phone number.']);
+    }
+
+    if (empty($_FILES['rx_file']) || ($_FILES['rx_file']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        wp_send_json_error(['msg' => 'Please attach your prescription file.']);
+    }
+
+    $file = $_FILES['rx_file'];
+
+    // Validate file type against what the dropzone advertises (JPG, PNG, PDF, DOC, DOCX).
+    $allowed_ext = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
+    $ext = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+    if ( ! in_array( $ext, $allowed_ext, true ) ) {
+        wp_send_json_error(['msg' => 'Unsupported file type. Please upload a JPG, PNG, PDF, DOC or DOCX file.']);
+    }
+
+    // Validate file size against the 5MB limit shown in the UI.
+    $max_bytes = 5 * 1024 * 1024;
+    if ( $file['size'] > $max_bytes ) {
+        wp_send_json_error(['msg' => 'File is too large. Maximum size is 5MB.']);
+    }
+
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+
+    // overrides: skip the default "form submitted from this page" referer
+    // check (already covered by check_ajax_referer above) and let our
+    // extension whitelist above be the source of truth.
+    $upload_overrides = [ 'test_form' => false ];
+    $uploaded = wp_handle_upload( $file, $upload_overrides );
+
+    if ( isset( $uploaded['error'] ) ) {
+        wp_send_json_error(['msg' => 'Upload failed. Please try again or contact us via WhatsApp.']);
+    }
+
+    $to      = leshavin_email();
+    $subject = "New Prescription Submission from {$name}";
+    $body    = "Name: {$name}\nPhone: {$phone}\n\nAdditional Notes:\n" . ( $notes !== '' ? $notes : '(none)' );
+    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+    $attachments = [ $uploaded['file'] ];
+
+    $sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+
+    if ( $sent ) {
+        wp_send_json_success(['msg' => 'Prescription received.']);
+    } else {
+        wp_send_json_error(['msg' => 'Could not send your prescription. Please try again or contact us via WhatsApp.']);
+    }
+}
+add_action('wp_ajax_leshavin_submit_prescription',        'leshavin_submit_prescription_handler');
+add_action('wp_ajax_nopriv_leshavin_submit_prescription', 'leshavin_submit_prescription_handler');
+
 // ─────────────────────────────────────────────
 // SUPPRESS ALL WOOCOMMERCE DEFAULT NOTICES
 // We use our own custom toast (#leshavin-toast in front-page.php) for
