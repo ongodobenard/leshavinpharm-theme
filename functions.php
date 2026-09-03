@@ -77,6 +77,17 @@ if ( ! function_exists('leshavin_tagline') ) {
 if ( ! function_exists('leshavin_email') ) {
     function leshavin_email()   { return get_option('leshavin_email',   'info@leshavinpharmacy.com'); }
 }
+// NOTE: page-prescription.php and page-contact.php call leshavin_phone_display()
+// and leshavin_location() unconditionally. Neither existed anywhere in this
+// file before, which would have caused a fatal "Call to undefined function"
+// on both of those pages. Added here as thin wrappers around the existing
+// leshavin_phone() / leshavin_address() helpers so those templates load.
+if ( ! function_exists('leshavin_phone_display') ) {
+    function leshavin_phone_display() { return leshavin_phone(); }
+}
+if ( ! function_exists('leshavin_location') ) {
+    function leshavin_location() { return leshavin_address(); }
+}
 
 // ─── SMALL SVG ICON HELPERS (no emoji, ever) ──
 if ( ! function_exists('leshavin_pill_svg') ) {
@@ -250,6 +261,69 @@ function leshavin_filter_products() {
 add_action('wp_ajax_leshavin_filter_products',        'leshavin_filter_products');
 add_action('wp_ajax_nopriv_leshavin_filter_products', 'leshavin_filter_products');
 
+// ─── ADMIN CONTACT ENQUIRY EMAIL (HTML, branded) ──────────────
+// Same navy / green / blue palette as the order + logo emails.
+if ( ! function_exists( 'leshavin_build_admin_contact_email_html' ) ) {
+    function leshavin_build_admin_contact_email_html( $name, $email, $phone, $dept, $msg ) {
+        $tagline   = leshavin_tagline();
+        $site_url  = home_url( '/' );
+        $wa_digits = preg_replace( '/[^0-9]/', '', $phone );
+
+        ob_start();
+        ?>
+<div style="font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;padding:24px;">
+  <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e7ebf1;">
+
+    <div style="background:#0e2358;padding:26px 28px;text-align:center;border-top:4px solid #8dc63f;">
+      <div style="color:#ffffff;font-size:20px;font-weight:700;">Leshavin Pharmacy</div>
+      <div style="color:#a9b6d1;font-size:13px;margin-top:4px;"><?php echo esc_html( $tagline ); ?></div>
+    </div>
+
+    <div style="padding:28px;">
+      <div style="display:inline-block;background:#f8f9fc;border:1px solid #e7ebf1;border-radius:20px;padding:6px 16px;color:#0e2358;font-weight:700;font-size:12px;margin-bottom:16px;">
+        Website Contact Form<?php echo $dept ? ' &nbsp;|&nbsp; ' . esc_html( $dept ) : ''; ?>
+      </div>
+
+      <h2 style="color:#0e2358;font-size:18px;margin:0 0 18px;">New Contact Enquiry</h2>
+
+      <div style="background:#f8f9fc;border:1px solid #e7ebf1;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
+        <table style="width:100%;border-collapse:collapse;">
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;width:110px;">Name</td><td style="padding:4px 0;color:#1c2b3a;font-size:13px;font-weight:700;"><?php echo esc_html( $name ); ?></td></tr>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">Phone</td><td style="padding:4px 0;font-size:13px;"><a href="tel:<?php echo esc_attr( $phone ); ?>" style="color:#1c75bc;font-weight:700;text-decoration:none;"><?php echo esc_html( $phone ); ?></a></td></tr>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">Email</td><td style="padding:4px 0;font-size:13px;"><a href="mailto:<?php echo esc_attr( $email ); ?>" style="color:#1c75bc;text-decoration:none;"><?php echo esc_html( $email ); ?></a></td></tr>
+          <?php if ( $dept ) : ?>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">Subject</td><td style="padding:4px 0;color:#1c2b3a;font-size:13px;font-weight:700;"><?php echo esc_html( $dept ); ?></td></tr>
+          <?php endif; ?>
+        </table>
+      </div>
+
+      <div style="background:#f8f9fc;border:1px solid #e7ebf1;border-left:4px solid #1c75bc;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+        <div style="color:#0e2358;font-weight:700;font-size:12px;text-transform:uppercase;margin-bottom:6px;">Message</div>
+        <div style="color:#1c2b3a;font-size:13.5px;line-height:1.7;white-space:pre-wrap;"><?php echo esc_html( $msg ); ?></div>
+      </div>
+
+      <div style="text-align:center;">
+        <?php if ( $wa_digits ) : ?>
+        <a href="https://wa.me/<?php echo esc_attr( $wa_digits ); ?>" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">WhatsApp Customer</a>
+        <?php endif; ?>
+        <a href="mailto:<?php echo esc_attr( $email ); ?>" style="display:inline-block;background:#0e2358;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">Reply by Email</a>
+      </div>
+    </div>
+
+    <div style="background:#f8f9fc;padding:18px 28px;text-align:center;border-top:1px solid #e7ebf1;">
+      <div style="color:#6b7c8f;font-size:12px;line-height:1.6;">
+        Automated notification from the Leshavin Pharmacy website contact form<br>
+        <a href="<?php echo esc_url( $site_url ); ?>" style="color:#1c75bc;text-decoration:none;"><?php echo esc_html( $site_url ); ?></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+        <?php
+        return ob_get_clean();
+    }
+}
+
 // ─── AJAX: CONTACT FORM ───────────────────────
 function leshavin_contact_handler() {
     check_ajax_referer('leshavin_nonce', 'nonce');
@@ -264,16 +338,87 @@ function leshavin_contact_handler() {
     $dept  = sanitize_text_field($_POST['contact_subject'] ?? '');
     $msg   = sanitize_textarea_field($_POST['contact_msg'] ?? '');
 
-    $to      = leshavin_email();
-    $subject = "New Enquiry from {$name} : {$dept}";
-    $body    = "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\nDept: {$dept}\n\n{$msg}";
-    $headers = ['Content-Type: text/plain; charset=UTF-8', "From: {$name} <{$email}>"];
+    // Sent to both the general pharmacy inbox and the owner's personal
+    // email, branded to match the logo/order email colors (was plain
+    // text, single recipient, before).
+    $to      = array_values( array_unique( array_filter( [
+        leshavin_email(),
+        'ongodobenard72@gmail.com',
+    ] ) ) );
+    $subject = "New Enquiry from {$name}" . ( $dept ? " : {$dept}" : '' );
+    $body    = leshavin_build_admin_contact_email_html( $name, $email, $phone, $dept, $msg );
+    $headers = [ 'Content-Type: text/html; charset=UTF-8', "Reply-To: {$name} <{$email}>" ];
 
     $sent = wp_mail($to, $subject, $body, $headers);
     wp_send_json($sent ? ['success' => true] : ['success' => false]);
 }
 add_action('wp_ajax_leshavin_contact',        'leshavin_contact_handler');
 add_action('wp_ajax_nopriv_leshavin_contact', 'leshavin_contact_handler');
+
+// ─── ADMIN PRESCRIPTION SUBMISSION EMAIL (HTML, branded) ──────────────
+// Same navy / green / blue palette as the order + contact + logo emails.
+if ( ! function_exists( 'leshavin_build_admin_prescription_email_html' ) ) {
+    function leshavin_build_admin_prescription_email_html( $name, $phone, $notes, $file_name ) {
+        $tagline   = leshavin_tagline();
+        $site_url  = home_url( '/' );
+        $wa_digits = preg_replace( '/[^0-9]/', '', $phone );
+
+        ob_start();
+        ?>
+<div style="font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;padding:24px;">
+  <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e7ebf1;">
+
+    <div style="background:#0e2358;padding:26px 28px;text-align:center;border-top:4px solid #8dc63f;">
+      <div style="color:#ffffff;font-size:20px;font-weight:700;">Leshavin Pharmacy</div>
+      <div style="color:#a9b6d1;font-size:13px;margin-top:4px;"><?php echo esc_html( $tagline ); ?></div>
+    </div>
+
+    <div style="padding:28px;">
+      <div style="display:inline-block;background:#f8f9fc;border:1px solid #e7ebf1;border-radius:20px;padding:6px 16px;color:#0e2358;font-weight:700;font-size:12px;margin-bottom:16px;">
+        Prescription Submission
+      </div>
+
+      <h2 style="color:#0e2358;font-size:18px;margin:0 0 18px;">New Prescription Received</h2>
+
+      <div style="background:#f8f9fc;border:1px solid #e7ebf1;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
+        <table style="width:100%;border-collapse:collapse;">
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;width:110px;">Name</td><td style="padding:4px 0;color:#1c2b3a;font-size:13px;font-weight:700;"><?php echo esc_html( $name ); ?></td></tr>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">Phone</td><td style="padding:4px 0;font-size:13px;"><a href="tel:<?php echo esc_attr( $phone ); ?>" style="color:#1c75bc;font-weight:700;text-decoration:none;"><?php echo esc_html( $phone ); ?></a></td></tr>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">File</td><td style="padding:4px 0;color:#1c2b3a;font-size:13px;font-weight:700;"><?php echo esc_html( $file_name ); ?> (attached)</td></tr>
+        </table>
+      </div>
+
+      <?php if ( $notes ) : ?>
+      <div style="background:#f8f9fc;border:1px solid #e7ebf1;border-left:4px solid #8dc63f;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+        <div style="color:#0e2358;font-weight:700;font-size:12px;text-transform:uppercase;margin-bottom:6px;">Additional Notes</div>
+        <div style="color:#1c2b3a;font-size:13.5px;line-height:1.7;white-space:pre-wrap;"><?php echo esc_html( $notes ); ?></div>
+      </div>
+      <?php endif; ?>
+
+      <div style="background:#fff9ec;border:1px solid #f0dfa8;border-radius:8px;padding:12px 16px;margin-bottom:22px;">
+        <div style="color:#8a6300;font-size:12.5px;line-height:1.6;">The prescription file is attached to this email — open it to verify before confirming the order.</div>
+      </div>
+
+      <div style="text-align:center;">
+        <?php if ( $wa_digits ) : ?>
+        <a href="https://wa.me/<?php echo esc_attr( $wa_digits ); ?>" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">WhatsApp Customer</a>
+        <?php endif; ?>
+      </div>
+    </div>
+
+    <div style="background:#f8f9fc;padding:18px 28px;text-align:center;border-top:1px solid #e7ebf1;">
+      <div style="color:#6b7c8f;font-size:12px;line-height:1.6;">
+        Automated notification from the Leshavin Pharmacy website prescription form<br>
+        <a href="<?php echo esc_url( $site_url ); ?>" style="color:#1c75bc;text-decoration:none;"><?php echo esc_html( $site_url ); ?></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+        <?php
+        return ob_get_clean();
+    }
+}
 
 // ─── AJAX: SUBMIT PRESCRIPTION ────────────────
 // This is the handler page-prescription.php's form was missing — the
@@ -325,10 +470,16 @@ function leshavin_submit_prescription_handler() {
         wp_send_json_error(['msg' => 'Upload failed. Please try again or contact us via WhatsApp.']);
     }
 
-    $to      = leshavin_email();
+    // Sent to both the general pharmacy inbox and the owner's personal
+    // email, branded to match the logo/order/contact email colors (was
+    // plain text, single recipient, before).
+    $to      = array_values( array_unique( array_filter( [
+        leshavin_email(),
+        'ongodobenard72@gmail.com',
+    ] ) ) );
     $subject = "New Prescription Submission from {$name}";
-    $body    = "Name: {$name}\nPhone: {$phone}\n\nAdditional Notes:\n" . ( $notes !== '' ? $notes : '(none)' );
-    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+    $body    = leshavin_build_admin_prescription_email_html( $name, $phone, $notes, basename( $uploaded['file'] ) );
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
     $attachments = [ $uploaded['file'] ];
 
     $sent = wp_mail( $to, $subject, $body, $headers, $attachments );
