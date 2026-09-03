@@ -16,6 +16,19 @@ function leshavin_setup() {
 }
 add_action('after_setup_theme', 'leshavin_setup');
 
+// ─── DISABLE NATIVE WOOCOMMERCE ORDER EMAILS ──────────────────
+// leshavin_send_order_handler() sends our own fully-branded admin +
+// customer emails (see below). Without disabling these, WooCommerce's
+// built-in "New order" (to admin) and "Order processing" / "On hold"
+// (to customer) emails ALSO fire automatically whenever we call
+// wc_create_order() + update_status('processing') — this is exactly
+// what was causing two separate notifications to land for the same
+// order (one native WooCommerce email, one from our custom handler).
+add_filter( 'woocommerce_email_enabled_new_order',                 '__return_false' );
+add_filter( 'woocommerce_email_enabled_customer_processing_order', '__return_false' );
+add_filter( 'woocommerce_email_enabled_customer_on_hold_order',    '__return_false' );
+add_filter( 'woocommerce_email_enabled_admin_failed_order',        '__return_false' );
+
 // ─── ENQUEUE ──────────────────────────────────
 function leshavin_enqueue() {
     wp_enqueue_style('google-fonts',
@@ -438,6 +451,116 @@ if ( ! function_exists( 'leshavin_build_order_email_html' ) ) {
     }
 }
 
+// ─── ADMIN / OWNER ORDER NOTIFICATION EMAIL (HTML, branded) ──────────
+// Same navy / green / blue palette as the customer confirmation and
+// the logo, but framed as an internal "New Order Received" alert with
+// full customer contact + delivery details up top, since that's what
+// the pharmacy team needs to act on the order.
+if ( ! function_exists( 'leshavin_build_admin_order_email_html' ) ) {
+    function leshavin_build_admin_order_email_html( $order, $first_name, $last_name, $phone, $email, $address, $city, $state_label, $postcode, $notes, $via ) {
+        $tagline  = leshavin_tagline();
+        $site_url = home_url( '/' );
+        $via_label = ( $via === 'whatsapp' ) ? 'WhatsApp Order Button' : 'Website Checkout';
+
+        $rows = '';
+        foreach ( $order->get_items() as $item ) {
+            $rows .= '<tr>'
+                . '<td style="padding:10px 0;border-bottom:1px solid #e7ebf1;color:#1c2b3a;font-size:14px;">' . esc_html( $item->get_name() ) . '</td>'
+                . '<td style="padding:10px 0;border-bottom:1px solid #e7ebf1;color:#6b7c8f;font-size:14px;text-align:center;">' . esc_html( $item->get_quantity() ) . '</td>'
+                . '<td style="padding:10px 0;border-bottom:1px solid #e7ebf1;color:#125a94;font-weight:700;font-size:14px;text-align:right;">KSh ' . number_format( (float) $order->get_line_total( $item, false, false ), 2 ) . '</td>'
+                . '</tr>';
+        }
+
+        $shipping_total = (float) $order->get_shipping_total();
+        if ( $shipping_total > 0 ) {
+            $rows .= '<tr>'
+                . '<td colspan="2" style="padding:10px 0;color:#6b7c8f;font-size:14px;">Delivery Fee</td>'
+                . '<td style="padding:10px 0;color:#1c2b3a;font-weight:600;font-size:14px;text-align:right;">KSh ' . number_format( $shipping_total, 2 ) . '</td>'
+                . '</tr>';
+        }
+
+        $total     = number_format( (float) $order->get_total(), 2 );
+        $full_name = trim( $first_name . ' ' . $last_name );
+        $wa_digits = preg_replace( '/[^0-9]/', '', $phone );
+
+        ob_start();
+        ?>
+<div style="font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;padding:24px;">
+  <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e7ebf1;">
+
+    <div style="background:#0e2358;padding:26px 28px;text-align:center;border-top:4px solid #8dc63f;">
+      <div style="color:#ffffff;font-size:20px;font-weight:700;">Leshavin Pharmacy</div>
+      <div style="color:#a9b6d1;font-size:13px;margin-top:4px;"><?php echo esc_html( $tagline ); ?></div>
+    </div>
+
+    <div style="padding:28px;">
+      <div style="display:inline-block;background:#f8f9fc;border:1px solid #e7ebf1;border-radius:20px;padding:6px 16px;color:#0e2358;font-weight:700;font-size:12px;margin-bottom:16px;">
+        <?php echo esc_html( $via_label ); ?> &nbsp;|&nbsp; Order #<?php echo esc_html( $order->get_id() ); ?>
+      </div>
+
+      <h2 style="color:#0e2358;font-size:18px;margin:0 0 18px;">New Order Received</h2>
+
+      <div style="background:#f8f9fc;border:1px solid #e7ebf1;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
+        <div style="color:#0e2358;font-weight:700;font-size:13px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.03em;">Customer Details</div>
+        <table style="width:100%;border-collapse:collapse;">
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;width:110px;">Name</td><td style="padding:4px 0;color:#1c2b3a;font-size:13px;font-weight:700;"><?php echo esc_html( $full_name ); ?></td></tr>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">Phone</td><td style="padding:4px 0;font-size:13px;"><a href="tel:<?php echo esc_attr( $phone ); ?>" style="color:#1c75bc;font-weight:700;text-decoration:none;"><?php echo esc_html( $phone ); ?></a></td></tr>
+          <?php if ( $email ) : ?>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;">Email</td><td style="padding:4px 0;font-size:13px;"><a href="mailto:<?php echo esc_attr( $email ); ?>" style="color:#1c75bc;text-decoration:none;"><?php echo esc_html( $email ); ?></a></td></tr>
+          <?php endif; ?>
+          <tr><td style="padding:4px 0;color:#6b7c8f;font-size:13px;vertical-align:top;">Address</td><td style="padding:4px 0;color:#1c2b3a;font-size:13px;"><?php echo esc_html( trim( $address . ', ' . $city . ', ' . $state_label . ( $postcode ? ' ' . $postcode : '' ) ) ); ?></td></tr>
+        </table>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">
+        <thead>
+          <tr>
+            <td style="font-size:12px;color:#6b7c8f;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #e7ebf1;">Product</td>
+            <td style="font-size:12px;color:#6b7c8f;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #e7ebf1;text-align:center;">Qty</td>
+            <td style="font-size:12px;color:#6b7c8f;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #e7ebf1;text-align:right;">Total</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php echo $rows; ?>
+        </tbody>
+      </table>
+
+      <table style="width:100%;border-collapse:collapse;margin-bottom:22px;">
+        <tr>
+          <td style="color:#0e2358;font-weight:700;font-size:15px;">Order Total</td>
+          <td style="color:#6ea82e;font-weight:700;font-size:18px;text-align:right;">KSh <?php echo esc_html( $total ); ?></td>
+        </tr>
+      </table>
+
+      <?php if ( $notes ) : ?>
+      <div style="background:#fff9ec;border:1px solid #f0dfa8;border-left:4px solid #f5a623;border-radius:8px;padding:12px 16px;margin-bottom:22px;">
+        <div style="color:#8a6300;font-weight:700;font-size:12px;text-transform:uppercase;margin-bottom:4px;">Customer Notes</div>
+        <div style="color:#6b7c8f;font-size:13px;line-height:1.6;"><?php echo esc_html( $notes ); ?></div>
+      </div>
+      <?php endif; ?>
+
+      <div style="text-align:center;">
+        <?php if ( $wa_digits ) : ?>
+        <a href="https://wa.me/<?php echo esc_attr( $wa_digits ); ?>" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">WhatsApp Customer</a>
+        <?php endif; ?>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-orders&action=edit&id=' . $order->get_id() ) ); ?>" style="display:inline-block;background:#0e2358;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">View Order in WooCommerce</a>
+      </div>
+    </div>
+
+    <div style="background:#f8f9fc;padding:18px 28px;text-align:center;border-top:1px solid #e7ebf1;">
+      <div style="color:#6b7c8f;font-size:12px;line-height:1.6;">
+        Automated order notification from Leshavin Pharmacy<br>
+        <a href="<?php echo esc_url( $site_url ); ?>" style="color:#1c75bc;text-decoration:none;"><?php echo esc_html( $site_url ); ?></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+        <?php
+        return ob_get_clean();
+    }
+}
+
 // ─── AJAX: SEND ORDER (CHECKOUT) ───────────────
 // FIX: page-checkout.php's JS posts action=leshavin_send_order for both
 // "Place Order" and "Order Via WhatsApp", but until now there was no
@@ -530,17 +653,19 @@ function leshavin_send_order_handler() {
         flush();
     }
 
-    // ── Pharmacy notification: always sent, whichever button was used ──
-    $admin_to      = leshavin_email();
-    $admin_subject = sprintf( 'New Order #%d from %s %s', $order_id, $first, $last );
-    $admin_body    = "New order received (via {$via}).\n\n"
-                   . "Name: {$first} {$last}\n"
-                   . "Phone: {$phone}\n"
-                   . ( $email ? "Email: {$email}\n" : '' )
-                   . "Address: {$address}, {$city}, {$state}" . ( $postcode ? " {$postcode}" : '' ) . "\n\n"
-                   . "Total: " . $order->get_formatted_order_total() . "\n\n"
-                   . ( $notes ? "Notes: {$notes}" : '' );
-    wp_mail( $admin_to, $admin_subject, $admin_body, [ 'Content-Type: text/plain; charset=UTF-8' ] );
+    // ── Pharmacy / owner notification: always sent, whichever button was used ──
+    // Sent to both the general pharmacy inbox and the owner's personal
+    // email, fully branded to match the logo/customer email colors.
+    $ck_states   = function_exists('WC') ? WC()->countries->get_states('KE') : [];
+    $state_label = ( $state && isset( $ck_states[ $state ] ) ) ? $ck_states[ $state ] : $state;
+
+    $admin_to      = array_values( array_unique( array_filter( [
+        leshavin_email(),
+        'ongodobenard72@gmail.com',
+    ] ) ) );
+    $admin_subject = sprintf( 'New Order #%d - %s %s | Leshavin Pharmacy', $order_id, $first, $last );
+    $admin_body    = leshavin_build_admin_order_email_html( $order, $first, $last, $phone, $email, $address, $city, $state_label, $postcode, $notes, $via );
+    wp_mail( $admin_to, $admin_subject, $admin_body, [ 'Content-Type: text/html; charset=UTF-8' ] );
 
     // ── Customer confirmation: only for website "Place Order" orders ──
     if ( $via !== 'whatsapp' && $email ) {
