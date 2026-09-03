@@ -243,7 +243,12 @@ function leshavin_contact_handler() {
     $name  = sanitize_text_field($_POST['contact_name']  ?? '');
     $email = sanitize_email($_POST['contact_email']      ?? '');
     $phone = sanitize_text_field($_POST['contact_phone'] ?? '');
-    $dept  = sanitize_text_field($_POST['contact_dept']  ?? '');
+    // FIX: the form field is named "contact_subject" (see the <select
+    // name="contact_subject"> in page-contact.php) — reading "contact_dept"
+    // here always returned an empty string, so the subject/department was
+    // silently missing from every enquiry email even though sending itself
+    // never errored.
+    $dept  = sanitize_text_field($_POST['contact_subject'] ?? '');
     $msg   = sanitize_textarea_field($_POST['contact_msg'] ?? '');
 
     $to      = leshavin_email();
