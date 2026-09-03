@@ -378,7 +378,7 @@ function leshavin_contact_handler() {
     // text, single recipient, before).
     $to      = array_values( array_unique( array_filter( [
         leshavin_email(),
-        'ongodobenard72@gmail.com',
+        'ongodojames1@gmail.com',
     ] ) ) );
     $subject = "New Enquiry from {$name}" . ( $dept ? " : {$dept}" : '' );
     $body    = leshavin_build_admin_contact_email_html( $name, $email, $phone, $dept, $msg );
@@ -510,7 +510,7 @@ function leshavin_submit_prescription_handler() {
     // plain text, single recipient, before).
     $to      = array_values( array_unique( array_filter( [
         leshavin_email(),
-        'ongodobenard72@gmail.com',
+        'ongodojames1@gmail.com',
     ] ) ) );
     $subject = "New Prescription Submission from {$name}";
     $body    = leshavin_build_admin_prescription_email_html( $name, $phone, $notes, basename( $uploaded['file'] ) );
@@ -847,7 +847,7 @@ function leshavin_send_order_handler() {
 
     $admin_to      = array_values( array_unique( array_filter( [
         leshavin_email(),
-        'ongodobenard72@gmail.com',
+        'ongodojames1@gmail.com',
     ] ) ) );
     $admin_subject = sprintf( 'New Order #%d - %s %s | Leshavin Pharmacy', $order_id, $first, $last );
     $admin_body    = leshavin_build_admin_order_email_html( $order, $first, $last, $phone, $email, $address, $city, $state_label, $postcode, $notes, $via );
