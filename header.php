@@ -206,9 +206,12 @@ body{font-family:var(--lph-font-body);}
 .lph-cart-icon-wrap{width:38px;height:38px;border-radius:50%;background:var(--lph-green-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
 .lph-cart-icon-wrap svg{width:17px;height:17px;color:var(--lph-green-dark);}
 .lph-cart-badge{position:absolute;top:-4px;right:-4px;background:var(--lph-green-dark);color:#fff;font-size:.62rem;font-weight:700;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #fff;}
-.lph-cart-text{display:flex;flex-direction:column;line-height:1.2;}
+.lph-cart-text{display:flex;flex-direction:column;justify-content:center;line-height:1.2;min-width:0;}
 .lph-cart-label{font-size:.68rem;color:var(--lph-text-light);}
-.lph-cart-total{font-family:var(--lph-font-head);font-size:.92rem;font-weight:600;color:var(--lph-blue-dark);}
+.lph-cart-total{
+  font-family:var(--lph-font-head);font-size:.92rem;font-weight:600;color:var(--lph-blue-dark);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 
 .lph-cart-dropdown{
   position:absolute;top:100%;right:0;width:340px;
@@ -305,7 +308,7 @@ body{font-family:var(--lph-font-body);}
   margin:8px 0 8px 8px !important;padding:8px 22px !important;
   font-weight:700 !important;transition:background .2s,transform .15s !important;
 }
-.lph-nav-contact > a:hover{background:#5b8e26 !important;color:#fff !important;transform:translateY(-1px);}
+.lph-nav-contact > a:hover{background:#5b8e26;color:#fff !important;transform:translateY(-1px);}
 
 /* Dropdown panel */
 .lph-dropdown{
@@ -400,14 +403,24 @@ body{font-family:var(--lph-font-body);}
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* ---- Tablet: hide the "Call/WhatsApp" text block entirely (icon
+       still visible via the WhatsApp link), and hide only the "My
+       Cart" LABEL — the actual price keeps showing, just smaller,
+       so the cart total is never fully hidden at any width. ---- */
 @media(max-width:1100px){
-  .lph-call-text,.lph-cart-text{display:none;}
+  .lph-call-text{display:none;}
+  .lph-cart-label{display:none;}
+  .lph-cart-total{font-size:.82rem;}
 }
 
 /* ---- Tablet / mobile: topbar becomes a compact single-row
        scroll strip instead of disappearing, navbar hidden in
        favour of the drawer, header becomes a Family-Drugmart
-       style grid (hamburger | logo | actions, search full row) ---- */
+       style grid (hamburger | logo | actions, search full row).
+       Cart switches to a STACKED layout here: icon on top,
+       total centered directly underneath it, rather than the
+       icon+total sitting side by side. ---- */
 @media(max-width:900px){
   :root{--lph-px:16px;}
 
@@ -463,12 +476,31 @@ body{font-family:var(--lph-font-body);}
 
   .lph-header-actions{
     grid-column:3;grid-row:1;
-    margin-left:0;gap:2px;
-    padding:0 6px;
+    margin-left:0;gap:10px;
+    padding:0 10px;
     align-self:stretch;align-items:center;
     border-left:1px solid var(--lph-border);
   }
   .lph-call-icon,.lph-cart-icon-wrap{width:34px;height:34px;}
+
+  /* ---- Stacked cart: icon on top, total directly below it,
+         both centered, instead of icon+total side by side. ---- */
+  .lph-cart{
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+  }
+  .lph-cart-text{
+    align-items:center;
+    text-align:center;
+  }
+  .lph-cart-label{display:none;}
+  .lph-cart-total{
+    font-size:.68rem;
+    max-width:60px;
+    text-align:center;
+  }
 
   /* Cart hover dropdown is desktop-only behaviour; on touch devices the
      link just navigates straight to the cart page as before. */
@@ -490,9 +522,14 @@ body{font-family:var(--lph-font-body);}
   .lph-mnav{width:86vw;max-width:320px;}
 }
 
+/* ---- Smallest phones: the "Call/WhatsApp" action is dropped to
+       leave room, but the cart (icon stacked above total) always
+       stays, just compacted a little further so it never gets
+       clipped. ---- */
 @media(max-width:480px){
   .lph-call{display:none;}
-  .lph-header-actions{gap:0;}
+  .lph-header-actions{gap:6px;padding:0 8px;}
+  .lph-cart-total{font-size:.64rem;max-width:56px;}
 }
 </style>
 <?php wp_head(); ?>
@@ -638,13 +675,18 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
         $lph_cart_items = WC()->cart->get_cart();
       ?>
       <div class="lph-cart-wrap">
-        <a href="<?php echo esc_url( $lph_cart_url ); ?>" class="lph-cart" aria-label="View cart">
+        <a href="<?php echo esc_url( $lph_cart_url ); ?>" class="lph-cart" aria-label="View cart, total <?php echo esc_attr( wp_strip_all_tags( $lph_cart_total ) ); ?>">
           <span class="lph-cart-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 00 1.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
             <?php if ( $lph_cart_count > 0 ) : ?>
               <span class="lph-cart-badge"><?php echo intval( $lph_cart_count ); ?></span>
             <?php endif; ?>
           </span>
+          <!-- ---- "My Cart" label hides at ≤1100px to save space, but
+               the total itself (lph-cart-total) is NEVER hidden by any
+               media query — only shrunk/repositioned (moves below the
+               icon on mobile, see ≤900px query) — so the amount stays
+               visible on every screen size, including mobile. ---- -->
           <span class="lph-cart-text">
             <span class="lph-cart-label">My Cart</span>
             <span class="lph-cart-total"><?php echo $lph_cart_total; ?></span>
