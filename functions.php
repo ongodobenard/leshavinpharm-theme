@@ -329,20 +329,136 @@ function leshavin_submit_prescription_handler() {
 add_action('wp_ajax_leshavin_submit_prescription',        'leshavin_submit_prescription_handler');
 add_action('wp_ajax_nopriv_leshavin_submit_prescription', 'leshavin_submit_prescription_handler');
 
+// ─── ORDER CONFIRMATION EMAIL (HTML, own content) ──────────
+// Built specifically for Leshavin Pharmacy. Simple layout, no borrowed
+// wording or branding from any other pharmacy site, and no em dashes.
+// Only used for website "Place Order" orders — see the via-check in
+// leshavin_send_order_handler() below.
+if ( ! function_exists( 'leshavin_build_order_email_html' ) ) {
+    function leshavin_build_order_email_html( $order, $first_name ) {
+        $tagline  = leshavin_tagline();
+        $phone    = leshavin_phone();
+        $wa       = leshavin_wa();
+        $to_email = leshavin_email();
+        $site_url = home_url( '/' );
+        $tel_href = preg_replace( '/\s+/', '', $phone );
+
+        $rows = '';
+        foreach ( $order->get_items() as $item ) {
+            $rows .= '<tr>'
+                . '<td style="padding:10px 0;border-bottom:1px solid #e7ebf1;color:#1c2b3a;font-size:14px;">' . esc_html( $item->get_name() ) . '</td>'
+                . '<td style="padding:10px 0;border-bottom:1px solid #e7ebf1;color:#6b7c8f;font-size:14px;text-align:center;">' . esc_html( $item->get_quantity() ) . '</td>'
+                . '<td style="padding:10px 0;border-bottom:1px solid #e7ebf1;color:#125a94;font-weight:700;font-size:14px;text-align:right;">KSh ' . number_format( (float) $order->get_line_total( $item, false, false ), 2 ) . '</td>'
+                . '</tr>';
+        }
+
+        $shipping_total = (float) $order->get_shipping_total();
+        if ( $shipping_total > 0 ) {
+            $rows .= '<tr>'
+                . '<td colspan="2" style="padding:10px 0;color:#6b7c8f;font-size:14px;">Delivery Fee</td>'
+                . '<td style="padding:10px 0;color:#1c2b3a;font-weight:600;font-size:14px;text-align:right;">KSh ' . number_format( $shipping_total, 2 ) . '</td>'
+                . '</tr>';
+        }
+
+        $total = number_format( (float) $order->get_total(), 2 );
+
+        ob_start();
+        ?>
+<div style="font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;padding:24px;">
+  <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e7ebf1;">
+
+    <div style="background:#0e2358;padding:26px 28px;text-align:center;">
+      <div style="color:#ffffff;font-size:20px;font-weight:700;">Leshavin Pharmacy</div>
+      <div style="color:#a9b6d1;font-size:13px;margin-top:4px;"><?php echo esc_html( $tagline ); ?></div>
+    </div>
+
+    <div style="padding:28px;">
+      <h2 style="color:#0e2358;font-size:18px;margin:0 0 10px;">Order Confirmed</h2>
+      <p style="color:#6b7c8f;font-size:14px;line-height:1.6;margin:0 0 18px;">
+        Thank you, <strong><?php echo esc_html( $first_name ); ?></strong>. We have received your order and will contact you shortly to confirm delivery.
+      </p>
+
+      <div style="display:inline-block;background:#f8f9fc;border:1px solid #e7ebf1;border-radius:20px;padding:6px 16px;color:#0e2358;font-weight:700;font-size:13px;margin-bottom:20px;">
+        Order #<?php echo esc_html( $order->get_id() ); ?>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">
+        <thead>
+          <tr>
+            <td style="font-size:12px;color:#6b7c8f;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #e7ebf1;">Product</td>
+            <td style="font-size:12px;color:#6b7c8f;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #e7ebf1;text-align:center;">Qty</td>
+            <td style="font-size:12px;color:#6b7c8f;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #e7ebf1;text-align:right;">Total</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php echo $rows; ?>
+        </tbody>
+      </table>
+
+      <table style="width:100%;border-collapse:collapse;margin-bottom:22px;">
+        <tr>
+          <td style="color:#0e2358;font-weight:700;font-size:15px;">Order Total</td>
+          <td style="color:#6ea82e;font-weight:700;font-size:18px;text-align:right;">KSh <?php echo esc_html( $total ); ?></td>
+        </tr>
+      </table>
+
+      <div style="background:#f8f9fc;border:1px solid #e7ebf1;border-left:4px solid #8dc63f;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+        <div style="color:#0e2358;font-weight:700;font-size:13px;margin-bottom:4px;">Payment</div>
+        <div style="color:#6b7c8f;font-size:13px;line-height:1.6;">Pay by Cash or M-Pesa when your order is delivered.</div>
+      </div>
+
+      <div style="margin-bottom:22px;">
+        <div style="color:#0e2358;font-weight:700;font-size:14px;margin-bottom:10px;">What happens next</div>
+        <div style="color:#6b7c8f;font-size:13px;line-height:1.8;">
+          1. Our pharmacist checks your order and confirms availability.<br>
+          2. We call or WhatsApp you on <?php echo esc_html( $phone ); ?> to confirm your delivery details.<br>
+          3. Your order is delivered to your address.
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <a href="https://wa.me/<?php echo esc_attr( $wa ); ?>" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">Chat on WhatsApp</a>
+        <a href="tel:<?php echo esc_attr( $tel_href ); ?>" style="display:inline-block;background:#0e2358;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;margin:0 6px 10px;">Call Us</a>
+      </div>
+    </div>
+
+    <div style="background:#f8f9fc;padding:18px 28px;text-align:center;border-top:1px solid #e7ebf1;">
+      <div style="color:#6b7c8f;font-size:12px;line-height:1.6;">
+        Leshavin Pharmacy. <?php echo esc_html( $tagline ); ?><br>
+        <?php echo esc_html( $phone ); ?> | <?php echo esc_html( $to_email ); ?><br>
+        <a href="<?php echo esc_url( $site_url ); ?>" style="color:#1c75bc;text-decoration:none;"><?php echo esc_html( $site_url ); ?></a>
+      </div>
+      <div style="color:#9aa8b8;font-size:11px;margin-top:10px;">This is an automated order confirmation. Please do not reply to this email.</div>
+    </div>
+
+  </div>
+</div>
+        <?php
+        return ob_get_clean();
+    }
+}
+
 // ─── AJAX: SEND ORDER (CHECKOUT) ───────────────
 // FIX: page-checkout.php's JS posts action=leshavin_send_order for both
 // "Place Order" and "Order Via WhatsApp", but until now there was no
 // wp_ajax_/wp_ajax_nopriv_ hook registered for that action. admin-ajax.php
-// therefore had nothing to route the request to and returned a bare
-// "0" with a 400 status. The checkout JS does fetch(...).then(r => r.json()),
-// which failed on that response and fell into the generic
-// "Something went wrong. Please try again or order via WhatsApp." message
-// every single time — regardless of what the customer entered.
+// therefore had nothing to route the request to and returned a bare "0"
+// with a 400 status, which the checkout JS could not parse as JSON —
+// every "Place Order" click fell into the generic error message.
 //
 // This handler creates a real WooCommerce order (pay on delivery, no
-// gateway needed), empties the cart, and emails the pharmacy via
-// leshavin_email() — the same address the contact and prescription
-// forms already use.
+// gateway needed) and empties the cart, for BOTH the website and
+// WhatsApp flows. It then flushes the JSON response back to the browser
+// immediately (before sending any email), so the checkout page can reset
+// to its normal state right away instead of waiting on wp_mail(), which
+// is often the slow part of the request.
+//
+// Emails:
+//   - The pharmacy inbox (leshavin_email()) always gets a short plain
+//     text notification, whichever button was used, so no order is missed.
+//   - The customer only gets the full HTML confirmation email when they
+//     used "Place Order". WhatsApp orders are confirmed in the chat
+//     itself, so no confirmation email is sent for that path.
 function leshavin_send_order_handler() {
     check_ajax_referer( 'leshavin_order_nonce', 'leshavin_order_nonce' );
 
@@ -393,22 +509,47 @@ function leshavin_send_order_handler() {
     $order->update_status( 'processing', sprintf( 'Order placed via %s checkout.', $via ) );
     $order->save();
 
+    $order_id = $order->get_id();
+
+    // Empty the cart on the server for every order, regardless of which
+    // button was used to place it.
     WC()->cart->empty_cart();
 
-    $to      = leshavin_email();
-    $subject = sprintf( 'New Order #%d from %s %s', $order->get_id(), $first, $last );
-    $body    = "New order received (via {$via}).\n\n"
-             . "Name: {$first} {$last}\n"
-             . "Phone: {$phone}\n"
-             . ( $email ? "Email: {$email}\n" : '' )
-             . "Address: {$address}, {$city}, {$state}" . ( $postcode ? " {$postcode}" : '' ) . "\n\n"
-             . "Total: " . $order->get_formatted_order_total() . "\n\n"
-             . ( $notes ? "Notes: {$notes}" : '' );
-    $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
+    // Send the JSON response to the browser right away so the page can
+    // start resetting immediately, instead of waiting for email sending
+    // (which can be slow) to finish first.
+    $response = [ 'success' => true, 'data' => [ 'order_id' => $order_id ] ];
+    if ( ! headers_sent() ) {
+        header( 'Content-Type: application/json; charset=UTF-8' );
+    }
+    echo wp_json_encode( $response );
+    if ( function_exists( 'fastcgi_finish_request' ) ) {
+        fastcgi_finish_request();
+    } else {
+        if ( ob_get_level() > 0 ) { ob_end_flush(); }
+        flush();
+    }
 
-    wp_mail( $to, $subject, $body, $headers );
+    // ── Pharmacy notification: always sent, whichever button was used ──
+    $admin_to      = leshavin_email();
+    $admin_subject = sprintf( 'New Order #%d from %s %s', $order_id, $first, $last );
+    $admin_body    = "New order received (via {$via}).\n\n"
+                   . "Name: {$first} {$last}\n"
+                   . "Phone: {$phone}\n"
+                   . ( $email ? "Email: {$email}\n" : '' )
+                   . "Address: {$address}, {$city}, {$state}" . ( $postcode ? " {$postcode}" : '' ) . "\n\n"
+                   . "Total: " . $order->get_formatted_order_total() . "\n\n"
+                   . ( $notes ? "Notes: {$notes}" : '' );
+    wp_mail( $admin_to, $admin_subject, $admin_body, [ 'Content-Type: text/plain; charset=UTF-8' ] );
 
-    wp_send_json_success( [ 'order_id' => $order->get_id() ] );
+    // ── Customer confirmation: only for website "Place Order" orders ──
+    if ( $via !== 'whatsapp' && $email ) {
+        $customer_subject = sprintf( 'Order Confirmation - Leshavin Pharmacy #%d', $order_id );
+        $customer_body    = leshavin_build_order_email_html( $order, $first );
+        wp_mail( $email, $customer_subject, $customer_body, [ 'Content-Type: text/html; charset=UTF-8' ] );
+    }
+
+    exit;
 }
 add_action('wp_ajax_leshavin_send_order',        'leshavin_send_order_handler');
 add_action('wp_ajax_nopriv_leshavin_send_order', 'leshavin_send_order_handler');

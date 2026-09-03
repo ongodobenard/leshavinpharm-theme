@@ -8,14 +8,21 @@
  * "Place Order" and "Order Via WhatsApp" both work with zero payment
  * gateways selected — native WC checkout processing (which was
  * throwing "Invalid payment method.") is bypassed entirely in favour
- * of a custom AJAX order-creation flow (leshavin_send_order), mirroring
- * how Family Drugmart Kenya's checkout behaves.
+ * of a custom AJAX order-creation flow (leshavin_send_order).
  *
- * FIX: added the missing wp_ajax_leshavin_send_order /
- * wp_ajax_nopriv_leshavin_send_order handler in functions.php. Before
- * this, admin-ajax.php had no route for the "leshavin_send_order"
- * action, so every "Place Order" click returned a 400 and the front
- * end fell into its generic "Something went wrong" message.
+ * FIX 1: added the missing wp_ajax_leshavin_send_order handler in
+ * functions.php (was previously unregistered, causing every "Place
+ * Order" click to fail with a 400 and fall into the generic error
+ * message).
+ *
+ * FIX 2: the page felt slow to reset after an order because the
+ * browser was waiting on wp_mail() (email sending) to finish before
+ * the AJAX response came back. functions.php now flushes the JSON
+ * response to the browser first and sends email afterwards, and this
+ * page triggers a WooCommerce cart-fragment refresh immediately on
+ * success, then does a full page reload shortly after so the cart,
+ * header cart icon, and form are all guaranteed to be back to a clean
+ * state — every time, for both "Place Order" and "Order Via WhatsApp".
  */
 
 /* Show product thumbnails in the order summary (WC's default review table
@@ -529,10 +536,10 @@ nav.breadcrumbs,
   }
 
   /* Sends the order to the server so it's saved as a real WooCommerce
-     order and the pharmacy is notified by email — regardless of
-     whether the customer used "Place Order" or "Order Via WhatsApp".
-     No payment method is collected; the order is created "pay on
-     delivery" server-side. */
+     order — regardless of whether the customer used "Place Order" or
+     "Order Via WhatsApp". No payment method is collected; the order
+     is created "pay on delivery" server-side, and the cart is always
+     emptied on the server as part of this call. */
   function sendOrderToServer(via, onDone){
     var form = document.getElementById('ckForm');
     var fd = new FormData(form);
@@ -547,7 +554,7 @@ nav.breadcrumbs,
   function showOrderSuccess(orderId){
     var successEl = document.getElementById('ckSuccessMsg');
     if (successEl){
-      successEl.innerHTML = '<strong>Order placed' + (orderId ? ' — #' + orderId : '') + '!</strong> Our pharmacist will confirm your order shortly. For urgent matters, WhatsApp us on <a href="https://wa.me/' + waPhone + '" target="_blank" style="color:inherit;font-weight:800;">' + waPhone + '</a>.';
+      successEl.innerHTML = '<strong>Order placed' + (orderId ? ' #' + orderId : '') + '!</strong> Our pharmacist will confirm your order shortly. For urgent matters, WhatsApp us on <a href="https://wa.me/' + waPhone + '" target="_blank" style="color:inherit;font-weight:800;">' + waPhone + '</a>.';
       successEl.classList.add('show');
       successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -563,6 +570,21 @@ nav.breadcrumbs,
 
     var placeBtn = document.getElementById('ckPlaceOrderBtn');
     if (placeBtn){ placeBtn.disabled = true; placeBtn.innerHTML = 'Order Placed'; }
+
+    // Immediately tell WooCommerce's own cart-fragments script (if loaded)
+    // to refresh the header mini-cart, so the cart icon count/total in
+    // the site header updates right away instead of staying stale.
+    if (window.jQuery) {
+      try { window.jQuery(document.body).trigger('wc_fragment_refresh'); } catch (e) {}
+    }
+
+    // Fully reload the page shortly after, so the cart, header, form,
+    // and nonce are all guaranteed fresh for the next order — this is
+    // the most reliable way to get the page fully back to its normal
+    // active state, rather than trying to patch every bit of UI by hand.
+    setTimeout(function(){
+      window.location.reload();
+    }, 1800);
   }
 
   function handlePlaceOrder(){
@@ -588,9 +610,11 @@ nav.breadcrumbs,
     splitName();
     if (!validateFields()) return;
     window.open('https://wa.me/' + waPhone + '?text=' + encodeURIComponent(buildWaMessage()), '_blank');
-    // Notify the pharmacy / save the order in the background too, so
-    // WhatsApp orders also land in WooCommerce and the inbox — the
-    // customer isn't blocked waiting on this.
+    // Save the order and empty the cart in the background too, so
+    // WhatsApp orders also land in WooCommerce and the pharmacy inbox —
+    // the customer isn't blocked waiting on this. No confirmation email
+    // is sent for this path (see functions.php); the WhatsApp chat is
+    // the customer's confirmation.
     sendOrderToServer('whatsapp', function(res){
       if (res && res.success){
         showOrderSuccess(res.data && res.data.order_id ? res.data.order_id : null);
