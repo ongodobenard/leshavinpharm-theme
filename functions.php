@@ -252,7 +252,7 @@ function leshavin_contact_handler() {
     $msg   = sanitize_textarea_field($_POST['contact_msg'] ?? '');
 
     $to      = leshavin_email();
-    $subject = "New Enquiry from {$name} — {$dept}";
+    $subject = "New Enquiry from {$name} : {$dept}";
     $body    = "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\nDept: {$dept}\n\n{$msg}";
     $headers = ['Content-Type: text/plain; charset=UTF-8', "From: {$name} <{$email}>"];
 
