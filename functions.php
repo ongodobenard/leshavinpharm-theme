@@ -111,6 +111,41 @@ if ( ! function_exists('leshavin_wa_svg') ) {
     }
 }
 
+// ─── NORMALIZE PHONE NUMBERS FOR wa.me LINKS ──────────────────
+// wa.me requires the full international number with country code and
+// no leading 0 (e.g. 254796038686), but customers type their number in
+// local format (0796038686) on every form. Passing that raw string
+// straight into a wa.me link is exactly what caused "Couldn't look up
+// phone number ... missing a country code or has the wrong one." on
+// the "WhatsApp Customer" buttons in the admin notification emails.
+// Normalizes any of: 0796038686 / 796038686 / 254796038686 /
+// +254 796 038 686 into the clean 254-prefixed digit string wa.me needs.
+if ( ! function_exists('leshavin_wa_digits') ) {
+    function leshavin_wa_digits( $phone ) {
+        $digits = preg_replace( '/[^0-9]/', '', (string) $phone );
+
+        if ( $digits === '' ) return '';
+
+        // Already has the country code (254XXXXXXXXX = 12 digits).
+        if ( strlen( $digits ) === 12 && substr( $digits, 0, 3 ) === '254' ) {
+            return $digits;
+        }
+
+        // Local format with leading 0 (0796038686 = 10 digits).
+        if ( strlen( $digits ) === 10 && $digits[0] === '0' ) {
+            return '254' . substr( $digits, 1 );
+        }
+
+        // Bare 9-digit number with no leading 0 (796038686).
+        if ( strlen( $digits ) === 9 ) {
+            return '254' . $digits;
+        }
+
+        // Fallback: return whatever we got, digits-only.
+        return $digits;
+    }
+}
+
 // ─── WHATSAPP ORDER BUTTON ON PRODUCT ─────────
 // Label switches based on prescription status: restricted products keep
 // the pharmacist-enquiry framing, everything else reads as a direct order.
@@ -267,7 +302,7 @@ if ( ! function_exists( 'leshavin_build_admin_contact_email_html' ) ) {
     function leshavin_build_admin_contact_email_html( $name, $email, $phone, $dept, $msg ) {
         $tagline   = leshavin_tagline();
         $site_url  = home_url( '/' );
-        $wa_digits = preg_replace( '/[^0-9]/', '', $phone );
+        $wa_digits = leshavin_wa_digits( $phone );
 
         ob_start();
         ?>
@@ -361,7 +396,7 @@ if ( ! function_exists( 'leshavin_build_admin_prescription_email_html' ) ) {
     function leshavin_build_admin_prescription_email_html( $name, $phone, $notes, $file_name ) {
         $tagline   = leshavin_tagline();
         $site_url  = home_url( '/' );
-        $wa_digits = preg_replace( '/[^0-9]/', '', $phone );
+        $wa_digits = leshavin_wa_digits( $phone );
 
         ob_start();
         ?>
@@ -632,7 +667,7 @@ if ( ! function_exists( 'leshavin_build_admin_order_email_html' ) ) {
 
         $total     = number_format( (float) $order->get_total(), 2 );
         $full_name = trim( $first_name . ' ' . $last_name );
-        $wa_digits = preg_replace( '/[^0-9]/', '', $phone );
+        $wa_digits = leshavin_wa_digits( $phone );
 
         ob_start();
         ?>
