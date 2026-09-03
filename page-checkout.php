@@ -2,6 +2,14 @@
 /**
  * Template Name: Checkout
  * Leshavin Pharmacy - page-checkout.php
+ *
+ * UPDATED: Checkout no longer requires selecting a WooCommerce payment
+ * method. The store takes payment on delivery (Cash / M-Pesa), so
+ * "Place Order" and "Order Via WhatsApp" both work with zero payment
+ * gateways selected — native WC checkout processing (which was
+ * throwing "Invalid payment method.") is bypassed entirely in favour
+ * of a custom AJAX order-creation flow (leshavin_send_order), mirroring
+ * how Family Drugmart Kenya's checkout behaves.
  */
 
 /* Show product thumbnails in the order summary (WC's default review table
@@ -17,13 +25,9 @@ add_filter( 'gettext', function( $translated, $text, $domain ) {
 	return $translated;
 }, 10, 3 );
 
-/* WooCommerce core auto-hooks woocommerce_checkout_payment() onto the
-   'woocommerce_checkout_order_review' action at priority 20 — meaning the
-   raw, unstyled payment box + Place Order button + privacy-policy text
-   render a SECOND time inside the sidebar order-summary output below,
-   on top of the one we render manually further down. Unhook it here so
-   there is exactly one payment/place-order block on the page, and we
-   control exactly where and how it renders. */
+/* We never render woocommerce_checkout_payment() on this page at all
+   (see below), but keep this removed as a safety net in case anything
+   else still hooks woocommerce_checkout_order_review at priority 20. */
 remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
 
 /* Attempt to unhook WooCommerce's own default breadcrumb wherever a theme
@@ -34,7 +38,11 @@ remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 )
 
 get_header();
 
-$ck_wa = leshavin_phone();
+// FIX: leshavin_phone() returns a DISPLAY-formatted number ("+254 792
+// 331 941") which breaks wa.me links (they need digits only). Use
+// leshavin_wa() instead, which returns the clean digit string.
+$ck_wa         = leshavin_wa();
+$ck_order_nonce = wp_create_nonce( 'leshavin_order_nonce' );
 ?>
 
 <style>
@@ -75,10 +83,6 @@ ul.woocommerce-error li{list-style:none;}
 
 /* ============================================================
    KILL DUPLICATE THEME PAGE-HEADER / BREADCRUMB BAR
-   The gradient blue bar above our custom header is a theme-level
-   feature, not part of this template. This targets the most common
-   selectors used by popular WordPress themes for that component.
-   Our own breadcrumb (.ck-breadcrumb) is never matched by these.
    ============================================================ */
 .woocommerce-breadcrumb,
 .ast-breadcrumbs,
@@ -102,9 +106,6 @@ nav.breadcrumbs,
 
 /* ============================================================
    HEAD
-   Uses the same concept as the cart page header: title on the
-   left, breadcrumb on the right, single row that wraps gracefully
-   on narrow screens. No underline accent — matches cart page style.
    ============================================================ */
 .ck-headrow{
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
@@ -163,6 +164,20 @@ nav.breadcrumbs,
 .ck-check{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--ck-text);margin-bottom:26px;cursor:pointer;}
 .ck-check input{width:18px;height:18px;accent-color:var(--ck-green-dark);flex-shrink:0;cursor:pointer;}
 
+/* ── PAY ON DELIVERY NOTE (replaces the payment-method selector) ── */
+.ck-pay-note{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--ck-bg-soft);border:1.5px solid var(--ck-border);border-left:4px solid var(--ck-green);
+  border-radius:10px;padding:16px 18px;margin-bottom:22px;
+}
+.ck-pay-note-icon{
+  width:34px;height:34px;border-radius:50%;background:#fff;border:1.5px solid var(--ck-border);
+  display:flex;align-items:center;justify-content:center;color:var(--ck-green-dark);flex-shrink:0;
+}
+.ck-pay-note-icon svg{width:16px;height:16px;}
+.ck-pay-note-title{font-family:var(--ck-font-head);font-weight:700;font-size:.88rem;color:var(--ck-navy);margin-bottom:3px;}
+.ck-pay-note-sub{font-size:.8rem;color:var(--ck-text-light);line-height:1.55;}
+
 /* Feedback message: plain colored text only — no icon, no background,
    no border, no pill shape. Sits directly above the buttons. */
 .ck-val-msg{
@@ -172,30 +187,27 @@ nav.breadcrumbs,
 }
 .ck-val-msg.show{display:block;}
 
-/* Payment gateway list is hidden — store only accepts Cash on Delivery. */
-#ckPaymentHidden{display:none;}
+.ck-success-msg{
+  display:none;
+  background:var(--ck-bg-soft);border:1.5px solid var(--ck-border);border-left:4px solid var(--ck-green);
+  border-radius:10px;padding:14px 16px;margin:0 0 14px;font-size:.84rem;color:var(--ck-text);line-height:1.6;
+}
+.ck-success-msg.show{display:block;}
+.ck-success-msg strong{color:var(--ck-green-dark);}
 
 /* Final action row */
 .ck-final-btn-row{
-  display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:flex-start;width:100%;
+  display:flex;flex-wrap:wrap;gap:14px;align-items:stretch;justify-content:flex-start;width:100%;
 }
-.ck-final-btn-row .form-row.place-order{margin:0;display:flex;flex-direction:column;gap:10px;flex:1 1 220px;max-width:280px;min-width:0;}
-.ck-final-btn-row noscript{display:none;}
-.ck-final-btn-row .woocommerce-privacy-policy-text{display:none;}
-.ck-final-btn-row .woocommerce-terms-and-conditions-wrapper{display:none;}
-.ck-final-btn-row .woocommerce-form__label-for-checkbox{display:flex;align-items:flex-start;gap:9px;font-size:.84rem;color:var(--ck-text);cursor:pointer;width:100%;margin:0;}
-.ck-final-btn-row input#terms{width:18px;height:18px;accent-color:var(--ck-green-dark);flex-shrink:0;margin-top:1px;cursor:pointer;}
-.ck-final-btn-row .required{color:var(--ck-red);}
-#ckPlaceOrderMount{display:flex;flex:1 1 220px;max-width:280px;min-width:0;}
-.ck-final-btn-row #place_order{
-  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+.ck-place-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;flex:1 1 220px;max-width:280px;min-width:0;
   background:var(--ck-navy);color:#fff;border:none;cursor:pointer;
   padding:16px 20px;border-radius:9px;font-family:var(--ck-font-head);font-weight:600;font-size:.9rem;
   letter-spacing:.02em;transition:background .2s,transform .2s;white-space:nowrap;
   box-shadow:0 10px 22px rgba(14,35,88,.18);
 }
-.ck-final-btn-row #place_order:hover{background:var(--ck-blue-dark);transform:translateY(-1px);}
-.ck-final-btn-row #place_order:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+.ck-place-btn:hover{background:var(--ck-blue-dark);transform:translateY(-1px);}
+.ck-place-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
 
 .ck-wa-btn{
   display:flex;align-items:center;justify-content:center;gap:9px;flex:1 1 240px;max-width:320px;min-width:0;
@@ -245,6 +257,10 @@ nav.breadcrumbs,
 }
 .ck-secure-note svg{width:16px;height:16px;flex-shrink:0;}
 
+/* Fades the form out once the order has been placed. */
+.ck-form-faded .ck-card{opacity:.3;pointer-events:none;transition:opacity .4s;}
+.ck-form-faded #ckActionsCard{opacity:1;pointer-events:auto;}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -260,9 +276,7 @@ nav.breadcrumbs,
   .ck-form-card{padding:22px 18px;}
   .ck-grid{grid-template-columns:1fr;}
   .ck-final-btn-row{flex-direction:column;align-items:stretch;}
-  .ck-final-btn-row .form-row.place-order,
-  #ckPlaceOrderMount,
-  .ck-wa-btn{flex:1 1 auto;max-width:100%;}
+  .ck-place-btn,.ck-wa-btn{flex:1 1 auto;max-width:100%;}
   .ck-sidebar table.woocommerce-checkout-review-order-table td,
   .ck-sidebar table.woocommerce-checkout-review-order-table th{padding:13px 16px;}
   .ck-secure-note{padding:0 16px 20px;}
@@ -285,12 +299,12 @@ nav.breadcrumbs,
   <?php if ( function_exists('WC') && WC()->cart && ! WC()->cart->is_empty() ) : ?>
 
   <div class="ck-wrap">
-    <div class="ck-layout">
+    <div class="ck-layout" id="ckLayout">
 
-      <div class="ck-card ck-form-card">
-        <form id="ckForm" name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" novalidate>
+      <div class="ck-card ck-form-card" id="ckFormCard">
+        <form id="ckForm" novalidate>
 
-          <input type="hidden" name="billing_country" id="billing_country" value="KE">
+          <?php wp_nonce_field( 'leshavin_order_nonce', 'leshavin_order_nonce' ); ?>
           <input type="hidden" name="billing_first_name" id="billing_first_name" value="">
           <input type="hidden" name="billing_last_name" id="billing_last_name" value="">
 
@@ -320,7 +334,7 @@ nav.breadcrumbs,
             <div class="ck-fg" data-field="billing_state">
               <label>County <span class="req">*</span></label>
               <?php
-              $ck_states = WC()->countries->get_states('KE');
+              $ck_states = function_exists('WC') ? WC()->countries->get_states('KE') : [];
               if ( $ck_states ) : ?>
               <select name="billing_state" id="billing_state">
                 <option value="">Select your county&hellip;</option>
@@ -357,20 +371,28 @@ nav.breadcrumbs,
             <span>Save this information for faster checkout next time</span>
           </label>
 
-          <!-- Payment method list is hidden: the store only accepts Cash on
-               Delivery, so WooCommerce auto-selects it with nothing for the
-               shopper to choose. This wrapper stays in the DOM only so the
-               nonce field and the real terms+place-order row exist for our
-               JS to move into the visible action row below. -->
-          <div id="ckPaymentHidden">
-            <?php woocommerce_checkout_payment(); ?>
+          <!-- No payment method to select — the store takes payment on
+               delivery, so checkout never blocks on "Invalid payment
+               method." like native WooCommerce checkout used to. -->
+          <div class="ck-pay-note">
+            <div class="ck-pay-note-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            </div>
+            <div>
+              <div class="ck-pay-note-title">Pay on Delivery</div>
+              <div class="ck-pay-note-sub">No payment is needed now. Pay by Cash or M-Pesa when your order arrives, or once our pharmacist confirms it with you.</div>
+            </div>
           </div>
 
           <!-- Feedback appears here, plain colored text (no icon), right above the buttons. -->
           <div class="ck-val-msg" id="ckValMsg"></div>
+          <div class="ck-success-msg" id="ckSuccessMsg"></div>
 
-          <div class="ck-final-btn-row">
-            <div id="ckPlaceOrderMount"></div>
+          <div class="ck-final-btn-row" id="ckActionsCard">
+            <button type="button" class="ck-place-btn" id="ckPlaceOrderBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Place Order
+            </button>
             <a href="#" id="ckWaBtn" class="ck-wa-btn">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Order Via WhatsApp
@@ -387,7 +409,7 @@ nav.breadcrumbs,
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
             Order Summary
           </div>
-          <div class="ck-order-table-wrap">
+          <div class="ck-order-table-wrap" id="ckOrderTableWrap">
             <?php do_action( 'woocommerce_checkout_order_review' ); ?>
           </div>
           <div class="ck-secure-note">
@@ -415,13 +437,13 @@ nav.breadcrumbs,
 
 <script>
 (function(){
-  var waPhone = '<?php echo esc_js( $ck_wa ); ?>';
+  var waPhone   = '<?php echo esc_js( $ck_wa ); ?>';
+  var AJAX_URL  = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
 
   /* ── Universal, theme-agnostic safety net: hide ANY leftover
      breadcrumb/page-header element the theme injects above our
      content, regardless of what class name it uses, as long as it
-     isn't part of our own .ck-page markup. This runs after the DOM
-     is ready so it also catches elements added late by the theme. ── */
+     isn't part of our own .ck-page markup. ── */
   function killDuplicateBreadcrumbs(){
     var pattern = /breadcrumb|page-?title-?bar|page-?header/i;
     document.querySelectorAll('body *').forEach(function(el){
@@ -433,22 +455,6 @@ nav.breadcrumbs,
       }
     });
   }
-
-  /* ── Relocate WooCommerce's real terms+button row out of the hidden
-     payment wrapper into the visible action row, so there's exactly one
-     #place_order element on the page and it's the one people actually
-     see and click. Runs immediately on page load — the hidden wrapper is
-     display:none, so there's no visible flash. ── */
-  (function relocatePlaceOrder(){
-    var nativeRow = document.querySelector('#ckPaymentHidden .form-row.place-order');
-    var mount = document.getElementById('ckPlaceOrderMount');
-    if (!nativeRow || !mount) return;
-    mount.appendChild(nativeRow);
-    var btn = mount.querySelector('#place_order');
-    if (btn) {
-      btn.innerHTML = 'Place Order <span style="font-weight:700;">&rarr;</span>';
-    }
-  })();
 
   function val(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
@@ -468,7 +474,6 @@ nav.breadcrumbs,
     msg.classList.add('show');
     msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
-
   function clearMsg(){
     var msg = document.getElementById('ckValMsg');
     if (msg) msg.classList.remove('show');
@@ -495,6 +500,26 @@ nav.breadcrumbs,
     return !missing;
   }
 
+  /* Reads every item row already rendered in the order-summary sidebar
+     (name, quantity, line total) so BOTH the WhatsApp message and the
+     server-side order use exactly what the customer sees on screen. */
+  function collectCartLines(){
+    var lines = [];
+    document.querySelectorAll('.ck-sidebar .woocommerce-checkout-review-order-table tbody tr').forEach(function(row){
+      var text = row.querySelector('.ck-item-text');
+      var qty  = row.querySelector('.product-quantity');
+      var total = row.querySelector('.product-total');
+      if (text && total){
+        lines.push({
+          name: text.textContent.trim(),
+          qty: qty ? qty.textContent.trim() : '',
+          total: total.textContent.trim()
+        });
+      }
+    });
+    return lines;
+  }
+
   function buildWaMessage(){
     var name = val('ck_full_name');
     var phone = val('billing_phone');
@@ -506,48 +531,105 @@ nav.breadcrumbs,
     var postcode = val('billing_postcode');
     var notes = val('ck_order_notes');
 
-    var lines = [];
-    document.querySelectorAll('.ck-sidebar .woocommerce-checkout-review-order-table tbody tr').forEach(function(row){
-      var text = row.querySelector('.ck-item-text');
-      var qty  = row.querySelector('.product-quantity');
-      var total = row.querySelector('.product-total');
-      if (text && total){
-        lines.push(text.textContent.trim() + (qty ? ' (' + qty.textContent.trim() + ')' : '') + ': ' + total.textContent.trim());
-      }
-    });
+    var lines = collectCartLines();
     var grand = document.querySelector('.ck-sidebar tfoot .order-total .amount');
     var grandText = grand ? grand.textContent.trim() : '';
 
     var msg = 'Hello Leshavin Pharmacy, I would like to place an order.\n\n';
     msg += 'Name: ' + name + '\nPhone: ' + phone + (email ? '\nEmail: ' + email : '') + '\n';
     msg += 'Delivery Address: ' + address + ', ' + city + ', ' + countyText + (postcode ? ' ' + postcode : '') + '\n\n';
-    if (lines.length){ msg += 'Order Items:\n' + lines.join('\n') + '\n\n'; }
+    if (lines.length){
+      msg += 'Order Items:\n';
+      lines.forEach(function(l){ msg += '- ' + l.name + (l.qty ? ' (' + l.qty + ')' : '') + ': ' + l.total + '\n'; });
+      msg += '\n';
+    }
     if (grandText) msg += 'Total: ' + grandText + '\n\n';
     if (notes){ msg += 'Additional Notes: ' + notes + '\n\n'; }
-    msg += 'Please confirm my order. Thank you.';
+    msg += 'I will pay by Cash / M-Pesa on delivery. Please confirm my order. Thank you.';
     return msg;
   }
 
-  /* Validate before letting the real WooCommerce submit go through. */
-  document.addEventListener('DOMContentLoaded', function(){
-    killDuplicateBreadcrumbs();
+  /* Sends the order to the server so it's saved as a real WooCommerce
+     order and the pharmacy is notified by email — regardless of
+     whether the customer used "Place Order" or "Order Via WhatsApp".
+     No payment method is collected; the order is created "pay on
+     delivery" server-side. */
+  function sendOrderToServer(via, onDone){
+    var form = document.getElementById('ckForm');
+    var fd = new FormData(form);
+    fd.append('action', 'leshavin_send_order');
+    fd.append('order_via', via || 'website');
+    fetch(AJAX_URL, { method: 'POST', body: fd })
+      .then(function(r){ return r.json(); })
+      .then(function(res){ if (onDone) onDone(res); })
+      .catch(function(){ if (onDone) onDone(null); });
+  }
 
-    var placeBtn = document.getElementById('place_order');
-    if (placeBtn) placeBtn.addEventListener('click', function(e){
-      splitName();
-      if (!validateFields()){
-        e.preventDefault();
-        e.stopImmediatePropagation();
+  function showOrderSuccess(orderId){
+    var successEl = document.getElementById('ckSuccessMsg');
+    if (successEl){
+      successEl.innerHTML = '<strong>Order placed' + (orderId ? ' — #' + orderId : '') + '!</strong> Our pharmacist will confirm your order shortly. Pay by Cash or M-Pesa on delivery. For urgent matters, WhatsApp us on <a href="https://wa.me/' + waPhone + '" target="_blank" style="color:inherit;font-weight:800;">' + waPhone + '</a>.';
+      successEl.classList.add('show');
+      successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    clearMsg();
+
+    var layout = document.getElementById('ckLayout');
+    if (layout) layout.classList.add('ck-form-faded');
+
+    var tbody = document.querySelector('.ck-sidebar .woocommerce-checkout-review-order-table tbody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="2" style="padding:15px 24px;text-align:center;color:var(--ck-text-light);font-size:.82rem;">Cart cleared</td></tr>';
+    var totCell = document.querySelector('.ck-sidebar tfoot .order-total .amount');
+    if (totCell) totCell.textContent = 'KSh 0.00';
+
+    var placeBtn = document.getElementById('ckPlaceOrderBtn');
+    if (placeBtn){ placeBtn.disabled = true; placeBtn.innerHTML = 'Order Placed'; }
+  }
+
+  function handlePlaceOrder(){
+    splitName();
+    if (!validateFields()) return;
+    var btn = document.getElementById('ckPlaceOrderBtn');
+    var original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Placing Order&hellip;';
+    sendOrderToServer('website', function(res){
+      btn.disabled = false;
+      btn.innerHTML = original;
+      if (res && res.success){
+        showOrderSuccess(res.data && res.data.order_id ? res.data.order_id : null);
+      } else {
+        var msg = (res && res.data && res.data.msg) ? res.data.msg : 'Something went wrong. Please try again or order via WhatsApp.';
+        showMsg(msg);
       }
     });
-  });
+  }
 
-  var waBtn = document.getElementById('ckWaBtn');
-  if (waBtn) waBtn.addEventListener('click', function(e){
-    e.preventDefault();
+  function handleWaOrder(){
     splitName();
     if (!validateFields()) return;
     window.open('https://wa.me/' + waPhone + '?text=' + encodeURIComponent(buildWaMessage()), '_blank');
+    // Notify the pharmacy / save the order in the background too, so
+    // WhatsApp orders also land in WooCommerce and the inbox — the
+    // customer isn't blocked waiting on this.
+    sendOrderToServer('whatsapp', function(res){
+      if (res && res.success){
+        showOrderSuccess(res.data && res.data.order_id ? res.data.order_id : null);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    killDuplicateBreadcrumbs();
+
+    var placeBtn = document.getElementById('ckPlaceOrderBtn');
+    if (placeBtn) placeBtn.addEventListener('click', handlePlaceOrder);
+
+    var waBtn = document.getElementById('ckWaBtn');
+    if (waBtn) waBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      handleWaOrder();
+    });
   });
 
 })();
