@@ -329,6 +329,90 @@ function leshavin_submit_prescription_handler() {
 add_action('wp_ajax_leshavin_submit_prescription',        'leshavin_submit_prescription_handler');
 add_action('wp_ajax_nopriv_leshavin_submit_prescription', 'leshavin_submit_prescription_handler');
 
+// ─── AJAX: SEND ORDER (CHECKOUT) ───────────────
+// FIX: page-checkout.php's JS posts action=leshavin_send_order for both
+// "Place Order" and "Order Via WhatsApp", but until now there was no
+// wp_ajax_/wp_ajax_nopriv_ hook registered for that action. admin-ajax.php
+// therefore had nothing to route the request to and returned a bare
+// "0" with a 400 status. The checkout JS does fetch(...).then(r => r.json()),
+// which failed on that response and fell into the generic
+// "Something went wrong. Please try again or order via WhatsApp." message
+// every single time — regardless of what the customer entered.
+//
+// This handler creates a real WooCommerce order (pay on delivery, no
+// gateway needed), empties the cart, and emails the pharmacy via
+// leshavin_email() — the same address the contact and prescription
+// forms already use.
+function leshavin_send_order_handler() {
+    check_ajax_referer( 'leshavin_order_nonce', 'leshavin_order_nonce' );
+
+    if ( ! function_exists('WC') || ! WC()->cart || WC()->cart->is_empty() ) {
+        wp_send_json_error(['msg' => 'Your cart is empty.']);
+    }
+
+    $first    = sanitize_text_field( $_POST['billing_first_name'] ?? '' );
+    $last     = sanitize_text_field( $_POST['billing_last_name']  ?? '' );
+    $phone    = sanitize_text_field( $_POST['billing_phone']      ?? '' );
+    $email    = sanitize_email( $_POST['billing_email']           ?? '' );
+    $state    = sanitize_text_field( $_POST['billing_state']      ?? '' );
+    $address  = sanitize_textarea_field( $_POST['billing_address_1'] ?? '' );
+    $city     = sanitize_text_field( $_POST['billing_city']       ?? '' );
+    $postcode = sanitize_text_field( $_POST['billing_postcode']   ?? '' );
+    $notes    = sanitize_textarea_field( $_POST['order_comments'] ?? '' );
+    $via      = sanitize_text_field( $_POST['order_via']          ?? 'website' );
+
+    if ( empty($first) || empty($phone) || empty($state) || empty($address) || empty($city) ) {
+        wp_send_json_error(['msg' => 'Please fill in all required fields.']);
+    }
+
+    $order = wc_create_order();
+
+    foreach ( WC()->cart->get_cart() as $item ) {
+        $order->add_product( $item['data'], $item['quantity'] );
+    }
+
+    $order->set_address( [
+        'first_name' => $first,
+        'last_name'  => $last,
+        'phone'      => $phone,
+        'email'      => $email,
+        'state'      => $state,
+        'address_1'  => $address,
+        'city'       => $city,
+        'postcode'   => $postcode,
+        'country'    => 'KE',
+    ], 'billing' );
+
+    if ( $notes ) {
+        $order->set_customer_note( $notes );
+    }
+
+    $order->set_payment_method( 'cod' );
+    $order->set_payment_method_title( 'Cash / M-Pesa on Delivery' );
+    $order->calculate_totals();
+    $order->update_status( 'processing', sprintf( 'Order placed via %s checkout.', $via ) );
+    $order->save();
+
+    WC()->cart->empty_cart();
+
+    $to      = leshavin_email();
+    $subject = sprintf( 'New Order #%d from %s %s', $order->get_id(), $first, $last );
+    $body    = "New order received (via {$via}).\n\n"
+             . "Name: {$first} {$last}\n"
+             . "Phone: {$phone}\n"
+             . ( $email ? "Email: {$email}\n" : '' )
+             . "Address: {$address}, {$city}, {$state}" . ( $postcode ? " {$postcode}" : '' ) . "\n\n"
+             . "Total: " . $order->get_formatted_order_total() . "\n\n"
+             . ( $notes ? "Notes: {$notes}" : '' );
+    $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
+
+    wp_mail( $to, $subject, $body, $headers );
+
+    wp_send_json_success( [ 'order_id' => $order->get_id() ] );
+}
+add_action('wp_ajax_leshavin_send_order',        'leshavin_send_order_handler');
+add_action('wp_ajax_nopriv_leshavin_send_order', 'leshavin_send_order_handler');
+
 // ─────────────────────────────────────────────
 // SUPPRESS ALL WOOCOMMERCE DEFAULT NOTICES
 // We use our own custom toast (#leshavin-toast in front-page.php) for

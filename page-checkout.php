@@ -10,6 +10,12 @@
  * throwing "Invalid payment method.") is bypassed entirely in favour
  * of a custom AJAX order-creation flow (leshavin_send_order), mirroring
  * how Family Drugmart Kenya's checkout behaves.
+ *
+ * FIX: added the missing wp_ajax_leshavin_send_order /
+ * wp_ajax_nopriv_leshavin_send_order handler in functions.php. Before
+ * this, admin-ajax.php had no route for the "leshavin_send_order"
+ * action, so every "Place Order" click returned a 400 and the front
+ * end fell into its generic "Something went wrong" message.
  */
 
 /* Show product thumbnails in the order summary (WC's default review table
@@ -163,20 +169,6 @@ nav.breadcrumbs,
 
 .ck-check{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--ck-text);margin-bottom:26px;cursor:pointer;}
 .ck-check input{width:18px;height:18px;accent-color:var(--ck-green-dark);flex-shrink:0;cursor:pointer;}
-
-/* ── PAY ON DELIVERY NOTE (replaces the payment-method selector) ── */
-.ck-pay-note{
-  display:flex;align-items:flex-start;gap:12px;
-  background:var(--ck-bg-soft);border:1.5px solid var(--ck-border);border-left:4px solid var(--ck-green);
-  border-radius:10px;padding:16px 18px;margin-bottom:22px;
-}
-.ck-pay-note-icon{
-  width:34px;height:34px;border-radius:50%;background:#fff;border:1.5px solid var(--ck-border);
-  display:flex;align-items:center;justify-content:center;color:var(--ck-green-dark);flex-shrink:0;
-}
-.ck-pay-note-icon svg{width:16px;height:16px;}
-.ck-pay-note-title{font-family:var(--ck-font-head);font-weight:700;font-size:.88rem;color:var(--ck-navy);margin-bottom:3px;}
-.ck-pay-note-sub{font-size:.8rem;color:var(--ck-text-light);line-height:1.55;}
 
 /* Feedback message: plain colored text only — no icon, no background,
    no border, no pill shape. Sits directly above the buttons. */
@@ -371,19 +363,6 @@ nav.breadcrumbs,
             <span>Save this information for faster checkout next time</span>
           </label>
 
-          <!-- No payment method to select — the store takes payment on
-               delivery, so checkout never blocks on "Invalid payment
-               method." like native WooCommerce checkout used to. -->
-          <div class="ck-pay-note">
-            <div class="ck-pay-note-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-            </div>
-            <div>
-              <div class="ck-pay-note-title">Pay on Delivery</div>
-              <div class="ck-pay-note-sub">No payment is needed now. Pay by Cash or M-Pesa when your order arrives, or once our pharmacist confirms it with you.</div>
-            </div>
-          </div>
-
           <!-- Feedback appears here, plain colored text (no icon), right above the buttons. -->
           <div class="ck-val-msg" id="ckValMsg"></div>
           <div class="ck-success-msg" id="ckSuccessMsg"></div>
@@ -545,7 +524,7 @@ nav.breadcrumbs,
     }
     if (grandText) msg += 'Total: ' + grandText + '\n\n';
     if (notes){ msg += 'Additional Notes: ' + notes + '\n\n'; }
-    msg += 'I will pay by Cash / M-Pesa on delivery. Please confirm my order. Thank you.';
+    msg += 'Please confirm my order. Thank you.';
     return msg;
   }
 
@@ -568,7 +547,7 @@ nav.breadcrumbs,
   function showOrderSuccess(orderId){
     var successEl = document.getElementById('ckSuccessMsg');
     if (successEl){
-      successEl.innerHTML = '<strong>Order placed' + (orderId ? ' — #' + orderId : '') + '!</strong> Our pharmacist will confirm your order shortly. Pay by Cash or M-Pesa on delivery. For urgent matters, WhatsApp us on <a href="https://wa.me/' + waPhone + '" target="_blank" style="color:inherit;font-weight:800;">' + waPhone + '</a>.';
+      successEl.innerHTML = '<strong>Order placed' + (orderId ? ' — #' + orderId : '') + '!</strong> Our pharmacist will confirm your order shortly. For urgent matters, WhatsApp us on <a href="https://wa.me/' + waPhone + '" target="_blank" style="color:inherit;font-weight:800;">' + waPhone + '</a>.';
       successEl.classList.add('show');
       successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
