@@ -111,6 +111,47 @@ if ( ! function_exists('leshavin_wa_svg') ) {
     }
 }
 
+// ─── FORCE-REPLACE SPECIFIC PRODUCT IMAGE SITE-WIDE ──────────
+// Any product currently using download-1.png as its image (thumbnail,
+// gallery, or full size) will render prescrpition_image.png instead,
+// everywhere it appears: shop grid, single product, related products,
+// AJAX product filter, etc. No changes needed per-product or in the
+// Media Library — this works purely off the resolved image URL.
+if ( ! function_exists( 'leshavin_force_image_swap' ) ) {
+    function leshavin_force_image_swap( $url ) {
+        if ( is_string( $url ) && strpos( $url, 'download-1.png' ) !== false ) {
+            return 'https://www.leshavinpharmacy.com/wp-content/uploads/2026/09/prescrpition_image.png';
+        }
+        return $url;
+    }
+}
+
+// Covers wp_get_attachment_image_src() and everything built on top of
+// it: wp_get_attachment_image(), wp_get_attachment_image_url(),
+// get_the_post_thumbnail_url() (used in leshavin_filter_products()
+// below), woocommerce_get_product_thumbnail(), etc.
+add_filter( 'wp_get_attachment_image_src', function( $image ) {
+    if ( is_array( $image ) && isset( $image[0] ) ) {
+        $image[0] = leshavin_force_image_swap( $image[0] );
+    }
+    return $image;
+} );
+
+// Covers direct wp_get_attachment_url() calls (some gallery/lightbox
+// and full-size image fetches go through this instead).
+add_filter( 'wp_get_attachment_url', 'leshavin_force_image_swap' );
+
+// Strips the original image out of the responsive srcset so the
+// browser can't silently pick a different-sized version of it back up.
+add_filter( 'wp_calculate_image_srcset', function( $sources ) {
+    foreach ( $sources as $width => $source ) {
+        if ( isset( $source['url'] ) && strpos( $source['url'], 'download-1.png' ) !== false ) {
+            unset( $sources[ $width ] );
+        }
+    }
+    return $sources;
+} );
+
 // ─── NORMALIZE PHONE NUMBERS FOR wa.me LINKS ──────────────────
 // wa.me requires the full international number with country code and
 // no leading 0 (e.g. 254796038686), but customers type their number in
