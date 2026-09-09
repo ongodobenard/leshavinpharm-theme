@@ -410,15 +410,16 @@ window.addEventListener('load', function () {
   var toastTimer = null, isSending = false;
 
   /* ---- Reflow: on mobile, move the Upload field into the Details
-     card right after Additional Notes (before Submit). On desktop,
+     card right after Phone Number (before Additional Notes). On desktop,
      put it back in its original spot in the Upload card. ---- */
   var privacyBox = document.getElementById('rxpPrivacyBox');
+  var notesField = document.getElementById('rxp-fg-notes');
 
   function placeUploadField() {
     var isMobile = window.matchMedia('(max-width: 640px)').matches;
     if (isMobile) {
-      if (fgFile.nextSibling !== btn || fgFile.parentNode !== btn.parentNode) {
-        btn.parentNode.insertBefore(fgFile, btn);
+      if (fgFile.nextSibling !== notesField || fgFile.parentNode !== notesField.parentNode) {
+        notesField.parentNode.insertBefore(fgFile, notesField);
       }
     } else {
       if (fgFile.nextSibling !== privacyBox || fgFile.parentNode !== privacyBox.parentNode) {
