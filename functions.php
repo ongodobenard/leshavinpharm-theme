@@ -117,9 +117,17 @@ if ( ! function_exists('leshavin_wa_svg') ) {
 // everywhere it appears: shop grid, single product, related products,
 // AJAX product filter, etc. No changes needed per-product or in the
 // Media Library — this works purely off the resolved image URL.
+//
+// The regex matches download-1.png (the original) AND every
+// WordPress-generated resized version of it, e.g.
+// download-1-150x150.png, download-1-300x300.png,
+// download-1-600x600.png, etc. A plain strpos('download-1.png') only
+// matched the original filename, which is why the swap worked on the
+// single product page (full-size image) but not in grids/archives
+// like "Trending Products" (which use the resized -150x150 file).
 if ( ! function_exists( 'leshavin_force_image_swap' ) ) {
     function leshavin_force_image_swap( $url ) {
-        if ( is_string( $url ) && strpos( $url, 'download-1.png' ) !== false ) {
+        if ( is_string( $url ) && preg_match( '/download-1(-\d+x\d+)?\.png$/i', $url ) ) {
             return 'https://www.leshavinpharmacy.com/wp-content/uploads/2026/09/prescrpition_image.png';
         }
         return $url;
@@ -141,11 +149,12 @@ add_filter( 'wp_get_attachment_image_src', function( $image ) {
 // and full-size image fetches go through this instead).
 add_filter( 'wp_get_attachment_url', 'leshavin_force_image_swap' );
 
-// Strips the original image out of the responsive srcset so the
-// browser can't silently pick a different-sized version of it back up.
+// Strips every resized version of the original image out of the
+// responsive srcset so the browser can't silently pick a
+// different-sized version of it back up.
 add_filter( 'wp_calculate_image_srcset', function( $sources ) {
     foreach ( $sources as $width => $source ) {
-        if ( isset( $source['url'] ) && strpos( $source['url'], 'download-1.png' ) !== false ) {
+        if ( isset( $source['url'] ) && preg_match( '/download-1(-\d+x\d+)?\.png$/i', $source['url'] ) ) {
             unset( $sources[ $width ] );
         }
     }
