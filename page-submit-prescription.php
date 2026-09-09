@@ -46,11 +46,12 @@ $rxp_hero_bg = get_template_directory_uri() . '/assets/js/images/prescriptionbg.
    ============================================================ */
 .rxp-hero{
   position:relative;
-  padding:70px 0 64px;
+  padding:90px 0 70px;
+  min-height:480px;
   overflow:hidden;
   background-image:url('<?php echo esc_url( $rxp_hero_bg ); ?>');
   background-size:cover;
-  background-position:center right;
+  background-position:top right;
   background-repeat:no-repeat;
 }
 .rxp-hero::before{
@@ -198,7 +199,7 @@ $rxp_hero_bg = get_template_directory_uri() . '/assets/js/images/prescriptionbg.
   :root{--rxp-px:16px;}
 }
 @media(max-width:1000px){
-  .rxp-hero{padding:52px 0 46px;}
+  .rxp-hero{padding:52px 0 46px;min-height:0;}
   .rxp-hero::before{
     background:linear-gradient(180deg,
       #ffffff 0%,
@@ -221,6 +222,7 @@ $rxp_hero_bg = get_template_directory_uri() . '/assets/js/images/prescriptionbg.
   .rxp-hero{
     padding:32px 0 28px;
     background-image:none;
+    min-height:0;
   }
   .rxp-hero::before{display:none;}
   .rxp-hero-media-box{
