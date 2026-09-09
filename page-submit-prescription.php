@@ -46,12 +46,12 @@ $rxp_hero_bg = get_template_directory_uri() . '/assets/js/images/prescriptionbg.
    ============================================================ */
 .rxp-hero{
   position:relative;
-  padding:90px 0 70px;
-  min-height:480px;
+  padding:96px 0 76px;
+  min-height:540px;
   overflow:hidden;
   background-image:url('<?php echo esc_url( $rxp_hero_bg ); ?>');
   background-size:cover;
-  background-position:top right;
+  background-position:right 15%;
   background-repeat:no-repeat;
 }
 .rxp-hero::before{
