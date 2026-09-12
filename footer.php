@@ -142,7 +142,14 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 /* ============================================================
    FOOTER MINI MAP (Contact Us column)
    ============================================================ */
-.foot-map-wrap{margin-top:16px;}
+/* position:relative here makes this the anchor for the "View Map"
+   link below, which is pulled OUT of normal flow on desktop (see
+   .foot-map-link) so this wrap's flow-height ends exactly at the
+   bottom of .foot-map itself, not at the bottom of the link text
+   underneath it. That flow-height is what the grid uses to size the
+   row, which is what lets the license card (bottom-aligned in its
+   own column via flex) land flush with the map's bottom border. */
+.foot-map-wrap{margin-top:16px; position:relative;}
 .foot-map{
   position:relative;
   width:100%;
@@ -160,13 +167,22 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 .foot-map-overlay{
   position:absolute;inset:0;background:transparent;cursor:pointer;
 }
+/* Desktop only: pulled out of normal flow (absolute, anchored to
+   .foot-map-wrap) so it renders visually right below the map exactly
+   as before, but no longer counts toward the column's flow-height.
+   Reverted to normal static flow at <=960px in the responsive block
+   below, since columns stack there and this alignment no longer
+   applies - keeping it static on smaller screens also avoids it
+   overlapping the tight mobile footer padding. */
 .foot-map-link{
+  position:absolute; top:100%; left:0;
   display:inline-flex;align-items:center;gap:6px;
   margin-top:10px;
   font-family:var(--ft-font-head);font-size:.76rem;font-weight:600;
   letter-spacing:.04em;text-transform:uppercase;
   color:var(--ft-green);text-decoration:none;
   transition:color .18s,gap .18s;
+  white-space:nowrap;
 }
 .foot-map-link svg{width:13px;height:13px;flex-shrink:0;}
 .foot-map-link:hover{color:#fff;gap:9px;}
@@ -200,6 +216,12 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
   .foot-desc{max-width:none;}
   .foot-license-wrap{margin-top:20px;}
   .foot-license-card{max-width:340px;}
+
+  /* Columns stack from here down, so the map/license bottom-border
+     alignment no longer applies - put the "View Map" link back into
+     normal flow underneath the map instead of floating over
+     whatever content follows. */
+  .foot-map-link{position:static; margin-top:10px;}
 }
 @media(max-width:600px){
   :root{--ft-px:20px;}
