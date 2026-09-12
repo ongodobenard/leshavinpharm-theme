@@ -2,7 +2,7 @@
 /**
  * Leshavin Pharmacy — footer.php
  */
-$lph_wa    = leshavin_phone();
+$lph_wa    = leshavin_wa(); // digits-only number for wa.me links - leshavin_phone() has a "+" and spaces and breaks wa.me URLs
 $lph_phone = leshavin_phone_display();
 $lph_addr  = function_exists('leshavin_location') ? leshavin_location() : 'Nairobi, Kenya';
 $lph_map_src = 'https://www.google.com/maps?q=' . rawurlencode( $lph_addr ) . '&output=embed';
