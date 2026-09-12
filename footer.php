@@ -7,6 +7,10 @@ $lph_phone = leshavin_phone_display();
 $lph_addr  = function_exists('leshavin_location') ? leshavin_location() : 'Nairobi, Kenya';
 $lph_map_src = 'https://www.google.com/maps?q=' . rawurlencode( $lph_addr ) . '&output=embed';
 $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( $lph_addr );
+
+/* Same verified license number used on the About Us page - pulled
+   from the same option so both places always match. */
+$lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 ?>
 
 <style>
@@ -47,6 +51,11 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
 }
 .foot-col{min-width:0;}
 
+/* Brand block — now a flex column so the license badge can be
+   pushed toward the bottom of this column, roughly level with the
+   mini map sitting at the bottom of the Contact Us column. */
+.foot-col.foot-brand{display:flex;flex-direction:column;}
+
 /* Brand block */
 .foot-logo{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;text-decoration:none;margin-bottom:16px;}
 .foot-logo img{height:44px;width:auto;object-fit:contain;display:block;flex-shrink:0;}
@@ -57,7 +66,7 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
   margin:0 0 20px;max-width:340px;
 }
 
-.foot-socs{display:flex;align-items:center;gap:16px;}
+.foot-socs{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
 .foot-soc{
   display:flex;align-items:center;justify-content:center;
   color:rgba(255,255,255,.55);
@@ -66,6 +75,40 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
 }
 .foot-soc svg{width:18px;height:18px;display:block;}
 .foot-soc:hover{color:var(--ft-green);transform:translateY(-2px);}
+
+/* ============================================================
+   FOOTER LICENSE BADGE — same visual language as the About Us
+   "Licensed & Compliant" card: light card, uppercase label,
+   dotted-border number strip, small caption underneath. Sits at
+   the bottom of the Brand column, opposite the mini map which
+   sits at the bottom of the Contact Us column, so both land on
+   the same row on desktop.
+   ============================================================ */
+.foot-license-wrap{margin-top:auto;padding-top:8px;}
+.foot-license-card{
+  background:rgba(255,255,255,.96);
+  border-radius:10px;
+  padding:16px 18px;
+  max-width:280px;
+  box-shadow:0 10px 26px rgba(0,0,0,.18);
+}
+.foot-license-label{
+  font-family:var(--ft-font-head);font-size:.66rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:#6b7c8f;
+  margin-bottom:10px;
+}
+.foot-license-num{
+  border-top:2px dotted var(--ft-blue);
+  border-bottom:2px dotted var(--ft-blue);
+  padding:10px 0;text-align:center;
+}
+.foot-license-num span{
+  font-family:var(--ft-font-head);font-weight:700;font-size:1.08rem;
+  color:var(--ft-navy);letter-spacing:.02em;
+}
+.foot-license-sub{
+  font-size:.7rem;color:#6b7c8f;text-align:center;margin-top:10px;
+}
 
 /* Headings */
 .foot-h{
@@ -155,6 +198,8 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
   .foot-grid{grid-template-columns:1fr 1fr;row-gap:36px;}
   .foot-col.foot-brand{grid-column:1 / -1;}
   .foot-desc{max-width:none;}
+  .foot-license-wrap{margin-top:20px;}
+  .foot-license-card{max-width:340px;}
 }
 @media(max-width:600px){
   :root{--ft-px:20px;}
@@ -164,11 +209,19 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
   .foot-grid{grid-template-columns:1fr;row-gap:12px;}
   .foot-logo{flex-direction:column;align-items:flex-start;gap:4px;margin-bottom:6px;}
   .foot-desc{margin-bottom:8px;}
+  .foot-socs{margin-bottom:12px;}
   .foot-h{margin-bottom:8px;padding-bottom:6px;}
   .foot-contact{gap:10px;}
   .foot-links{gap:8px;}
   .foot-map{height:190px;}
   .foot-map-wrap{margin-top:14px;}
+
+  /* License badge: full width, sits right after the socials in
+     natural document order instead of being pinned to the bottom
+     (there is no "same row" to match once columns stack). */
+  .foot-license-wrap{margin-top:0;padding-top:0;margin-bottom:14px;}
+  .foot-license-card{max-width:none;padding:14px 16px;}
+  .foot-license-num span{font-size:1rem;}
 
   /* Show Terms & Conditions inside Quick Links on mobile only */
   .foot-links-mobile-terms{display:block;}
@@ -249,6 +302,19 @@ $lph_map_link = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencod
           <a href="https://wa.me/<?php echo esc_attr( $lph_wa ); ?>" class="foot-soc" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           </a>
+        </div>
+
+        <!-- PPB LICENSE BADGE — same content/format as the About Us
+             "Licensed & Compliant" card. Pinned toward the bottom of
+             this column via margin-top:auto so it lands roughly on
+             the same row as the mini map at the bottom of the
+             Contact Us column on desktop. -->
+        <div class="foot-license-wrap">
+          <div class="foot-license-card">
+            <div class="foot-license-label">PPB License Number</div>
+            <div class="foot-license-num"><span><?php echo esc_html( $lph_ppb_license ); ?></span></div>
+            <div class="foot-license-sub">Pharmacy and Poisons Board of Kenya</div>
+          </div>
         </div>
       </div>
 
