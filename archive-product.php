@@ -241,7 +241,7 @@ if ( ! function_exists('leshavin_primary_cat_name') ) {
 
 if ( ! function_exists('leshavin_whatsapp_url') ) {
   function leshavin_whatsapp_url( $title = '', $url = '', $price_text = '' ) {
-    $phone = leshavin_phone();
+    $phone = leshavin_wa();
     $msg = 'Hi! I would like to enquire about: ' . $title;
     if ( $price_text ) $msg .= ' - ' . $price_text;
     if ( $url ) $msg .= ' ' . $url;
