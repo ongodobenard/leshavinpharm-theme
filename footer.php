@@ -51,11 +51,6 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 }
 .foot-col{min-width:0;}
 
-/* Brand block — now a flex column so the license badge can be
-   pushed toward the bottom of this column, roughly level with the
-   mini map sitting at the bottom of the Contact Us column. */
-.foot-col.foot-brand{display:flex;flex-direction:column;}
-
 /* Brand block */
 .foot-logo{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;text-decoration:none;margin-bottom:16px;}
 .foot-logo img{height:44px;width:auto;object-fit:contain;display:block;flex-shrink:0;}
@@ -79,12 +74,17 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 /* ============================================================
    FOOTER LICENSE BADGE — same visual language as the About Us
    "Licensed & Compliant" card: light card, uppercase label,
-   dotted-border number strip, small caption underneath. Sits at
-   the bottom of the Brand column, opposite the mini map which
-   sits at the bottom of the Contact Us column, so both land on
-   the same row on desktop.
+   dotted-border number strip, small caption underneath.
+
+   Alignment with the mini map (bottom borders level, desktop only)
+   is handled by a small JS block near the end of this file, which
+   measures both elements' actual rendered position and sets the
+   exact margin needed - far more reliable across differing content
+   heights than a pure-CSS grid-stretch trick. The fixed margin-top
+   below is just the sane fallback shown before JS runs / if JS is
+   disabled.
    ============================================================ */
-.foot-license-wrap{margin-top:auto;padding-top:8px;}
+.foot-license-wrap{margin-top:24px;}
 .foot-license-card{
   background:rgba(255,255,255,.96);
   border-radius:10px;
@@ -142,14 +142,7 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 /* ============================================================
    FOOTER MINI MAP (Contact Us column)
    ============================================================ */
-/* position:relative here makes this the anchor for the "View Map"
-   link below, which is pulled OUT of normal flow on desktop (see
-   .foot-map-link) so this wrap's flow-height ends exactly at the
-   bottom of .foot-map itself, not at the bottom of the link text
-   underneath it. That flow-height is what the grid uses to size the
-   row, which is what lets the license card (bottom-aligned in its
-   own column via flex) land flush with the map's bottom border. */
-.foot-map-wrap{margin-top:16px; position:relative;}
+.foot-map-wrap{margin-top:16px;}
 .foot-map{
   position:relative;
   width:100%;
@@ -167,22 +160,13 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
 .foot-map-overlay{
   position:absolute;inset:0;background:transparent;cursor:pointer;
 }
-/* Desktop only: pulled out of normal flow (absolute, anchored to
-   .foot-map-wrap) so it renders visually right below the map exactly
-   as before, but no longer counts toward the column's flow-height.
-   Reverted to normal static flow at <=960px in the responsive block
-   below, since columns stack there and this alignment no longer
-   applies - keeping it static on smaller screens also avoids it
-   overlapping the tight mobile footer padding. */
 .foot-map-link{
-  position:absolute; top:100%; left:0;
   display:inline-flex;align-items:center;gap:6px;
   margin-top:10px;
   font-family:var(--ft-font-head);font-size:.76rem;font-weight:600;
   letter-spacing:.04em;text-transform:uppercase;
   color:var(--ft-green);text-decoration:none;
   transition:color .18s,gap .18s;
-  white-space:nowrap;
 }
 .foot-map-link svg{width:13px;height:13px;flex-shrink:0;}
 .foot-map-link:hover{color:#fff;gap:9px;}
@@ -216,12 +200,6 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
   .foot-desc{max-width:none;}
   .foot-license-wrap{margin-top:20px;}
   .foot-license-card{max-width:340px;}
-
-  /* Columns stack from here down, so the map/license bottom-border
-     alignment no longer applies - put the "View Map" link back into
-     normal flow underneath the map instead of floating over
-     whatever content follows. */
-  .foot-map-link{position:static; margin-top:10px;}
 }
 @media(max-width:600px){
   :root{--ft-px:20px;}
@@ -327,10 +305,11 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
         </div>
 
         <!-- PPB LICENSE BADGE — same content/format as the About Us
-             "Licensed & Compliant" card. Pinned toward the bottom of
-             this column via margin-top:auto so it lands roughly on
-             the same row as the mini map at the bottom of the
-             Contact Us column on desktop. -->
+             "Licensed & Compliant" card. Its exact top margin is set
+             by the JS block near the end of this file so its bottom
+             border lines up precisely with the mini map's bottom
+             border on desktop, regardless of how tall either column
+             ends up being. -->
         <div class="foot-license-wrap">
           <div class="foot-license-card">
             <div class="foot-license-label">PPB License Number</div>
@@ -444,6 +423,54 @@ $lph_ppb_license = get_option( 'leshavin_ppb_license', 'PPB/L/9875' );
   <span class="fab-tip">Chat on WhatsApp</span>
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
+
+<!-- ==================== FOOTER LICENSE / MAP ALIGNMENT ====================
+     Measures the actual rendered bottom edge of the mini map and the
+     license card, then sets the exact top margin on the license card's
+     wrapper so their bottom borders match pixel-for-pixel - independent
+     of how tall either footer column happens to be. Re-runs after load,
+     shortly after (in case the Google Maps iframe or a webfont shifts
+     the layout post-paint), on resize, and once fonts finish loading. -->
+<script>
+(function(){
+  function alignFooterLicense(){
+    var wrap = document.querySelector('.foot-license-wrap');
+    var map  = document.querySelector('.foot-map');
+    var card = document.querySelector('.foot-license-card');
+    if (!wrap || !map || !card) return;
+
+    // Only meaningful once the four footer columns actually sit side
+    // by side - matches the grid's own stacking breakpoint. Below
+    // that, clear any inline offset so the normal stacked CSS margin
+    // (set in the max-width:960px block) applies instead.
+    if (window.innerWidth <= 960) {
+      wrap.style.marginTop = '';
+      return;
+    }
+
+    wrap.style.marginTop = '0px'; // reset first so old offsets don't stack up on re-measure
+    var mapBottom  = map.getBoundingClientRect().bottom;
+    var cardBottom = card.getBoundingClientRect().bottom;
+    var delta = mapBottom - cardBottom;
+    wrap.style.marginTop = (delta > 0 ? delta : 0) + 'px';
+  }
+
+  function run(){
+    alignFooterLicense();
+    setTimeout(alignFooterLicense, 400);
+    setTimeout(alignFooterLicense, 1200);
+  }
+
+  if (document.readyState === 'complete') run();
+  else window.addEventListener('load', run);
+
+  window.addEventListener('resize', alignFooterLicense);
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(alignFooterLicense);
+  }
+})();
+</script>
 
 <?php wp_footer(); ?>
 </body>
