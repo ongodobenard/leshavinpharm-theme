@@ -93,16 +93,47 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-strip-title{font-family:var(--lp-font-head);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.02em;overflow-wrap:break-word;}
 .lp-strip-sub{font-size:.75rem;color:rgba(255,255,255,.65);overflow-wrap:break-word;}
 
-/* POPULAR CATEGORIES */
-.lp-popcat{padding:48px 0;}
-.lp-popcat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-.lp-popcat-card{border-radius:10px;padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;transition:transform .15s;border:1.5px solid var(--lp-border);background:#fff;}
-.lp-popcat-card:hover{transform:translateY(-3px);}
-.lp-popcat-img{width:66px;height:66px;border-radius:8px;overflow:hidden;background:#f7f9fb;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.lp-popcat-img img{width:100%;height:100%;object-fit:contain;padding:6px;}
-.lp-popcat-img svg{width:26px;height:26px;color:var(--lp-blue);}
-.lp-popcat-name{font-family:var(--lp-font-head);font-weight:600;text-transform:uppercase;letter-spacing:.01em;color:var(--lp-blue-dark);font-size:.86rem;margin-bottom:3px;overflow-wrap:break-word;}
-.lp-popcat-count{font-size:.78rem;color:var(--lp-text-light);}
+/* POPULAR CATEGORIES — single horizontal row, auto-sliding, with a visible
+   horizontal scrollbar. 5 visible on desktop, 4 on tablet, 3 on mobile. */
+.lp-popcat{padding:40px 0;}
+.lp-popcat-track{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  padding:2px 2px 14px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--lp-green) #eaf0f5;
+}
+.lp-popcat-track::-webkit-scrollbar{height:6px;}
+.lp-popcat-track::-webkit-scrollbar-track{background:#eaf0f5;border-radius:6px;}
+.lp-popcat-track::-webkit-scrollbar-thumb{background:var(--lp-green);border-radius:6px;}
+.lp-popcat-track::-webkit-scrollbar-thumb:hover{background:var(--lp-green-dark);}
+.lp-popcat-card{
+  flex:0 0 calc((100% - 48px) / 5);
+  min-width:0;
+  scroll-snap-align:start;
+  border-radius:6px;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  transition:transform .15s, border-color .15s;
+  border:1.5px solid var(--lp-border);
+  background:#fff;
+}
+.lp-popcat-card:hover{transform:translateY(-2px);border-color:var(--lp-green);}
+.lp-popcat-img{width:44px;height:44px;border-radius:5px;overflow:hidden;background:#f7f9fb;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-popcat-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.lp-popcat-img svg{width:22px;height:22px;color:var(--lp-blue);}
+.lp-popcat-info{min-width:0;}
+.lp-popcat-name{font-family:var(--lp-font-head);font-weight:600;text-transform:uppercase;letter-spacing:.01em;color:var(--lp-blue-dark);font-size:.76rem;line-height:1.25;margin-bottom:2px;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.lp-popcat-count{font-size:.7rem;color:var(--lp-text-light);}
 
 /* PRODUCT GRIDS - 4 per row */
 .lp-prod-sec{padding:8px 0 48px;}
@@ -332,7 +363,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 /* RESPONSIVE */
 @media(max-width:1100px){
   .lp-prod-grid{grid-template-columns:repeat(2,1fr);}
-  .lp-popcat-grid{grid-template-columns:repeat(2,1fr);}
+  .lp-popcat-card{flex:0 0 calc((100% - 36px) / 4);}
   .lp-disc-wrap{flex-direction:column;}
   .lp-disc-left img{min-height:220px;}
   .lp-disc-card{flex:0 0 calc((100% - 16px) / 2);}
@@ -350,23 +381,33 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-trend-left{grid-template-columns:repeat(2,1fr);}
   .lp-disc-card{flex:0 0 100%;}
   .lp-disc-right{padding:24px 20px;}
-  .lp-popcat{padding:32px 0;}
-  .lp-popcat-card{padding:14px;gap:12px;}
-  .lp-popcat-img{width:54px;height:54px;}
+  .lp-popcat{padding:30px 0;}
 
   .lp-news{margin:0 16px 40px;padding:26px 22px;flex-direction:column;align-items:stretch;max-width:calc(100% - 32px);}
   .lp-news-form{max-width:100%;flex:1 1 100%;}
 }
+@media(max-width:700px){
+  /* Mobile categories: exactly 3 across in ONE line, compact stacked cards, slide + scrollbar */
+  .lp-popcat-track{gap:8px;padding-bottom:12px;}
+  .lp-popcat-card{
+    flex:0 0 calc((100% - 16px) / 3);
+    flex-direction:column;
+    justify-content:flex-start;
+    text-align:center;
+    gap:6px;
+    padding:10px 6px;
+    border-radius:6px;
+  }
+  .lp-popcat-img{width:40px;height:40px;}
+  .lp-popcat-info{width:100%;}
+  .lp-popcat-name{font-size:.64rem;line-height:1.2;-webkit-line-clamp:3;line-clamp:3;min-height:3.6em;text-align:center;}
+  .lp-popcat-count{font-size:.62rem;}
+}
 @media(max-width:640px){
-  .lp-hero2{height:260px;min-height:260px;}
-  .lp-popcat-grid{grid-template-columns:1fr;}
-  .lp-popcat-card{padding:12px;gap:10px;}
-  .lp-popcat-img{width:48px;height:48px;}
-  .lp-popcat-name{font-size:.78rem;}
-  .lp-popcat-count{font-size:.72rem;}
   .lp-prod-grid{grid-template-columns:repeat(2,1fr);}
   .lp-trend-left{grid-template-columns:repeat(2,1fr);}
 
+  .lp-hero2{height:260px;min-height:260px;}
   .lp-hero2-nav{top:auto;bottom:16px;transform:none;width:32px;height:32px;font-size:16px;}
   .lp-hero2-prev{left:16px;}
   .lp-hero2-next{right:16px;}
@@ -719,8 +760,7 @@ $lp_hero_slides = [
 
 <!-- POPULAR CATEGORIES -->
 <?php
-$lp_categories = get_terms(['taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>8]);
-$lp_pastels    = ['#eaf3fb','#f2f9e9','#f3f2ef','#eaf3fb','#f2f9e9','#faf1ee','#eaf3fb','#f2f9e9'];
+$lp_categories = get_terms(['taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>12]);
 $lp_fallback   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="7"/><circle cx="15" cy="15" r="7"/></svg>';
 ?>
 <section class="lp-popcat">
@@ -732,32 +772,63 @@ $lp_fallback   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
       </div>
       <a href="<?php echo esc_url( get_permalink( wc_get_page_id('shop') ) ); ?>" class="lp-viewall">View all categories &rarr;</a>
     </div>
-    <div class="lp-popcat-grid">
+    <div class="lp-popcat-track" id="lpPopTrack">
       <?php if ( $lp_categories && ! is_wp_error( $lp_categories ) ) :
-        foreach ( $lp_categories as $ci => $lp_cat ) :
+        foreach ( $lp_categories as $lp_cat ) :
           $lp_img = leshavin_cat_image( $lp_cat );
-          $bg = $lp_pastels[ $ci % count( $lp_pastels ) ];
       ?>
       <a href="<?php echo esc_url( get_term_link( $lp_cat ) ); ?>" class="lp-popcat-card">
         <div class="lp-popcat-img">
           <?php if ( $lp_img ) : ?>
-            <img src="<?php echo esc_url( $lp_img ); ?>" alt="<?php echo esc_attr( $lp_cat->name ); ?>">
+            <img src="<?php echo esc_url( $lp_img ); ?>" alt="<?php echo esc_attr( $lp_cat->name ); ?>" loading="lazy">
           <?php else : ?>
             <?php echo $lp_fallback; ?>
           <?php endif; ?>
         </div>
-        <div>
+        <div class="lp-popcat-info">
           <div class="lp-popcat-name"><?php echo esc_html( $lp_cat->name ); ?></div>
           <div class="lp-popcat-count"><?php echo intval( $lp_cat->count ); ?> Products</div>
         </div>
       </a>
       <?php endforeach;
       else: ?>
-        <p style="grid-column:1/-1;text-align:center;color:var(--lp-text-light);">Add product categories in WooCommerce to show them here.</p>
+        <p style="color:var(--lp-text-light);">Add product categories in WooCommerce to show them here.</p>
       <?php endif; ?>
     </div>
   </div>
 </section>
+<script>
+(function(){
+  var track = document.getElementById('lpPopTrack');
+  if (!track || track.children.length < 2) return;
+  var timer = null;
+
+  function step(){
+    var card = track.querySelector('.lp-popcat-card');
+    if (!card) return 0;
+    var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+    return card.getBoundingClientRect().width + gap;
+  }
+  function next(){
+    var max = track.scrollWidth - track.clientWidth;
+    if (max <= 4) return;
+    if (track.scrollLeft >= max - 4) { track.scrollTo({ left: 0, behavior: 'smooth' }); }
+    else { track.scrollBy({ left: step(), behavior: 'smooth' }); }
+  }
+  function start(){ stop(); timer = setInterval(next, 3500); }
+  function stop(){ if (timer) { clearInterval(timer); timer = null; } }
+
+  // Pause while the visitor is interacting (mouse, touch, dragging the scrollbar, keyboard focus)
+  track.addEventListener('mouseenter', stop);
+  track.addEventListener('mouseleave', start);
+  track.addEventListener('touchstart', stop, { passive: true });
+  track.addEventListener('touchend', function(){ setTimeout(start, 4000); }, { passive: true });
+  track.addEventListener('focusin', stop);
+  track.addEventListener('focusout', start);
+
+  start();
+})();
+</script>
 
 <!-- POPULAR PRODUCTS -->
 <section class="lp-prod-sec">
