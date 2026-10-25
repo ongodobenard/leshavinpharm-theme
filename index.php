@@ -359,54 +359,82 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-trend-banner-title{font-family:var(--lp-font-head);text-transform:uppercase;font-size:1.4rem;font-weight:700;margin:0 0 8px;position:relative;z-index:2;}
 .lp-trend-banner-price{font-size:.95rem;font-weight:700;position:relative;z-index:2;}
 
-/* ══ LOCAL SEO CONTENT ══ */
-.lp-seo-sec{padding:8px 0 48px;}
-.lp-seo-card{background:#f7f9fb;border:1.5px solid var(--lp-border);border-radius:16px;padding:30px;}
-.lp-seo-title{font-family:var(--lp-font-head);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em;color:var(--lp-blue-dark);line-height:1.25;margin:0 0 18px;padding-left:12px;border-left:4px solid var(--lp-green);}
-.lp-seo-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:0 0 24px;}
-.lp-seo-col{background:#fff;border:1.5px solid var(--lp-border);border-radius:12px;padding:20px 22px;min-width:0;}
-.lp-seo-col-title{font-family:var(--lp-font-head);font-size:1.02rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1.3;color:var(--lp-blue);margin:0 0 10px;}
-.lp-seo-text{font-size:.88rem;line-height:1.8;color:var(--lp-text-light);margin:0;}
-.lp-seo-text a{color:var(--lp-blue);font-weight:600;text-decoration:none;}
-.lp-seo-text a:hover{text-decoration:underline;}
-.lp-seo-sub{font-family:var(--lp-font-head);font-size:1.05rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--lp-blue-dark);margin:28px 0 12px;}
+/* ══ LOCAL SEO CONTENT — Leshavin's own layout ══ */
+.lp-seo-sec{padding:8px 0 28px;}
 
-/* Slow moving rows (info boxes + category chips): one row, two identical
-   groups, slides left by exactly one group so the loop is seamless. */
-@keyframes lp-marq-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.lp-marq{--gap:14px;--n:3;container-type:inline-size;overflow:hidden;width:100%;}
-.lp-marq-track{display:flex;width:max-content;animation:lp-marq-scroll var(--dur,70s) linear infinite;will-change:transform;}
-.lp-marq:hover .lp-marq-track,.lp-marq:active .lp-marq-track,.lp-marq:focus-within .lp-marq-track{animation-play-state:paused;}
-.lp-marq-group{display:flex;gap:var(--gap);padding-right:var(--gap);flex-shrink:0;}
-.lp-marq-item{flex:0 0 auto;width:calc((100cqw - var(--gap) * (var(--n) - 1)) / var(--n));}
+/* 1. Split intro: blue brand panel + two stacked text blocks */
+.lp-intro{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);background:#fff;border:1.5px solid var(--lp-border);border-radius:18px;overflow:hidden;box-shadow:0 14px 44px rgba(18,90,148,.08);}
+.lp-intro-main{position:relative;background:var(--lp-blue-dark);color:#fff;padding:38px 34px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;}
+.lp-intro-main::after{content:"";position:absolute;top:0;right:0;bottom:0;width:5px;background:var(--lp-green);}
+.lp-intro-kicker{font-family:var(--lp-font-head);font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#d5efb2;margin-bottom:12px;}
+.lp-intro-title{font-family:var(--lp-font-head);font-size:clamp(1.35rem,2.3vw,1.85rem);font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:1.22;color:#fff;margin:0 0 22px;}
+.lp-intro-btn{display:inline-flex;align-items:center;gap:8px;background:var(--lp-wa);color:#fff;font-family:var(--lp-font-head);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;padding:11px 22px;border-radius:50px;transition:background .2s,transform .15s;}
+.lp-intro-btn:hover{background:var(--lp-wa-dark);color:#fff;transform:translateY(-1px);}
+.lp-intro-copy{padding:32px 34px;display:flex;flex-direction:column;gap:24px;justify-content:center;}
+.lp-intro-block{border-left:4px solid var(--lp-green);padding-left:18px;}
+.lp-intro-block h3{font-family:var(--lp-font-head);font-size:1.02rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1.3;color:var(--lp-blue);margin:0 0 8px;}
+.lp-intro-block p{font-size:.88rem;line-height:1.8;color:var(--lp-text-light);margin:0;}
+.lp-intro-block a{color:var(--lp-blue);font-weight:600;text-decoration:none;}
+.lp-intro-block a:hover{text-decoration:underline;}
 
-.lp-marq-boxes{--n:3;--dur:75s;}
-.lp-seo-box{height:100%;background:#fff;border:1.5px solid var(--lp-border);border-radius:12px;padding:18px 18px 20px;}
-.lp-seo-box h3{font-family:var(--lp-font-head);font-size:.98rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;color:var(--lp-blue);margin:0 0 8px;}
-.lp-seo-box p{font-size:.84rem;line-height:1.7;color:var(--lp-text-light);margin:0;}
-.lp-seo-box a{color:var(--lp-blue);font-weight:600;text-decoration:none;}
-.lp-seo-box a:hover{text-decoration:underline;}
+/* 2. Numbered topic grid (all visible, first card featured) */
+.lp-topics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:22px;}
+.lp-topic{background:#fff;border:1.5px solid var(--lp-border);border-top:4px solid var(--lp-green);border-radius:14px;padding:20px 20px 22px;min-width:0;}
+.lp-topic:first-child{grid-column:span 2;background:var(--lp-green-pale);border-top-color:var(--lp-blue);}
+.lp-topic-num{font-family:var(--lp-font-head);font-size:1.7rem;font-weight:700;line-height:1;color:#c9dff0;margin-bottom:10px;}
+.lp-topic:first-child .lp-topic-num{color:#c5e49a;}
+.lp-topic h3{font-family:var(--lp-font-head);font-size:.98rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1.3;color:var(--lp-blue-dark);margin:0 0 8px;}
+.lp-topic p{font-size:.84rem;line-height:1.7;color:var(--lp-text-light);margin:0;}
+.lp-topic a{color:var(--lp-blue);font-weight:600;text-decoration:none;}
+.lp-topic a:hover{text-decoration:underline;}
 
-.lp-marq-chips{--n:5;--gap:10px;--dur:90s;}
-.lp-chip{display:flex;align-items:center;justify-content:center;text-align:center;height:100%;min-height:56px;padding:10px 14px;border:1.5px solid var(--lp-border);border-radius:10px;background:#fff;font-size:.8rem;font-weight:600;line-height:1.3;color:var(--lp-blue-dark);text-decoration:none;transition:background .2s,border-color .2s;}
-.lp-chip:hover{background:var(--lp-green-pale);border-color:var(--lp-green);}
+/* 3. Category pill cloud (static, wraps) */
+.lp-cats{margin-top:22px;background:#f7f9fb;border:1.5px solid var(--lp-border);border-radius:14px;padding:24px;}
+.lp-cats-title{font-family:var(--lp-font-head);font-size:1.05rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--lp-blue-dark);margin:0 0 14px;}
+.lp-cloud{display:flex;flex-wrap:wrap;gap:10px;}
+.lp-cloud a{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1.5px solid var(--lp-border);border-radius:50px;background:#fff;font-size:.82rem;font-weight:600;color:var(--lp-blue-dark);text-decoration:none;transition:background .2s,border-color .2s,transform .15s;}
+.lp-cloud a::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lp-green);flex-shrink:0;}
+.lp-cloud a:hover{background:var(--lp-green-pale);border-color:var(--lp-green);transform:translateY(-1px);}
 
-.lp-info-strip{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:22px;padding:14px 18px;border:1.5px solid var(--lp-border);border-radius:10px;background:#fff;font-size:.84rem;color:var(--lp-text);}
-.lp-info-strip strong{color:var(--lp-blue-dark);font-weight:700;}
+/* 4. Contact band */
+.lp-contact{margin-top:22px;display:flex;flex-wrap:wrap;align-items:center;gap:18px 34px;background:linear-gradient(100deg,var(--lp-blue-dark) 0%,var(--lp-blue) 100%);color:#fff;border-radius:14px;padding:22px 26px;}
+.lp-contact-item{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.lp-contact-label{font-family:var(--lp-font-head);font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#d5efb2;}
+.lp-contact-val{font-size:.9rem;font-weight:600;color:#fff;overflow-wrap:anywhere;}
+.lp-contact-cta{margin-left:auto;}
 
-/* FAQ: two columns on desktop, one on mobile */
+/* FAQ: brand side panel + single-column accordion */
 .lp-faq-sec{padding:8px 0 48px;}
-.lp-faq-card{background:#fff;border:1.5px solid var(--lp-border);border-radius:16px;padding:30px;}
-.lp-faq-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px;align-items:start;}
-.lp-faq-col{min-width:0;}
-.lp-faq-item{border-bottom:1px solid var(--lp-border);padding:14px 0;}
-.lp-faq-item summary{font-weight:700;font-size:.9rem;cursor:pointer;color:var(--lp-text);}
-.lp-faq-item p{font-size:.86rem;line-height:1.7;color:var(--lp-text-light);margin:10px 0 0;}
+.lp-faq-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:26px;align-items:start;}
+.lp-faq-side{position:sticky;top:120px;background:var(--lp-green-pale);border:1.5px solid #dcecc4;border-radius:16px;padding:28px 26px;}
+.lp-faq-title{font-family:var(--lp-font-head);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1.2;color:var(--lp-blue-dark);margin:0 0 12px;}
+.lp-faq-side p{font-size:.88rem;line-height:1.7;color:var(--lp-text-light);margin:0 0 18px;}
+.lp-faq-list{display:flex;flex-direction:column;gap:10px;}
+.lp-faq-item{background:#fff;border:1.5px solid var(--lp-border);border-radius:12px;padding:0 18px;}
+.lp-faq-item summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;font-weight:700;font-size:.9rem;color:var(--lp-text);}
+.lp-faq-item summary::-webkit-details-marker{display:none;}
+.lp-faq-item summary::after{content:"+";flex:0 0 24px;height:24px;border-radius:50%;background:var(--lp-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:1;}
+.lp-faq-item[open] summary::after{content:"\2013";background:var(--lp-green-dark);}
+.lp-faq-item p{margin:0;padding:0 0 16px;font-size:.86rem;line-height:1.7;color:var(--lp-text-light);}
 
-@media (prefers-reduced-motion: reduce){
-  .lp-marq{overflow-x:auto;}
-  .lp-marq-track{animation:none;}
-  .lp-marq-group[aria-hidden="true"]{display:none;}
+@media(max-width:1100px){
+  .lp-topics{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:900px){
+  .lp-intro{grid-template-columns:1fr;}
+  .lp-intro-main::after{top:auto;left:0;width:auto;height:5px;}
+  .lp-intro-main{padding:28px 22px;}
+  .lp-intro-copy{padding:24px 20px;gap:20px;}
+  .lp-cats{padding:18px 14px;}
+  .lp-contact{padding:18px 18px;}
+  .lp-contact-cta{margin-left:0;width:100%;}
+  .lp-faq-grid{grid-template-columns:1fr;}
+  .lp-faq-side{position:static;padding:22px 18px;}
+}
+@media(max-width:640px){
+  .lp-topics{grid-template-columns:1fr;}
+  .lp-topic:first-child{grid-column:auto;}
+  .lp-cloud a{font-size:.76rem;padding:8px 12px;}
 }
 
 /* TESTIMONIALS */
@@ -494,13 +522,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-news{margin:0 16px 40px;padding:26px 22px;flex-direction:column;align-items:stretch;max-width:calc(100% - 32px);}
   .lp-news-form{max-width:100%;flex:1 1 100%;}
 
-  .lp-seo-card,.lp-faq-card{padding:22px 16px;}
-  .lp-seo-split{grid-template-columns:1fr;gap:12px;margin-bottom:18px;}
-  .lp-seo-col{padding:16px 14px;}
-  .lp-faq-split{grid-template-columns:1fr;gap:0;}
-  .lp-marq-boxes{--n:2.2;--gap:10px;}
-  .lp-marq-chips{--n:3;--gap:8px;}
-  .lp-chip{font-size:.72rem;padding:8px 8px;min-height:54px;}
 }
 @media(max-width:700px){
   /* Mobile categories: exactly 3 across in ONE line, compact stacked cards, slide + scrollbar */
@@ -539,7 +560,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-sec-title{font-size:1.35rem;}
   .lp-sec-tag{font-size:.66rem;padding:5px 13px;}
   .lp-viewall{font-size:.72rem;}
-  .lp-seo-title{font-size:1.2rem;}
 
   .lp-strip-title{font-size:.78rem;}
   .lp-strip-sub{font-size:.7rem;}
@@ -565,9 +585,6 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-news-title{font-size:.95rem;}
   .lp-news-sub{font-size:.78rem;}
   .lp-news{margin:0 14px 32px;padding:22px 18px;max-width:calc(100% - 28px);}
-}
-@media(max-width:560px){
-  .lp-marq-boxes{--n:1.15;}
 }
 @media(max-width:480px){
   .lp-prod-grid{grid-template-columns:1fr;}
@@ -1310,90 +1327,80 @@ $lp_sale_ids = wc_get_product_ids_on_sale();
 <!-- ═══════════ LOCAL SEO CONTENT ═══════════ -->
 <section class="lp-seo-sec">
   <div class="lp-wrap">
-    <div class="lp-seo-card">
-      <h2 class="lp-seo-title">Leshavin Pharmacy: Your Online Pharmacy in Nairobi and Across Kenya</h2>
 
-      <div class="lp-seo-split">
-        <div class="lp-seo-col">
-          <h3 class="lp-seo-col-title">Pharmacy Care Delivered to Your Door in Kenya</h3>
-          <p class="lp-seo-text">
-            Skip the queue and shop from home. Leshavin Pharmacy, based in <?php echo esc_html( $lp_place ); ?>, brings genuine medicines and everyday health essentials to your door, with same day delivery in selected areas and nationwide delivery across Kenya. Pay with M-Pesa or card at checkout, and message our pharmacist on WhatsApp whenever you need help choosing the right product.
-          </p>
-        </div>
-        <div class="lp-seo-col">
-          <h3 class="lp-seo-col-title">Prescriptions, Skin Care and Wellness in One Place</h3>
-          <p class="lp-seo-text">
-            Have a prescription? <a href="<?php echo esc_url( $lp_prescription_url ); ?>">Upload it online</a> and our pharmacist reviews it before your order is packed. Beyond prescriptions, explore weight management support, CeraVe and other skin care, and vitamins for everyday wellness. It is a simple, trusted way to buy medicine online in Kenya, with clear prices and real pharmacist advice.
-          </p>
-        </div>
+    <!-- Intro: brand panel + two text blocks -->
+    <div class="lp-intro">
+      <div class="lp-intro-main">
+        <div class="lp-intro-kicker">About Leshavin</div>
+        <h2 class="lp-intro-title">Leshavin Pharmacy: Your Online Pharmacy in Nairobi and Across Kenya</h2>
+        <a class="lp-intro-btn" href="<?php echo esc_url( $lp_wa_chat_url ); ?>" target="_blank" rel="noopener noreferrer">
+          <?php echo leshavin_wa_svg(); ?> Chat with a pharmacist
+        </a>
       </div>
-
-      <!-- Info boxes: ONE row, 3 visible, the rest move slowly to the left -->
-      <div class="lp-marq lp-marq-boxes" aria-label="What we offer">
-        <div class="lp-marq-track">
-          <?php for ( $pass = 0; $pass < 2; $pass++ ) : $is_dup = ( $pass === 1 ); ?>
-          <div class="lp-marq-group"<?php echo $is_dup ? ' aria-hidden="true"' : ''; ?>>
-            <?php foreach ( $LP_BOXES as $b ) :
-              $body = $b[1];
-              if ( $is_dup ) { $body = str_replace( '<a ', '<a tabindex="-1" ', $body ); }
-            ?>
-              <div class="lp-marq-item">
-                <div class="lp-seo-box">
-                  <h3><?php echo $b[0]; ?></h3>
-                  <p><?php echo $body; ?></p>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-          <?php endfor; ?>
+      <div class="lp-intro-copy">
+        <div class="lp-intro-block">
+          <h3>Pharmacy Care Delivered to Your Door in Kenya</h3>
+          <p>Skip the queue and shop from home. Leshavin Pharmacy, based in <?php echo esc_html( $lp_place ); ?>, brings genuine medicines and everyday health essentials to your door, with same day delivery in selected areas and nationwide delivery across Kenya. Pay with M-Pesa or card at checkout, and message our pharmacist on WhatsApp whenever you need help choosing the right product.</p>
         </div>
-      </div>
-
-      <?php if ( ! empty( $LP_CHIP_LINKS ) ) : ?>
-      <h3 class="lp-seo-sub">Shop Pharmacy Categories in Nairobi &amp; Kenya</h3>
-
-      <!-- Category chips: ONE row, 5 visible (3 on mobile), the rest move slowly to the left -->
-      <div class="lp-marq lp-marq-chips" aria-label="Pharmacy categories">
-        <div class="lp-marq-track">
-          <?php for ( $pass = 0; $pass < 2; $pass++ ) : $is_dup = ( $pass === 1 ); ?>
-          <div class="lp-marq-group"<?php echo $is_dup ? ' aria-hidden="true"' : ''; ?>>
-            <?php foreach ( $LP_CHIP_LINKS as $c ) : ?>
-              <div class="lp-marq-item">
-                <a class="lp-chip" href="<?php echo esc_url( $c[1] ); ?>"<?php echo $is_dup ? ' tabindex="-1"' : ''; ?>><?php echo esc_html( $c[0] ); ?></a>
-              </div>
-            <?php endforeach; ?>
-          </div>
-          <?php endfor; ?>
+        <div class="lp-intro-block">
+          <h3>Prescriptions, Skin Care and Wellness in One Place</h3>
+          <p>Have a prescription? <a href="<?php echo esc_url( $lp_prescription_url ); ?>">Upload it online</a> and our pharmacist reviews it before your order is packed. Beyond prescriptions, explore weight management support, CeraVe and other skin care, and vitamins for everyday wellness. It is a simple, trusted way to buy medicine online in Kenya, with clear prices and real pharmacist advice.</p>
         </div>
-      </div>
-      <?php endif; ?>
-
-      <div class="lp-info-strip">
-        <span><strong>Location:</strong> <?php echo esc_html( $lp_place ); ?></span>
-        <span><strong>WhatsApp / Phone:</strong> +<?php echo esc_html( $lp_phone ); ?></span>
-        <?php if ( $LP_PPB_LICENSE ) : ?><span><strong>PPB License No:</strong> <?php echo esc_html( $LP_PPB_LICENSE ); ?></span><?php endif; ?>
-        <?php if ( $LP_HOURS_TEXT ) : ?><span><strong>Opening hours:</strong> <?php echo esc_html( $LP_HOURS_TEXT ); ?></span><?php endif; ?>
       </div>
     </div>
+
+    <!-- Numbered topic grid -->
+    <div class="lp-topics">
+      <?php foreach ( $LP_BOXES as $n => $b ) : ?>
+        <div class="lp-topic">
+          <div class="lp-topic-num"><?php echo sprintf( '%02d', $n + 1 ); ?></div>
+          <h3><?php echo $b[0]; ?></h3>
+          <p><?php echo $b[1]; ?></p>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <?php if ( ! empty( $LP_CHIP_LINKS ) ) : ?>
+    <!-- Category pill cloud -->
+    <div class="lp-cats">
+      <h3 class="lp-cats-title">Shop Pharmacy Categories in Nairobi &amp; Kenya</h3>
+      <div class="lp-cloud">
+        <?php foreach ( $LP_CHIP_LINKS as $c ) : ?>
+          <a href="<?php echo esc_url( $c[1] ); ?>"><?php echo esc_html( $c[0] ); ?></a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Contact band -->
+    <div class="lp-contact">
+      <div class="lp-contact-item"><span class="lp-contact-label">Location</span><span class="lp-contact-val"><?php echo esc_html( $lp_place ); ?></span></div>
+      <div class="lp-contact-item"><span class="lp-contact-label">WhatsApp / Phone</span><span class="lp-contact-val">+<?php echo esc_html( $lp_phone ); ?></span></div>
+      <?php if ( $LP_PPB_LICENSE ) : ?><div class="lp-contact-item"><span class="lp-contact-label">PPB License No</span><span class="lp-contact-val"><?php echo esc_html( $LP_PPB_LICENSE ); ?></span></div><?php endif; ?>
+      <?php if ( $LP_HOURS_TEXT ) : ?><div class="lp-contact-item"><span class="lp-contact-label">Opening hours</span><span class="lp-contact-val"><?php echo esc_html( $LP_HOURS_TEXT ); ?></span></div><?php endif; ?>
+      <div class="lp-contact-cta">
+        <a class="lp-intro-btn" href="<?php echo esc_url( $lp_wa_chat_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo leshavin_wa_svg(); ?> WhatsApp us</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- FAQ -->
 <section class="lp-faq-sec">
   <div class="lp-wrap">
-    <div class="lp-faq-card">
-      <h2 class="lp-seo-title">Online Pharmacy Kenya FAQs</h2>
-      <?php $lp_faq_cols = array_chunk( $LP_FAQS, (int) ceil( count( $LP_FAQS ) / 2 ) ); ?>
-      <div class="lp-faq-split">
-        <?php foreach ( $lp_faq_cols as $lp_col ) : ?>
-        <div class="lp-faq-col">
-          <?php foreach ( $lp_col as $f ) : ?>
-            <details class="lp-faq-item">
-              <summary><?php echo esc_html( $f['q'] ); ?></summary>
-              <p><?php echo esc_html( $f['a'] ); ?></p>
-            </details>
-          <?php endforeach; ?>
-        </div>
+    <div class="lp-faq-grid">
+      <div class="lp-faq-side">
+        <h2 class="lp-faq-title">Online Pharmacy Kenya FAQs</h2>
+        <p>Quick answers about ordering, prescriptions, delivery and payment. Can't find what you need? Our pharmacist is a message away.</p>
+        <a class="lp-intro-btn" href="<?php echo esc_url( $lp_wa_chat_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo leshavin_wa_svg(); ?> Ask on WhatsApp</a>
+      </div>
+      <div class="lp-faq-list">
+        <?php foreach ( $LP_FAQS as $f ) : ?>
+          <details class="lp-faq-item">
+            <summary><?php echo esc_html( $f['q'] ); ?></summary>
+            <p><?php echo esc_html( $f['a'] ); ?></p>
+          </details>
         <?php endforeach; ?>
       </div>
     </div>
