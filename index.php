@@ -1,4 +1,61 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Front Page Template — Leshavin Pharmacy
+ * SEO: Leshavin Pharmacy | Affordable Online Pharmacy Kenya
+ */
+
+if ( ! defined('ABSPATH') ) { die(); }
+
+/* ══════════════════════════════════════════════════════════════
+   SEO — must run BEFORE get_header() so wp_head can output it.
+   If you use Yoast or Rank Math, delete the title / description /
+   canonical block below and set them in the plugin instead.
+   ══════════════════════════════════════════════════════════════ */
+$LP_SEO_TITLE = 'Leshavin Pharmacy | Affordable Online Pharmacy Kenya';
+$LP_SEO_DESC  = 'Trusted online pharmacy in Nairobi, Kenya. Genuine medicines, skin care and vitamins, delivered fast. Order online or upload your prescription.';
+$LP_SEO_KEYWORDS = 'online pharmacy Kenya, trusted pharmacy in Nairobi, best pharmacy in Nairobi, affordable online pharmacy Kenya, buy medicine online Kenya, prescription medicines Nairobi, genuine medicines Kenya, pharmacy delivery Nairobi, weight management medicines Kenya, best skin care products in Kenya, CeraVe Kenya, vitamins and supplements Kenya, Leshavin Pharmacy';
+
+/* ── OPTIONAL BUSINESS DETAILS ───────────────────────────────
+   Fill these in and they appear automatically in the visible SEO
+   section, the FAQ and the Google structured data. Leave a value
+   empty ('') and that line is simply left out, so no wrong or
+   placeholder text is ever shown on the live site.            */
+$LP_PPB_LICENSE   = '';   // e.g. 'PPB/F/1234'  (Pharmacy and Poisons Board licence number)
+$LP_STREET_ADDRESS = '';  // e.g. 'Building name, Street, Estate'
+$LP_HOURS_TEXT    = '';   // e.g. 'Mon to Fri 8am to 6pm, Sat 9am to 2pm'
+
+$lp_phone    = function_exists('leshavin_phone')    ? leshavin_phone()    : '254792331941';
+$lp_email    = function_exists('leshavin_email')    ? leshavin_email()    : 'info@leshavinpharmacy.com';
+$lp_location = function_exists('leshavin_location') ? leshavin_location() : 'Nairobi, Kenya';
+$lp_place    = $LP_STREET_ADDRESS ? $LP_STREET_ADDRESS . ', ' . $lp_location : $lp_location;
+
+$lp_has_seo_plugin = defined( 'WPSEO_VERSION' )
+    || defined( 'RANK_MATH_VERSION' )
+    || defined( 'AIOSEO_VERSION' )
+    || defined( 'SEOPRESS_VERSION' )
+    || defined( 'THE_SEO_FRAMEWORK_VERSION' );
+
+if ( ! $lp_has_seo_plugin ) {
+
+    add_filter( 'pre_get_document_title', function ( $title ) use ( $LP_SEO_TITLE ) {
+        return is_front_page() ? $LP_SEO_TITLE : $title;
+    }, 99 );
+
+    add_action( 'wp_head', function () use ( $LP_SEO_DESC, $LP_SEO_TITLE, $LP_SEO_KEYWORDS ) {
+        if ( ! is_front_page() ) return;
+        echo '<meta name="description" content="' . esc_attr( $LP_SEO_DESC ) . '">' . "\n";
+        echo '<meta name="keywords" content="' . esc_attr( $LP_SEO_KEYWORDS ) . '">' . "\n";
+        echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '">' . "\n";
+        echo '<meta property="og:title" content="' . esc_attr( $LP_SEO_TITLE ) . '">' . "\n";
+        echo '<meta property="og:description" content="' . esc_attr( $LP_SEO_DESC ) . '">' . "\n";
+        echo '<meta property="og:type" content="website">' . "\n";
+        echo '<meta property="og:url" content="' . esc_url( home_url( '/' ) ) . '">' . "\n";
+    }, 1 );
+
+}
+
+get_header();
+?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -73,7 +130,8 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-hero2-overlay{position:absolute;inset:0;background:linear-gradient(100deg, rgba(18,90,148,.68) 0%, rgba(18,90,148,.52) 24%, rgba(18,90,148,.26) 44%, rgba(18,90,148,.05) 60%, rgba(18,90,148,0) 74%);}
 .lp-hero2-content{position:absolute;top:0;left:0;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 56px;max-width:540px;z-index:3;box-sizing:border-box;}
 .lp-hero2-label{font-family:var(--lp-font-head);color:#d5efb2;font-weight:600;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;}
-.lp-hero2-content h1{font-family:var(--lp-font-head);text-transform:uppercase;letter-spacing:.01em;color:#fff;font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:700;margin:0 0 16px;line-height:1.2;text-shadow:0 2px 14px rgba(0,0,0,.25);}
+/* h1 on the first slide, h2 on the others — one H1 per page for SEO, same look */
+.lp-hero2-content h1,.lp-hero2-content h2{font-family:var(--lp-font-head);text-transform:uppercase;letter-spacing:.01em;color:#fff;font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:700;margin:0 0 16px;line-height:1.2;text-shadow:0 2px 14px rgba(0,0,0,.25);}
 .lp-hero2-sub{color:rgba(255,255,255,.88);font-size:.94rem;line-height:1.6;max-width:390px;margin-bottom:28px;}
 .lp-hero2-btns{display:flex;gap:14px;flex-wrap:wrap;}
 .lp-hero2-btn-white{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--lp-blue-dark);padding:13px 28px;border-radius:50px;font-family:var(--lp-font-head);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.03em;text-decoration:none;white-space:nowrap;}
@@ -301,6 +359,56 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-trend-banner-title{font-family:var(--lp-font-head);text-transform:uppercase;font-size:1.4rem;font-weight:700;margin:0 0 8px;position:relative;z-index:2;}
 .lp-trend-banner-price{font-size:.95rem;font-weight:700;position:relative;z-index:2;}
 
+/* ══ LOCAL SEO CONTENT ══ */
+.lp-seo-sec{padding:8px 0 48px;}
+.lp-seo-card{background:#f7f9fb;border:1.5px solid var(--lp-border);border-radius:16px;padding:30px;}
+.lp-seo-title{font-family:var(--lp-font-head);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em;color:var(--lp-blue-dark);line-height:1.25;margin:0 0 18px;padding-left:12px;border-left:4px solid var(--lp-green);}
+.lp-seo-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:0 0 24px;}
+.lp-seo-col{background:#fff;border:1.5px solid var(--lp-border);border-radius:12px;padding:20px 22px;min-width:0;}
+.lp-seo-col-title{font-family:var(--lp-font-head);font-size:1.02rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1.3;color:var(--lp-blue);margin:0 0 10px;}
+.lp-seo-text{font-size:.88rem;line-height:1.8;color:var(--lp-text-light);margin:0;}
+.lp-seo-text a{color:var(--lp-blue);font-weight:600;text-decoration:none;}
+.lp-seo-text a:hover{text-decoration:underline;}
+.lp-seo-sub{font-family:var(--lp-font-head);font-size:1.05rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--lp-blue-dark);margin:28px 0 12px;}
+
+/* Slow moving rows (info boxes + category chips): one row, two identical
+   groups, slides left by exactly one group so the loop is seamless. */
+@keyframes lp-marq-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.lp-marq{--gap:14px;--n:3;container-type:inline-size;overflow:hidden;width:100%;}
+.lp-marq-track{display:flex;width:max-content;animation:lp-marq-scroll var(--dur,70s) linear infinite;will-change:transform;}
+.lp-marq:hover .lp-marq-track,.lp-marq:active .lp-marq-track,.lp-marq:focus-within .lp-marq-track{animation-play-state:paused;}
+.lp-marq-group{display:flex;gap:var(--gap);padding-right:var(--gap);flex-shrink:0;}
+.lp-marq-item{flex:0 0 auto;width:calc((100cqw - var(--gap) * (var(--n) - 1)) / var(--n));}
+
+.lp-marq-boxes{--n:3;--dur:75s;}
+.lp-seo-box{height:100%;background:#fff;border:1.5px solid var(--lp-border);border-radius:12px;padding:18px 18px 20px;}
+.lp-seo-box h3{font-family:var(--lp-font-head);font-size:.98rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;color:var(--lp-blue);margin:0 0 8px;}
+.lp-seo-box p{font-size:.84rem;line-height:1.7;color:var(--lp-text-light);margin:0;}
+.lp-seo-box a{color:var(--lp-blue);font-weight:600;text-decoration:none;}
+.lp-seo-box a:hover{text-decoration:underline;}
+
+.lp-marq-chips{--n:5;--gap:10px;--dur:90s;}
+.lp-chip{display:flex;align-items:center;justify-content:center;text-align:center;height:100%;min-height:56px;padding:10px 14px;border:1.5px solid var(--lp-border);border-radius:10px;background:#fff;font-size:.8rem;font-weight:600;line-height:1.3;color:var(--lp-blue-dark);text-decoration:none;transition:background .2s,border-color .2s;}
+.lp-chip:hover{background:var(--lp-green-pale);border-color:var(--lp-green);}
+
+.lp-info-strip{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:22px;padding:14px 18px;border:1.5px solid var(--lp-border);border-radius:10px;background:#fff;font-size:.84rem;color:var(--lp-text);}
+.lp-info-strip strong{color:var(--lp-blue-dark);font-weight:700;}
+
+/* FAQ: two columns on desktop, one on mobile */
+.lp-faq-sec{padding:8px 0 48px;}
+.lp-faq-card{background:#fff;border:1.5px solid var(--lp-border);border-radius:16px;padding:30px;}
+.lp-faq-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px;align-items:start;}
+.lp-faq-col{min-width:0;}
+.lp-faq-item{border-bottom:1px solid var(--lp-border);padding:14px 0;}
+.lp-faq-item summary{font-weight:700;font-size:.9rem;cursor:pointer;color:var(--lp-text);}
+.lp-faq-item p{font-size:.86rem;line-height:1.7;color:var(--lp-text-light);margin:10px 0 0;}
+
+@media (prefers-reduced-motion: reduce){
+  .lp-marq{overflow-x:auto;}
+  .lp-marq-track{animation:none;}
+  .lp-marq-group[aria-hidden="true"]{display:none;}
+}
+
 /* TESTIMONIALS */
 .lp-test{padding:52px 0;}
 .lp-test-hdr{text-align:center;margin-bottom:34px;}
@@ -385,6 +493,14 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 
   .lp-news{margin:0 16px 40px;padding:26px 22px;flex-direction:column;align-items:stretch;max-width:calc(100% - 32px);}
   .lp-news-form{max-width:100%;flex:1 1 100%;}
+
+  .lp-seo-card,.lp-faq-card{padding:22px 16px;}
+  .lp-seo-split{grid-template-columns:1fr;gap:12px;margin-bottom:18px;}
+  .lp-seo-col{padding:16px 14px;}
+  .lp-faq-split{grid-template-columns:1fr;gap:0;}
+  .lp-marq-boxes{--n:2.2;--gap:10px;}
+  .lp-marq-chips{--n:3;--gap:8px;}
+  .lp-chip{font-size:.72rem;padding:8px 8px;min-height:54px;}
 }
 @media(max-width:700px){
   /* Mobile categories: exactly 3 across in ONE line, compact stacked cards, slide + scrollbar */
@@ -416,13 +532,14 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-hero2-btns{margin-bottom:20px;}
 
   .lp-hero2-label{font-size:.68rem;letter-spacing:.14em;margin-bottom:10px;}
-  .lp-hero2-content h1{font-size:clamp(1.2rem,5.4vw,1.5rem);margin-bottom:8px;}
+  .lp-hero2-content h1,.lp-hero2-content h2{font-size:clamp(1.2rem,5.4vw,1.5rem);margin-bottom:8px;}
   .lp-hero2-sub{font-size:.8rem;margin-bottom:14px;}
   .lp-hero2-btn-white,.lp-hero2-btn-ghost{font-size:.72rem;padding:9px 18px;}
 
   .lp-sec-title{font-size:1.35rem;}
   .lp-sec-tag{font-size:.66rem;padding:5px 13px;}
   .lp-viewall{font-size:.72rem;}
+  .lp-seo-title{font-size:1.2rem;}
 
   .lp-strip-title{font-size:.78rem;}
   .lp-strip-sub{font-size:.7rem;}
@@ -448,6 +565,9 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-news-title{font-size:.95rem;}
   .lp-news-sub{font-size:.78rem;}
   .lp-news{margin:0 14px 32px;padding:22px 18px;max-width:calc(100% - 28px);}
+}
+@media(max-width:560px){
+  .lp-marq-boxes{--n:1.15;}
 }
 @media(max-width:480px){
   .lp-prod-grid{grid-template-columns:1fr;}
@@ -554,6 +674,36 @@ if ( ! function_exists('leshavin_cat_image') ) {
     }
     $thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
     return $thumb_id ? wp_get_attachment_url( $thumb_id ) : '';
+  }
+}
+
+/**
+ * Finds a WooCommerce category link from a list of slugs / name fragments.
+ * Returns the category URL, or (if $fallback_shop) the Shop page URL,
+ * or false when nothing matches and no fallback is wanted.
+ */
+if ( ! function_exists('lp_cat_url') ) {
+  function lp_cat_url( array $frags, $fallback_shop = true ) {
+    foreach ( $frags as $slug ) {
+      $t = get_term_by( 'slug', $slug, 'product_cat' );
+      if ( $t && ! is_wp_error( $t ) ) {
+        $l = get_term_link( $t );
+        if ( ! is_wp_error( $l ) ) return $l;
+      }
+    }
+    $all = get_terms([ 'taxonomy' => 'product_cat', 'hide_empty' => true, 'number' => 200 ]);
+    if ( ! is_wp_error( $all ) ) {
+      foreach ( $all as $t ) {
+        foreach ( $frags as $f ) {
+          if ( stripos( $t->name, $f ) !== false ) {
+            $l = get_term_link( $t );
+            if ( ! is_wp_error( $l ) ) return $l;
+          }
+        }
+      }
+    }
+    if ( ! $fallback_shop ) return false;
+    return function_exists('wc_get_page_id') ? get_permalink( wc_get_page_id('shop') ) : home_url('/shop/');
   }
 }
 
@@ -677,24 +827,135 @@ if ( ! function_exists('leshavin_product_grid') ) {
     endif;
   }
 }
-?>
+
+/* ══ SEO content data (links resolve from your live WooCommerce categories) ══ */
+$lp_shop_url         = function_exists('wc_get_page_id') ? get_permalink( wc_get_page_id('shop') ) : home_url('/shop/');
+$lp_prescription_url = home_url('/submit-prescription/');
+$lp_rx_cat_url       = lp_cat_url( ['prescription-only-medicine','prescription'] );
+$lp_weight_url       = lp_cat_url( ['weight-management','diabetic-weight-management'] );
+$lp_skin_url         = lp_cat_url( ['skincare','skin-care','skin'] );
+$lp_vitamin_url      = lp_cat_url( ['vitamins-supplements','vitamins','supplements','vitamin'] );
+$lp_wa_chat_url      = 'https://wa.me/' . $lp_phone . '?text=' . rawurlencode( "Hi! I'd like to speak with a pharmacist." );
+
+$LP_BOXES = [
+  [ 'Trusted Online Pharmacy in Kenya',
+    'Leshavin Pharmacy is a trusted online pharmacy in Nairobi, serving customers across Kenya with genuine medicines, healthcare products and friendly pharmacist support.' ],
+  [ 'Prescription Medicines Nairobi',
+    'Order prescription medicines in Nairobi and across Kenya. <a href="' . esc_url( $lp_prescription_url ) . '">Upload your prescription online</a> and our pharmacist reviews it before your order is processed.' ],
+  [ 'Weight Management &amp; Diabetic Care',
+    'Browse <a href="' . esc_url( $lp_weight_url ) . '">weight management and diabetic care products</a>. Prescription-only medicines such as Wegovy need a valid prescription; ask our pharmacist for availability and prices.' ],
+  [ 'Best Skin Care Products in Kenya',
+    'Shop dermatologist recommended <a href="' . esc_url( $lp_skin_url ) . '">skin care products in Kenya</a>, including our CeraVe range, for every skin type.' ],
+  [ 'Vitamins &amp; Supplements Kenya',
+    'Trusted vitamins and supplements to support your daily health. <a href="' . esc_url( $lp_vitamin_url ) . '">Buy vitamins online in Kenya</a> from a pharmacy you can rely on.' ],
+  [ 'Fast Delivery Across Kenya',
+    'Same day delivery in selected areas and nationwide delivery across Kenya. Pay securely with M-Pesa or card.' ],
+  [ 'Buy Medicine Online in Kenya',
+    'Browse the <a href="' . esc_url( $lp_shop_url ) . '">online pharmacy shop</a>, add to cart and check out in minutes, or <a href="' . esc_url( $lp_wa_chat_url ) . '" target="_blank" rel="noopener noreferrer">message us on WhatsApp</a> to order.' ],
+];
+
+/* Category chips (links only shown when the category really exists in your shop) */
+$LP_LOCAL_CATS = [
+  [ 'Prescription medicines Nairobi',        ['prescription-only-medicine','prescription'] ],
+  [ 'Weight management medicines Kenya',     ['weight-management','diabetic-weight-management'] ],
+  [ 'Diabetic care Nairobi',                 ['diabetic-weight-management','diabetic','diabetes'] ],
+  [ 'Vitamins and supplements Kenya',        ['vitamins-supplements','vitamins','supplements','vitamin'] ],
+  [ 'Best skin care products in Kenya',      ['skincare','skin-care','skin'] ],
+  [ 'Baby formula and baby care Nairobi',    ['infant-baby','baby','infant'] ],
+  [ 'Pain relief medicines Kenya',           ['pain-relief','pain','analgesic'] ],
+  [ 'Cold, flu and allergy medicines Kenya', ['allergy-cold-and-flu','cold','flu','allergy'] ],
+  [ 'Personal care products Nairobi',        ['personal-care'] ],
+];
+$LP_CHIP_LINKS = [];
+$lp_seen_urls  = [];
+foreach ( $LP_LOCAL_CATS as $c ) {
+  $u = lp_cat_url( $c[1], false );
+  if ( $u && ! in_array( $u, $lp_seen_urls, true ) ) {
+    $lp_seen_urls[]  = $u;
+    $LP_CHIP_LINKS[] = [ $c[0], $u ];
+  }
+}
+
+/* FAQs — only facts already on the site; licence and hours appear once you set them above */
+$LP_FAQS = [];
+if ( $LP_PPB_LICENSE ) {
+  $LP_FAQS[] = [ 'q' => 'Is Leshavin Pharmacy a licensed pharmacy in Kenya?',
+                 'a' => 'Yes. Leshavin Pharmacy is licensed by the Pharmacy and Poisons Board (PPB) of Kenya, License No: ' . $LP_PPB_LICENSE . '.' ];
+}
+$LP_FAQS[] = [ 'q' => 'Where is Leshavin Pharmacy located?',
+               'a' => 'We are based in ' . $lp_place . ' and serve customers in Nairobi and across Kenya. You can also order online and have your items delivered.' ];
+if ( $LP_HOURS_TEXT ) {
+  $LP_FAQS[] = [ 'q' => 'What are your opening hours?',
+                 'a' => 'We are open ' . $LP_HOURS_TEXT . '. You can place orders on the website at any time.' ];
+}
+$LP_FAQS[] = [ 'q' => 'Can I buy medicine online in Kenya from Leshavin Pharmacy?',
+               'a' => 'Yes. Browse our online pharmacy, add products to your cart and check out, or message us on WhatsApp. Prescription medicines need a valid prescription, which you can upload on our Submit Prescription page.' ];
+$LP_FAQS[] = [ 'q' => 'How do I order prescription medicines in Nairobi?',
+               'a' => 'Open the Submit Prescription page and upload your prescription. Our pharmacist reviews it before your order is processed. For questions about a prescription product, use the Ask a Pharmacist button on the product.' ];
+$LP_FAQS[] = [ 'q' => 'Do you deliver across Kenya?',
+               'a' => 'Yes. We offer same day delivery in selected areas and nationwide delivery across Kenya. Chat with us on WhatsApp to confirm delivery for your location.' ];
+$LP_FAQS[] = [ 'q' => 'What payment methods do you accept?',
+               'a' => 'You can pay securely with M-Pesa or card.' ];
+$LP_FAQS[] = [ 'q' => 'Do I need a prescription for Wegovy or other weight management medicines?',
+               'a' => 'Yes. Weight management injectables such as Wegovy are prescription-only medicines in Kenya. Upload your prescription for review, or chat with our pharmacist for availability and current prices.' ];
+$LP_FAQS[] = [ 'q' => 'Do you sell CeraVe and other skin care products in Kenya?',
+               'a' => 'Yes. Our certified CeraVe range is in stock, alongside other dermatologist recommended skin care products. Browse the skin care category in our shop.' ];
+$LP_FAQS[] = [ 'q' => 'Which is the best pharmacy in Nairobi?',
+               'a' => 'Leshavin Pharmacy aims to be the best pharmacy in Nairobi for our customers, with genuine products, fast delivery, easy prescription uploads and friendly pharmacist support.' ];
+$LP_FAQS[] = [ 'q' => 'Can I speak to a pharmacist before I order?',
+               'a' => 'Yes. Message us on WhatsApp and our team will help you choose the right product. For prescription products, use the Ask a Pharmacist button.' ];
+
+$lp_pharmacy_schema = [
+  '@context'      => 'https://schema.org',
+  '@type'         => 'Pharmacy',
+  'name'          => 'Leshavin Pharmacy',
+  'description'   => $LP_SEO_DESC,
+  'url'           => home_url( '/' ),
+  'telephone'     => '+' . $lp_phone,
+  'email'         => $lp_email,
+  'areaServed'    => [
+    [ '@type' => 'City',    'name' => 'Nairobi' ],
+    [ '@type' => 'Country', 'name' => 'Kenya' ],
+  ],
+  'address'       => [
+    '@type'           => 'PostalAddress',
+    'addressLocality' => 'Nairobi',
+    'addressCountry'  => 'KE',
+  ],
+  'paymentAccepted' => 'M-Pesa, Credit Card',
+];
+if ( $LP_STREET_ADDRESS ) { $lp_pharmacy_schema['address']['streetAddress'] = $LP_STREET_ADDRESS; }
+if ( $LP_PPB_LICENSE )    { $lp_pharmacy_schema['identifier'] = [ '@type' => 'PropertyValue', 'name' => 'Pharmacy and Poisons Board (PPB) Kenya License No', 'value' => $LP_PPB_LICENSE ]; }
+$lp_faq_schema = [
+  '@context'   => 'https://schema.org',
+  '@type'      => 'FAQPage',
+  'mainEntity' => array_map( function ( $f ) {
+    return [ '@type' => 'Question', 'name' => $f['q'], 'acceptedAnswer' => [ '@type' => 'Answer', 'text' => $f['a'] ] ];
+  }, $LP_FAQS ),
+];
+
+$lp_has_yoast_local = defined( 'WPSEO_LOCAL_VERSION' ) || class_exists( 'WPSEO_Local_Core' );
+if ( ! $lp_has_yoast_local ) : ?>
+<script type="application/ld+json"><?php echo wp_json_encode( $lp_pharmacy_schema, JSON_UNESCAPED_SLASHES ); ?></script>
+<?php endif; ?>
+<script type="application/ld+json"><?php echo wp_json_encode( $lp_faq_schema, JSON_UNESCAPED_SLASHES ); ?></script>
 
 <!-- HERO -->
 <?php
 $lp_hero_slides = [
-  [ 'img' => 'homebg.png',  'label' => 'Welcome To Leshavin', 'h1a' => 'Your Health,',      'h1b' => 'Our Priority.',   'sub' => 'Quality medicines and healthcare products delivered fast and reliably across Kenya.', 'pos' => 'center 25%' ],
-  [ 'img' => 'cerave.png',  'label' => 'Skincare',            'h1a' => 'Certified CeraVe',   'h1b' => 'Skincare Range.', 'sub' => 'Dermatologist recommended skincare, now in stock and ready to ship.', 'pos' => 'center top' ],
-  [ 'img' => 'wegovy.png',  'label' => 'In Stock',            'h1a' => 'Wegovy Now',         'h1b' => 'Available.',      'sub' => 'Speak to our pharmacist about weight management support today.', 'pos' => 'center' ],
+  [ 'img' => 'homebg.png',  'label' => 'Welcome To Leshavin Pharmacy', 'h1a' => 'Online Pharmacy Kenya:', 'h1b' => 'Your Health, Our Priority.', 'sub' => 'Genuine medicines and healthcare products from a trusted Nairobi pharmacy, delivered fast across Kenya.', 'pos' => 'center 25%' ],
+  [ 'img' => 'cerave.png',  'label' => 'Skincare',            'h1a' => 'Certified CeraVe',   'h1b' => 'Skincare Range.', 'sub' => 'Dermatologist recommended skin care products in Kenya, now in stock and ready to ship.', 'pos' => 'center top' ],
+  [ 'img' => 'wegovy.png',  'label' => 'In Stock',            'h1a' => 'Wegovy Now',         'h1b' => 'Available.',      'sub' => 'Speak to our pharmacist in Nairobi about weight management support today.', 'pos' => 'center' ],
 ];
 ?>
 <section class="lp-hero2" id="lpHero2">
-  <?php foreach ( $lp_hero_slides as $i => $s ) : ?>
+  <?php foreach ( $lp_hero_slides as $i => $s ) : $lp_htag = ( $i === 0 ) ? 'h1' : 'h2'; ?>
   <div class="lp-hero2-slide <?php echo $i === 0 ? 'active' : ''; ?>" data-i="<?php echo $i; ?>">
     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/js/images/' . $s['img'] ); ?>" alt="<?php echo esc_attr( $s['h1a'] . ' ' . $s['h1b'] ); ?>" style="--lp-obj-pos:<?php echo esc_attr( $s['pos'] ); ?>;">
     <div class="lp-hero2-overlay"></div>
     <div class="lp-hero2-content">
       <div class="lp-hero2-label"><?php echo esc_html( $s['label'] ); ?></div>
-      <h1><?php echo esc_html( $s['h1a'] ); ?><br><?php echo esc_html( $s['h1b'] ); ?></h1>
+      <<?php echo $lp_htag; ?>><?php echo esc_html( $s['h1a'] ); ?><br><?php echo esc_html( $s['h1b'] ); ?></<?php echo $lp_htag; ?>>
       <p class="lp-hero2-sub"><?php echo esc_html( $s['sub'] ); ?></p>
       <div class="lp-hero2-btns">
         <a href="<?php echo esc_url( get_permalink( wc_get_page_id('shop') ) ); ?>" class="lp-hero2-btn-white">
@@ -1041,6 +1302,99 @@ $lp_sale_ids = wc_get_product_ids_on_sale();
         <div class="lp-trend-banner-label">Medicines</div>
         <div class="lp-trend-banner-title">Leshavin<br>Deals</div>
         <div class="lp-trend-banner-price">Trusted brands, honest prices</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ LOCAL SEO CONTENT ═══════════ -->
+<section class="lp-seo-sec">
+  <div class="lp-wrap">
+    <div class="lp-seo-card">
+      <h2 class="lp-seo-title">Leshavin Pharmacy: Your Online Pharmacy in Nairobi and Across Kenya</h2>
+
+      <div class="lp-seo-split">
+        <div class="lp-seo-col">
+          <h3 class="lp-seo-col-title">Pharmacy Care Delivered to Your Door in Kenya</h3>
+          <p class="lp-seo-text">
+            Skip the queue and shop from home. Leshavin Pharmacy, based in <?php echo esc_html( $lp_place ); ?>, brings genuine medicines and everyday health essentials to your door, with same day delivery in selected areas and nationwide delivery across Kenya. Pay with M-Pesa or card at checkout, and message our pharmacist on WhatsApp whenever you need help choosing the right product.
+          </p>
+        </div>
+        <div class="lp-seo-col">
+          <h3 class="lp-seo-col-title">Prescriptions, Skin Care and Wellness in One Place</h3>
+          <p class="lp-seo-text">
+            Have a prescription? <a href="<?php echo esc_url( $lp_prescription_url ); ?>">Upload it online</a> and our pharmacist reviews it before your order is packed. Beyond prescriptions, explore weight management support, CeraVe and other skin care, and vitamins for everyday wellness. It is a simple, trusted way to buy medicine online in Kenya, with clear prices and real pharmacist advice.
+          </p>
+        </div>
+      </div>
+
+      <!-- Info boxes: ONE row, 3 visible, the rest move slowly to the left -->
+      <div class="lp-marq lp-marq-boxes" aria-label="What we offer">
+        <div class="lp-marq-track">
+          <?php for ( $pass = 0; $pass < 2; $pass++ ) : $is_dup = ( $pass === 1 ); ?>
+          <div class="lp-marq-group"<?php echo $is_dup ? ' aria-hidden="true"' : ''; ?>>
+            <?php foreach ( $LP_BOXES as $b ) :
+              $body = $b[1];
+              if ( $is_dup ) { $body = str_replace( '<a ', '<a tabindex="-1" ', $body ); }
+            ?>
+              <div class="lp-marq-item">
+                <div class="lp-seo-box">
+                  <h3><?php echo $b[0]; ?></h3>
+                  <p><?php echo $body; ?></p>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endfor; ?>
+        </div>
+      </div>
+
+      <?php if ( ! empty( $LP_CHIP_LINKS ) ) : ?>
+      <h3 class="lp-seo-sub">Shop Pharmacy Categories in Nairobi &amp; Kenya</h3>
+
+      <!-- Category chips: ONE row, 5 visible (3 on mobile), the rest move slowly to the left -->
+      <div class="lp-marq lp-marq-chips" aria-label="Pharmacy categories">
+        <div class="lp-marq-track">
+          <?php for ( $pass = 0; $pass < 2; $pass++ ) : $is_dup = ( $pass === 1 ); ?>
+          <div class="lp-marq-group"<?php echo $is_dup ? ' aria-hidden="true"' : ''; ?>>
+            <?php foreach ( $LP_CHIP_LINKS as $c ) : ?>
+              <div class="lp-marq-item">
+                <a class="lp-chip" href="<?php echo esc_url( $c[1] ); ?>"<?php echo $is_dup ? ' tabindex="-1"' : ''; ?>><?php echo esc_html( $c[0] ); ?></a>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endfor; ?>
+        </div>
+      </div>
+      <?php endif; ?>
+
+      <div class="lp-info-strip">
+        <span><strong>Location:</strong> <?php echo esc_html( $lp_place ); ?></span>
+        <span><strong>WhatsApp / Phone:</strong> +<?php echo esc_html( $lp_phone ); ?></span>
+        <?php if ( $LP_PPB_LICENSE ) : ?><span><strong>PPB License No:</strong> <?php echo esc_html( $LP_PPB_LICENSE ); ?></span><?php endif; ?>
+        <?php if ( $LP_HOURS_TEXT ) : ?><span><strong>Opening hours:</strong> <?php echo esc_html( $LP_HOURS_TEXT ); ?></span><?php endif; ?>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="lp-faq-sec">
+  <div class="lp-wrap">
+    <div class="lp-faq-card">
+      <h2 class="lp-seo-title">Online Pharmacy Kenya FAQs</h2>
+      <?php $lp_faq_cols = array_chunk( $LP_FAQS, (int) ceil( count( $LP_FAQS ) / 2 ) ); ?>
+      <div class="lp-faq-split">
+        <?php foreach ( $lp_faq_cols as $lp_col ) : ?>
+        <div class="lp-faq-col">
+          <?php foreach ( $lp_col as $f ) : ?>
+            <details class="lp-faq-item">
+              <summary><?php echo esc_html( $f['q'] ); ?></summary>
+              <p><?php echo esc_html( $f['a'] ); ?></p>
+            </details>
+          <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
