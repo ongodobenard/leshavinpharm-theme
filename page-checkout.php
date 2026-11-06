@@ -286,7 +286,28 @@ nav.breadcrumbs,
   .ck-secure-note{padding:0 16px 20px;}
 }
 i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
-</style>
+/* ck-scroll-v1: order summary items scroll, totals stay pinned (same behaviour as Travotech) */
+.ck-sidebar table.woocommerce-checkout-review-order-table{border-collapse:separate !important;border-spacing:0 !important;}
+.ck-sidebar table.woocommerce-checkout-review-order-table tfoot{position:sticky;bottom:0;z-index:4;}
+.ck-sidebar table.woocommerce-checkout-review-order-table tfoot th,
+.ck-sidebar table.woocommerce-checkout-review-order-table tfoot td{background:#fff !important;}
+.ck-sidebar table.woocommerce-checkout-review-order-table tfoot tr:first-child th,
+.ck-sidebar table.woocommerce-checkout-review-order-table tfoot tr:first-child td{border-top:2px solid var(--ck-border) !important;}
+.ck-sidebar .ck-order-table-wrap{overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--ck-green) #eaf0f5;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.ck-sidebar .ck-order-table-wrap::-webkit-scrollbar{width:8px;}
+.ck-sidebar .ck-order-table-wrap::-webkit-scrollbar-track{background:#eaf0f5;}
+.ck-sidebar .ck-order-table-wrap::-webkit-scrollbar-thumb{background:var(--ck-green);border-radius:6px;}
+@media (min-width:1001px){
+  .ck-layout{align-items:stretch;}
+  .ck-sidebar{position:relative !important;top:auto !important;min-height:480px;}
+  .ck-sidebar > .ck-card{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;overflow:hidden;}
+  .ck-sidebar .ck-summary-head{flex:0 0 auto;}
+  .ck-sidebar .ck-order-table-wrap{flex:1 1 auto;min-height:0;}
+  .ck-sidebar .ck-secure-note{flex:0 0 auto;padding-top:14px;}
+}
+@media (max-width:1000px){
+  .ck-sidebar .ck-order-table-wrap{max-height:380px;overscroll-behavior:auto;}
+}</style>
 
 <div class="ck-page">
 
@@ -644,4 +665,25 @@ i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justi
 })();
 </script>
 
+<script>
+/* ck-scroll-v1: when the list reaches its top or bottom on touch screens, hand scrolling to the page */
+(function(){
+  var el = document.getElementById('ckOrderTableWrap');
+  if(!el) return;
+  var last = 0;
+  el.addEventListener('touchstart', function(e){ last = e.touches[0].clientY; }, {passive:true});
+  el.addEventListener('touchmove', function(e){
+    if(!window.matchMedia('(max-width:1000px)').matches) return;
+    var y = e.touches[0].clientY, d = last - y;
+    last = y;
+    if(el.scrollHeight <= el.clientHeight + 1) return;
+    var atTop = el.scrollTop <= 0;
+    var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+    if((d > 0 && atBottom) || (d < 0 && atTop)){
+      if(e.cancelable) e.preventDefault();
+      window.scrollBy(0, d);
+    }
+  }, {passive:false});
+})();
+</script>
 <?php get_footer(); ?>
