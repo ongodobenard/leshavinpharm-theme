@@ -491,6 +491,17 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 @media(max-width:900px){.lp-rv-grid{grid-template-columns:1fr;}.lp-rv-side{padding:24px 20px 30px;}}
 @media(max-width:560px){.lp-rv-tag{display:none;}}
 @media (prefers-reduced-motion:reduce){.lp-rv-track{transition:none;}}
+/* review cards: Travotech style */
+.lp-rv-slide{display:flex;}
+.lp-rv-card{flex:1 1 auto;height:auto;min-height:290px;border:1.5px solid var(--lp-border);border-top:1.5px solid var(--lp-border);gap:14px;padding:22px;}
+.lp-rv-q,.lp-rv-tag,.lp-rv-by{display:none !important;}
+.lp-rv-head{display:flex;align-items:center;gap:12px;}
+.lp-rv-head .lp-rv-who{flex:1;min-width:0;}
+.lp-rv-g{flex:0 0 auto;display:flex;align-items:center;}
+.lp-rv-stars{color:#FBBC04;font-size:1rem;}
+.lp-rv-text{flex:1;}
+.lp-rv-foot{display:flex;align-items:center;gap:8px;border-top:1px solid var(--lp-border);padding-top:14px;font-size:.85rem;color:var(--lp-text-light);}
+.lp-rv-foot svg{width:20px;height:20px;}
 /* NEWSLETTER */
 .lp-news{
   background:var(--lp-blue-dark);
@@ -1491,6 +1502,7 @@ $lp_reviews = [
   [ '',                  'Peter Omondi',      'Machakos',          'Nationwide',      'Nationwide delivery really works. Pain relief and first aid items reached Machakos in two days.' ],
   [ '',                  'Fatuma Said',       'Nairobi CBD',       'M-Pesa',          'Paying with M-Pesa at checkout was quick and smooth. Top service from the whole team.' ],
 ];
+$lp_g_svg = '<svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
 $lp_rv_cols = [ '#1c75bc', '#6ea82e', '#e0433b', '#125a94', '#f5a623', '#8dc63f' ];
 ?>
 <section class="lp-test lp-rv-sec" aria-labelledby="lpRvH">
@@ -1519,18 +1531,18 @@ $lp_rv_cols = [ '#1c75bc', '#6ea82e', '#e0433b', '#125a94', '#f5a623', '#8dc63f'
             ?>
             <div class="lp-rv-slide">
               <article class="lp-rv-card">
-                <i class="fa-solid fa-quote-right lp-rv-q" aria-hidden="true"></i>
-                <div class="lp-rv-stars" role="img" aria-label="5 out of 5 stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                <p class="lp-rv-text"><?php echo esc_html( $r[4] ); ?></p>
-                <div class="lp-rv-by">
+                <div class="lp-rv-head">
                   <?php if ( $r[0] ) : ?>
                     <img class="lp-rv-av" src="<?php echo esc_url( $lp_rv_img . $r[0] ); ?>" alt="<?php echo esc_attr( $r[1] ); ?>" loading="lazy">
                   <?php else : ?>
                     <span class="lp-rv-av" style="background:<?php echo esc_attr( $col ); ?>;"><?php echo esc_html( $ini ); ?></span>
                   <?php endif; ?>
                   <div class="lp-rv-who"><strong><?php echo esc_html( $r[1] ); ?></strong><span><?php echo esc_html( $r[2] ); ?></span></div>
-                  <span class="lp-rv-tag"><?php echo esc_html( $r[3] ); ?></span>
+                  <span class="lp-rv-g"><?php echo $lp_g_svg; ?></span>
                 </div>
+                <div class="lp-rv-stars" role="img" aria-label="5 out of 5 stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p class="lp-rv-text"><?php echo esc_html( $r[4] ); ?></p>
+                <div class="lp-rv-foot"><?php echo $lp_g_svg; ?><span>Posted on Google</span></div>
               </article>
             </div>
             <?php endforeach; ?>
