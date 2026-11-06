@@ -709,27 +709,56 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
     window.history.replaceState(null, '', cleanUrl.toString());
   }
 
-  // Main "Add to Cart" button on this product page
+  function lpRefreshCart() {
+    fetch(window.location.href.split('#')[0], { credentials: 'same-origin', cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var fresh = doc.querySelectorAll('.lph-cart-wrap');
+        document.querySelectorAll('.lph-cart-wrap').forEach(function (el, i) {
+          if (fresh[i]) el.replaceWith(fresh[i]);
+        });
+      }).catch(function () {});
+  }
+  function lpAdd(pid, qty) {
+    var fb = new URL(window.location.href);
+    fb.searchParams.set('add-to-cart', pid);
+    fb.searchParams.set('quantity', qty);
+    var body = new URLSearchParams();
+    body.set('product_id', pid);
+    body.set('quantity', qty);
+    return fetch('<?php echo esc_url( home_url( '/?wc-ajax=add_to_cart' ) ); ?>', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString()
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.error) { return { ok: false, url: data.product_url || fb.toString() }; }
+        lpRefreshCart();
+        return { ok: true };
+      })
+      .catch(function () { return { ok: false, url: fb.toString() }; });
+  }
+  // Main "Add to Cart" button on this product page (background add, no reload)
+  function lpPdBusy(btn, on) { btn.style.opacity = on ? '0.65' : ''; btn.style.pointerEvents = on ? 'none' : ''; }
   if (addBtn) {
     addBtn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-
       var qty  = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
       var name = addBtn.getAttribute('data-name');
       var base = addBtn.getAttribute('data-base');
-
-      var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      sessionStorage.setItem('lp_pd_scroll_pos', scrollY);
-
-      addBtn.classList.add('lp-pd-atc-loading');
+      var pid  = new URL(base, window.location.href).searchParams.get('add-to-cart');
       var txtEl = addBtn.querySelector('.lp-pd-atc-txt');
-      if (txtEl) txtEl.textContent = 'Adding…';
-
-      var url = new URL(base, window.location.href);
-      url.searchParams.set('quantity', qty);
-      url.searchParams.set('lp_added_name', encodeURIComponent(name));
-      window.location.href = url.toString();
+      var orig = txtEl ? txtEl.textContent : '';
+      addBtn.classList.add('lp-pd-atc-loading');
+      if (txtEl) txtEl.textContent = 'Adding...';
+      lpAdd(pid, qty).then(function (res) {
+        addBtn.classList.remove('lp-pd-atc-loading');
+        if (txtEl) txtEl.textContent = orig;
+        if (res.ok) { showToast(name); } else if (res.url) { window.location.href = res.url; }
+      });
     });
   }
 
@@ -738,22 +767,13 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-
       var pid  = btn.getAttribute('data-pid');
       var name = btn.getAttribute('data-name');
-
-      var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      sessionStorage.setItem('lp_pd_scroll_pos', scrollY);
-
-      var txtEl = btn.querySelector('span');
-      btn.style.opacity = '0.65';
-      btn.style.pointerEvents = 'none';
-
-      var url = new URL(window.location.href);
-      url.searchParams.set('add-to-cart', pid);
-      url.searchParams.set('quantity', '1');
-      url.searchParams.set('lp_added_name', encodeURIComponent(name));
-      window.location.href = url.toString();
+      lpPdBusy(btn, true);
+      lpAdd(pid, 1).then(function (res) {
+        lpPdBusy(btn, false);
+        if (res.ok) { showToast(name); } else if (res.url) { window.location.href = res.url; }
+      });
     });
   });
 })();

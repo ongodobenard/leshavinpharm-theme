@@ -570,26 +570,53 @@ $lp_current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslas
     window.history.replaceState(null, '', cleanUrl.toString());
   }
 
+  function lpRefreshCart() {
+    fetch(window.location.href.split('#')[0], { credentials: 'same-origin', cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var fresh = doc.querySelectorAll('.lph-cart-wrap');
+        document.querySelectorAll('.lph-cart-wrap').forEach(function (el, i) {
+          if (fresh[i]) el.replaceWith(fresh[i]);
+        });
+      }).catch(function () {});
+  }
+  function lpAdd(pid, qty) {
+    var fb = new URL(window.location.href);
+    fb.searchParams.set('add-to-cart', pid);
+    fb.searchParams.set('quantity', qty);
+    var body = new URLSearchParams();
+    body.set('product_id', pid);
+    body.set('quantity', qty);
+    return fetch('<?php echo esc_url( home_url( '/?wc-ajax=add_to_cart' ) ); ?>', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString()
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.error) { return { ok: false, url: data.product_url || fb.toString() }; }
+        lpRefreshCart();
+        return { ok: true };
+      })
+      .catch(function () { return { ok: false, url: fb.toString() }; });
+  }
   document.querySelectorAll('.leshavin-atc-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-
+      if (btn.classList.contains('lp-atc-loading')) return;
       var pid  = btn.getAttribute('data-pid');
       var name = btn.getAttribute('data-name');
-
-      var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      sessionStorage.setItem('lp_scroll_pos', scrollY);
-
-      btn.classList.add('lp-atc-loading');
       var txtEl = btn.querySelector('.lp-atc-txt');
-      if (txtEl) txtEl.textContent = 'Adding…';
-
-      var url = new URL(window.location.href);
-      url.searchParams.set('add-to-cart', pid);
-      url.searchParams.set('quantity', '1');
-      url.searchParams.set('lp_added_name', encodeURIComponent(name));
-      window.location.href = url.toString();
+      var orig = txtEl ? txtEl.textContent : '';
+      btn.classList.add('lp-atc-loading');
+      if (txtEl) txtEl.textContent = 'Adding...';
+      lpAdd(pid, 1).then(function (res) {
+        btn.classList.remove('lp-atc-loading');
+        if (txtEl) txtEl.textContent = orig;
+        if (res.ok) { showToast(name); } else if (res.url) { window.location.href = res.url; }
+      });
     });
   });
 
