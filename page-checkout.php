@@ -377,14 +377,7 @@ i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justi
               <textarea name="billing_address_1" id="billing_address_1" rows="2" placeholder="Enter your delivery address"></textarea>
               <div class="ck-hint">e.g. House/Apartment, Street, Area</div>
             </div>
-            <div class="ck-fg" data-field="billing_city">
-              <label>Town / City <span class="req">*</span></label>
-              <input type="text" name="billing_city" id="billing_city" placeholder="Enter your town or city" autocomplete="address-level2">
-            </div>
-            <div class="ck-fg" data-field="billing_postcode">
-              <label>Postal Code <span class="opt">(Optional)</span></label>
-              <input type="text" name="billing_postcode" id="billing_postcode" placeholder="Enter postal code" autocomplete="postal-code">
-            </div>
+            <input type="hidden" name="billing_city" id="billing_city" value="To be confirmed"><!-- ck-city-hidden -->
             <div class="ck-fg ck-fg-full" data-field="ck_order_notes">
               <label>Additional Notes <span class="opt">(Optional)</span></label>
               <textarea name="order_comments" id="ck_order_notes" rows="3" placeholder="e.g. Delivery instructions, preferred delivery time, or anything else we should know"></textarea>
@@ -493,7 +486,7 @@ i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justi
   }
 
   function validateFields(){
-    var required = ['ck_full_name','billing_phone','billing_state','billing_address_1','billing_city'];
+    var required = ['ck_full_name','billing_phone','billing_state','billing_address_1'];
     var missing = false;
     required.forEach(function(id){
       var wrap = document.querySelector('[data-field="'+id+'"]');
@@ -550,7 +543,7 @@ i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justi
 
     var msg = 'Hello Leshavin Pharmacy, I would like to place an order.\n\n';
     msg += 'Name: ' + name + '\nPhone: ' + phone + (email ? '\nEmail: ' + email : '') + '\n';
-    msg += 'Delivery Address: ' + address + ', ' + city + ', ' + countyText + (postcode ? ' ' + postcode : '') + '\n\n';
+    msg += 'Delivery Address: ' + address + ', ' + countyText + '\n\n';
     if (lines.length){
       msg += 'Order Items:\n';
       lines.forEach(function(l){ msg += '- ' + l.name + (l.qty ? ' (' + l.qty + ')' : '') + ': ' + l.total + '\n'; });
