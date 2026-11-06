@@ -90,6 +90,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
   z-index:3;
 }
 .tc-hero-badge svg{width:38px;height:38px;color:var(--tc-navy);}
+.tc-hero-badge i{font-size:32px;line-height:1}
 
 /* Trust strip under hero */
 .tc-trust{
@@ -103,6 +104,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
   display:flex;align-items:center;justify-content:center;color:var(--tc-blue-dark);flex-shrink:0;
 }
 .tc-trust-icon svg{width:19px;height:19px;}
+.tc-trust-icon i{font-size:16px;line-height:1}
 .tc-trust-title{font-family:var(--tc-font-head);font-weight:600;font-size:.84rem;color:var(--tc-text);text-transform:uppercase;letter-spacing:.01em;}
 .tc-trust-sub{font-size:.76rem;color:var(--tc-text-light);}
 
@@ -146,6 +148,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
   display:flex;align-items:center;justify-content:center;
 }
 .tc-note-icon svg{width:17px;height:17px;}
+.tc-note-icon i{font-size:14px;line-height:1}
 .tc-note-title{font-family:var(--tc-font-head);font-weight:700;font-size:.88rem;color:var(--tc-text);margin-bottom:4px;text-transform:uppercase;}
 .tc-note-desc{font-size:.82rem;line-height:1.7;color:var(--tc-text-light);}
 
@@ -163,6 +166,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
   display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;
 }
 .tc-cta-icon svg{width:22px;height:22px;}
+.tc-cta-icon i{font-size:19px;line-height:1}
 .tc-cta-title{font-family:var(--tc-font-head);font-weight:700;color:#fff;font-size:1.02rem;text-transform:uppercase;margin-bottom:3px;}
 .tc-cta-sub{font-size:.8rem;color:rgba(255,255,255,.7);max-width:480px;}
 .tc-btn{
@@ -173,6 +177,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
 }
 .tc-btn:hover{background:var(--tc-green);color:#fff;transform:translateY(-2px);}
 .tc-btn svg{width:14px;height:14px;}
+.tc-btn i{font-size:12px;line-height:1}
 
 /* ============================================================
    RESPONSIVE
@@ -233,6 +238,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
   .tc-cta{flex-direction:column;align-items:flex-start;padding:22px;}
   .tc-cta .tc-btn{width:100%;justify-content:center;}
 }
+i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
 </style>
 
 <div class="tc-page">
@@ -243,7 +249,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
 
       <div class="tc-hero-media-box">
         <div class="tc-hero-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5.5-3.5 9.7-8 11-4.5-1.3-8-5.5-8-11V5l8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
         </div>
         <div class="tc-hero-text">
           <h1 class="tc-hero-title">Terms &amp; Conditions</h1>
@@ -254,15 +260,15 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
 
       <div class="tc-trust">
         <div class="tc-trust-item">
-          <div class="tc-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+          <div class="tc-trust-icon"><i class="fa-solid fa-file-prescription" aria-hidden="true"></i></div>
           <div><div class="tc-trust-title">Transparent</div><div class="tc-trust-sub">Clear and fair terms for everyone.</div></div>
         </div>
         <div class="tc-trust-item">
-          <div class="tc-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5.5-3.5 9.7-8 11-4.5-1.3-8-5.5-8-11V5l8-3z"/></svg></div>
+          <div class="tc-trust-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
           <div><div class="tc-trust-title">Secure</div><div class="tc-trust-sub">Your data and privacy are protected.</div></div>
         </div>
         <div class="tc-trust-item">
-          <div class="tc-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg></div>
+          <div class="tc-trust-icon"><i class="fa-solid fa-user" aria-hidden="true"></i></div>
           <div><div class="tc-trust-title">Reliable</div><div class="tc-trust-sub">We are committed to quality service.</div></div>
         </div>
         <div class="tc-trust-item">
@@ -344,7 +350,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
   <section class="tc-note-wrap">
     <div class="tc-wrap">
       <div class="tc-note">
-        <div class="tc-note-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+        <div class="tc-note-icon"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></div>
         <div>
           <div class="tc-note-title">Important Note</div>
           <div class="tc-note-desc">We reserve the right to update or modify these Terms &amp; Conditions at any time without prior notice. Changes will be effective immediately upon posting on this page. Please review this page regularly.</div>
@@ -358,7 +364,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
     <div class="tc-wrap">
       <div class="tc-cta">
         <div class="tc-cta-left">
-          <div class="tc-cta-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 12.5"/></svg></div>
+          <div class="tc-cta-icon"><i class="fa-solid fa-file-prescription" aria-hidden="true"></i></div>
           <div>
             <div class="tc-cta-title">By Using Our Website</div>
             <div class="tc-cta-sub">You acknowledge that you have read, understood, and agree to be bound by these Terms &amp; Conditions.</div>
@@ -366,7 +372,7 @@ $tc_hero_bg  = get_template_directory_uri() . '/assets/js/images/terms.png';
         </div>
         <a href="<?php echo esc_url( home_url('/') ); ?>" class="tc-btn">
           Continue Shopping
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
         </a>
       </div>
     </div>

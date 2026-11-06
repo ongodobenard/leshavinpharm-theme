@@ -69,6 +69,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-pd-main-img img{max-width:100%;max-height:100%;object-fit:contain;}
 .lp-pd-zoom-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:#fff;border:1.5px solid var(--lp-border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--lp-blue-dark);}
 .lp-pd-zoom-btn svg{width:16px;height:16px;}
+.lp-pd-zoom-btn i{font-size:14px;line-height:1}
 .lp-pd-thumbs{display:flex;align-items:center;gap:8px;margin-top:14px;}
 .lp-pd-thumb-nav{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--lp-border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--lp-text-light);flex-shrink:0;}
 .lp-pd-thumb-nav:hover{border-color:var(--lp-green);color:var(--lp-green-dark);}
@@ -93,6 +94,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 
 .lp-pd-stock{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;margin-bottom:18px;}
 .lp-pd-stock svg{width:16px;height:16px;flex-shrink:0;}
+.lp-pd-stock i{font-size:14px;line-height:1}
 .lp-pd-stock.in{color:var(--lp-green-dark);}
 .lp-pd-stock.out{color:var(--lp-red);}
 
@@ -103,6 +105,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-pd-trust-row{display:flex;gap:18px;flex-wrap:wrap;padding:18px 0;border-top:1.5px solid var(--lp-border);border-bottom:1.5px solid var(--lp-border);margin-bottom:22px;}
 .lp-pd-trust-item{display:flex;align-items:center;gap:9px;}
 .lp-pd-trust-item svg{width:24px;height:24px;color:var(--lp-green-dark);flex-shrink:0;}
+.lp-pd-trust-item i{font-size:20px;line-height:1}
 .lp-pd-trust-title{font-family:var(--lp-font-head);font-weight:600;font-size:.74rem;text-transform:uppercase;color:var(--lp-blue-dark);}
 .lp-pd-trust-sub{font-size:.7rem;color:var(--lp-text-light);}
 
@@ -128,13 +131,16 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-pd-btn-rx{background:var(--lp-red);color:#fff;}
 .lp-pd-btn-rx:hover{background:var(--lp-red-dark);}
 .lp-pd-btn-cart svg,.lp-pd-btn-rx svg{width:16px;height:16px;flex-shrink:0;}
+.lp-pd-btn-cart i,.lp-pd-btn-rx i{font-size:14px;line-height:1}
 .lp-pd-wish-btn{width:48px;height:48px;border-radius:8px;border:1.5px solid var(--lp-border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--lp-blue-dark);flex-shrink:0;}
 .lp-pd-wish-btn:hover{border-color:var(--lp-red);color:var(--lp-red);}
 .lp-pd-wish-btn svg{width:18px;height:18px;}
+.lp-pd-wish-btn i{font-size:15px;line-height:1}
 
 .lp-pd-btn-wa{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:var(--lp-wa);color:#fff;font-family:var(--lp-font-head);font-weight:600;font-size:.84rem;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:8px;text-decoration:none;margin-bottom:8px;}
 .lp-pd-btn-wa:hover{background:var(--lp-wa-dark);}
 .lp-pd-btn-wa svg{width:16px;height:16px;flex-shrink:0;}
+.lp-pd-btn-wa i{font-size:14px;line-height:1}
 
 /* SIDEBAR */
 .lp-pd-sidebar-widget{border:1.5px solid var(--lp-border);border-radius:12px;padding:20px;background:#fff;margin-bottom:16px;}
@@ -145,6 +151,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-pd-share-btn{width:38px;height:38px;border-radius:50%;background:#f7f9fb;border:1.5px solid var(--lp-border);display:flex;align-items:center;justify-content:center;color:var(--lp-blue-dark);text-decoration:none;}
 .lp-pd-share-btn:hover{background:var(--lp-blue-pale);border-color:var(--lp-blue);}
 .lp-pd-share-btn svg{width:15px;height:15px;}
+.lp-pd-share-btn i{font-size:13px;line-height:1}
 
 /* TABS (custom-styled, wraps WooCommerce default tabs output) */
 .lp-pd-tabs-wrap{margin-top:12px;padding-bottom:56px;}
@@ -222,6 +229,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-pd-r-btn-wa{background:var(--lp-wa);color:#fff;}
 .lp-pd-r-btn-wa:hover{background:var(--lp-wa-dark);}
 .lp-pd-r-btn-cart svg,.lp-pd-r-btn-rx svg,.lp-pd-r-btn-wa svg{width:12px;height:12px;flex-shrink:0;}
+.lp-pd-r-btn-cart i,.lp-pd-r-btn-rx i,.lp-pd-r-btn-wa i{font-size:10px;line-height:1}
 
 /* ADD-TO-CART TOAST */
 #leshavin-pd-toast {
@@ -290,22 +298,25 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 @media(max-width:380px){
   .lp-pd-btn-cart,.lp-pd-btn-rx{font-size:.64rem;padding:12px 6px;gap:4px;}
   .lp-pd-btn-cart svg,.lp-pd-btn-rx svg{width:13px;height:13px;}
+.lp-pd-btn-cart i,.lp-pd-btn-rx i{font-size:11px;line-height:1}
   .lp-pd-wish-btn{width:40px;}
   .lp-pd-wish-btn svg{width:16px;height:16px;}
+.lp-pd-wish-btn i{font-size:14px;line-height:1}
 }
+i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
 </style>
 
 <!-- ADD-TO-CART TOAST (product page) -->
 <div id="leshavin-pd-toast" role="alert" aria-live="assertive">
   <div class="lp-toast-icon-wrap">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <i class="fa-solid fa-check" style="font-size:18px;line-height:1;color:#fff;" aria-hidden="true"></i>
   </div>
   <div class="lp-toast-body">
     <div class="lp-toast-title">&#10003; Added to Cart</div>
     <div class="lp-toast-name" id="lp-pd-toast-name"></div>
     <div class="lp-toast-actions">
       <a href="<?php echo esc_url( function_exists('wc_get_cart_url') ? wc_get_cart_url() : '#' ); ?>" class="lp-toast-btn-cart">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
+        <i class="fa-solid fa-cart-shopping" style="font-size:12px;line-height:1;" aria-hidden="true"></i>
         View Cart
       </a>
       <button class="lp-toast-btn-close" id="lp-pd-toast-close" type="button">Dismiss</button>
@@ -353,17 +364,17 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
         <?php if ($img): ?>
           <img src="<?php echo esc_url($img); ?>" alt="<?php the_title_attribute(); ?>" id="lpPdMainImgTag">
         <?php else: ?>
-          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="var(--lp-blue-dark)" stroke-width="1.4" style="opacity:.25"><path d="M10.5 3.5a6 6 0 018 8l-8.5 8.5a6 6 0 01-8-8l8.5-8.5z"/><line x1="9" y1="15" x2="15" y2="9"/></svg>
+          <i class="fa-solid fa-pills" style="font-size:72px;line-height:1;opacity:.25color:var(--lp-blue-dark);" aria-hidden="true"></i>
         <?php endif; ?>
         <button class="lp-pd-zoom-btn" aria-label="Zoom" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
         </button>
       </div>
 
       <?php if ($img || $gallery_ids): ?>
       <div class="lp-pd-thumbs">
         <button class="lp-pd-thumb-nav" type="button" onclick="document.getElementById('lpPdThumbTrack').scrollBy({left:-80,behavior:'smooth'})" aria-label="Previous">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>
+          <i class="fa-solid fa-chevron-left" style="font-size:14px;line-height:1;" aria-hidden="true"></i>
         </button>
         <div class="lp-pd-thumb-track" id="lpPdThumbTrack">
           <?php if ($img): ?>
@@ -382,7 +393,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
           <?php endforeach; ?>
         </div>
         <button class="lp-pd-thumb-nav" type="button" onclick="document.getElementById('lpPdThumbTrack').scrollBy({left:80,behavior:'smooth'})" aria-label="Next">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
+          <i class="fa-solid fa-chevron-right" style="font-size:14px;line-height:1;" aria-hidden="true"></i>
         </button>
       </div>
       <?php endif; ?>
@@ -417,9 +428,9 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
 
       <div class="lp-pd-stock <?php echo $stock === 'instock' ? 'in' : 'out'; ?>">
         <?php if ($stock === 'instock'): ?>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg> In Stock
+          <i class="fa-solid fa-check" aria-hidden="true"></i> In Stock
         <?php else: ?>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Out of Stock
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i> Out of Stock
         <?php endif; ?>
       </div>
 
@@ -433,15 +444,15 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
       <!-- TRUST STRIP (hidden on mobile ≤640px) -->
       <div class="lp-pd-trust-row">
         <div class="lp-pd-trust-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <i class="fa-solid fa-truck" aria-hidden="true"></i>
           <div><div class="lp-pd-trust-title">Fast Delivery</div><div class="lp-pd-trust-sub">Across Kenya</div></div>
         </div>
         <div class="lp-pd-trust-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
           <div><div class="lp-pd-trust-title">Genuine Products</div><div class="lp-pd-trust-sub">100% Authentic</div></div>
         </div>
         <div class="lp-pd-trust-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <i class="fa-solid fa-lock" aria-hidden="true"></i>
           <div><div class="lp-pd-trust-title">Secure Payments</div><div class="lp-pd-trust-sub">Multiple Options</div></div>
         </div>
       </div>
@@ -487,7 +498,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
           </div>
         <?php endif; ?>
         <button type="button" class="lp-pd-wish-btn" aria-label="Add to wishlist">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          <i class="fa-regular fa-heart" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -503,16 +514,16 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
         <div class="lp-pd-sidebar-sub">Let someone else know about this</div>
         <div class="lp-pd-share-row">
           <a class="lp-pd-share-btn" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" aria-label="Share on Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"/></svg>
+            <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
           </a>
           <a class="lp-pd-share-btn" href="https://twitter.com/intent/tweet?url=<?php echo urlencode(get_permalink()); ?>&text=<?php echo urlencode($name); ?>" target="_blank" rel="noopener" aria-label="Share on Twitter">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 4.9c-.8.4-1.7.6-2.6.8a4.6 4.6 0 002-2.5c-.9.5-1.8.9-2.9 1.1a4.5 4.5 0 00-7.7 4.1 12.9 12.9 0 01-9.3-4.7 4.5 4.5 0 001.4 6 4.4 4.4 0 01-2-.6v.1a4.5 4.5 0 003.6 4.4 4.5 4.5 0 01-2 .1 4.5 4.5 0 004.2 3.1A9.1 9.1 0 012 19.5a12.9 12.9 0 006.9 2c8.3 0 12.9-6.9 12.9-12.9v-.6c.9-.6 1.6-1.4 2.2-2.1z"/></svg>
+            <i class="fa-brands fa-twitter" aria-hidden="true"></i>
           </a>
           <a class="lp-pd-share-btn" href="https://wa.me/?text=<?php echo urlencode($name . ' ' . get_permalink()); ?>" target="_blank" rel="noopener" aria-label="Share on WhatsApp">
             <?php echo leshavin_wa_svg(); ?>
           </a>
           <a class="lp-pd-share-btn" href="mailto:?subject=<?php echo urlencode($name); ?>&body=<?php echo urlencode(get_permalink()); ?>" aria-label="Share via Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -549,7 +560,7 @@ if ( isset( $_GET['lp_added_name'] ) && function_exists('WC') && WC()->session )
           <?php if ($rimg): ?>
             <img src="<?php echo esc_url($rimg); ?>" alt="<?php echo esc_attr($rp->get_name()); ?>" loading="lazy">
           <?php else: ?>
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.3"><path d="M10.5 3.5a6 6 0 018 8l-8.5 8.5a6 6 0 01-8-8l8.5-8.5z"/></svg>
+            <i class="fa-solid fa-pills" style="font-size:34px;line-height:1;opacity:.3;" aria-hidden="true"></i>
           <?php endif; ?>
         </a>
         <div class="lp-pd-r-body">

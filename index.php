@@ -148,6 +148,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;justify-items:center;align-items:center;}
 .lp-strip-item{display:flex;align-items:center;gap:12px;color:#fff;justify-content:flex-start;min-width:0;}
 .lp-strip-item svg{width:30px;height:30px;flex-shrink:0;color:var(--lp-green);}
+.lp-strip-item i{font-size:26px;line-height:1}
 .lp-strip-title{font-family:var(--lp-font-head);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.02em;overflow-wrap:break-word;}
 .lp-strip-sub{font-size:.75rem;color:rgba(255,255,255,.65);overflow-wrap:break-word;}
 
@@ -189,6 +190,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-popcat-img{width:44px;height:44px;border-radius:5px;overflow:hidden;background:#f7f9fb;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .lp-popcat-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
 .lp-popcat-img svg{width:22px;height:22px;color:var(--lp-blue);}
+.lp-popcat-img i{font-size:19px;line-height:1}
 .lp-popcat-info{min-width:0;}
 .lp-popcat-name{font-family:var(--lp-font-head);font-weight:600;text-transform:uppercase;letter-spacing:.01em;color:var(--lp-blue-dark);font-size:.76rem;line-height:1.25;margin-bottom:2px;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .lp-popcat-count{font-size:.7rem;color:var(--lp-text-light);}
@@ -201,6 +203,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-p-sale{position:absolute;top:10px;left:10px;background:var(--lp-green-dark);color:#fff;font-family:var(--lp-font-head);font-size:.6rem;font-weight:600;letter-spacing:.03em;padding:3px 9px;border-radius:50px;z-index:2;}
 .lp-p-wish{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;z-index:2;}
 .lp-p-wish svg{width:14px;height:14px;color:var(--lp-blue-dark);}
+.lp-p-wish i{font-size:12px;line-height:1}
 .lp-p-img{height:190px;background:#f7f9fb;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;}
 .lp-p-img img{width:100%;height:100%;object-fit:contain;}
 .lp-p-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1;}
@@ -224,6 +227,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-p-btn-wa{background:var(--lp-wa);color:#fff;}
 .lp-p-btn-wa:hover{background:var(--lp-wa-dark);}
 .lp-p-btn-cart svg,.lp-p-btn-rx svg,.lp-p-btn-wa svg{width:13px;height:13px;flex-shrink:0;}
+.lp-p-btn-cart i,.lp-p-btn-rx i,.lp-p-btn-wa i{font-size:11px;line-height:1}
 .lp-p-btn-cart.lp-atc-loading{opacity:.65;pointer-events:none;}
 
 /* DISCOUNTED PRODUCTS */
@@ -299,6 +303,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-disc-badge{position:absolute;top:10px;left:10px;background:var(--lp-green-dark);color:#fff;font-family:var(--lp-font-head);font-size:.6rem;font-weight:600;letter-spacing:.03em;padding:3px 9px;border-radius:50px;}
 .lp-disc-wish{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;background:#f7f9fb;border:none;display:flex;align-items:center;justify-content:center;}
 .lp-disc-wish svg{width:13px;height:13px;color:var(--lp-blue-dark);}
+.lp-disc-wish i{font-size:11px;line-height:1}
 .lp-disc-img{height:150px;display:flex;align-items:center;justify-content:center;margin:12px 0 10px;overflow:hidden;}
 .lp-disc-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;}
 .lp-disc-cat{font-family:var(--lp-font-head);font-size:.62rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--lp-blue);margin-bottom:4px;}
@@ -315,6 +320,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-disc-btn-wa{background:var(--lp-wa);color:#fff;}
 .lp-disc-btn-wa:hover{background:var(--lp-wa-dark);}
 .lp-disc-btn-cart svg,.lp-disc-btn-rx svg,.lp-disc-btn-wa svg{width:12px;height:12px;flex-shrink:0;}
+.lp-disc-btn-cart i,.lp-disc-btn-rx i,.lp-disc-btn-wa i{font-size:10px;line-height:1}
 .lp-disc-btn-cart.lp-atc-loading{opacity:.65;pointer-events:none;}
 
 /* TRENDING PRODUCTS */
@@ -337,6 +343,7 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
 .lp-trend-btn-wa{background:var(--lp-wa);color:#fff;}
 .lp-trend-btn-wa:hover{background:var(--lp-wa-dark);}
 .lp-trend-btn-cart svg,.lp-trend-btn-rx svg,.lp-trend-btn-wa svg{width:10px;height:10px;flex-shrink:0;}
+.lp-trend-btn-cart i,.lp-trend-btn-rx i,.lp-trend-btn-wa i{font-size:8px;line-height:1}
 .lp-trend-btn-cart.lp-atc-loading{opacity:.65;pointer-events:none;}
 
 .lp-trend-banner{
@@ -598,19 +605,20 @@ body{font-family:var(--lp-font-body);overflow-x:hidden;}
   .lp-news-form input,.lp-news-form button{width:100%;flex:1 1 100%;}
   .lp-news{margin:0 10px 28px;padding:20px 16px;max-width:calc(100% - 20px);border-radius:12px;}
 }
+i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
 </style>
 
 <!-- ADD-TO-CART TOAST -->
 <div id="leshavin-toast" role="alert" aria-live="assertive">
   <div class="lp-toast-icon-wrap">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <i class="fa-solid fa-check" style="font-size:18px;line-height:1;color:#fff;" aria-hidden="true"></i>
   </div>
   <div class="lp-toast-body">
     <div class="lp-toast-title">&#10003; Added to Cart</div>
     <div class="lp-toast-name" id="lp-toast-name"></div>
     <div class="lp-toast-actions">
       <a href="<?php echo esc_url( function_exists('wc_get_cart_url') ? wc_get_cart_url() : '#' ); ?>" class="lp-toast-btn-cart">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
+        <i class="fa-solid fa-cart-shopping" style="font-size:12px;line-height:1;" aria-hidden="true"></i>
         View Cart
       </a>
       <button class="lp-toast-btn-close" id="lp-toast-close" type="button">Dismiss</button>
@@ -738,17 +746,17 @@ if ( ! function_exists('leshavin_whatsapp_url') ) {
 /** Small reusable icons */
 if ( ! function_exists('leshavin_cart_svg') ) {
   function leshavin_cart_svg() {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>';
+    return '<i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>';
   }
 }
 if ( ! function_exists('leshavin_rx_svg') ) {
   function leshavin_rx_svg() {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+    return '<i class="fa-solid fa-file-prescription" aria-hidden="true"></i>';
   }
 }
 if ( ! function_exists('leshavin_wa_svg') ) {
   function leshavin_wa_svg() {
-    return '<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+    return '<i class="fa-brands fa-whatsapp" style="font-size:13px;line-height:1;" aria-hidden="true"></i>';
   }
 }
 
@@ -789,13 +797,13 @@ if ( ! function_exists('leshavin_product_grid') ) {
             <div class="lp-p-sale">-<?php echo round( ( ( $reg - $cur ) / $reg ) * 100 ); ?>% OFF</div>
           <?php endif; ?>
           <button class="lp-p-wish" aria-label="Wishlist" onclick="event.preventDefault();">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            <i class="fa-regular fa-heart" aria-hidden="true"></i>
           </button>
           <a href="<?php the_permalink(); ?>" class="lp-p-img">
             <?php if ( $img ) : ?>
               <img src="<?php echo esc_url( $img ); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy">
             <?php else: ?>
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.3"><path d="M10.5 3.5a6 6 0 018 8l-8.5 8.5a6 6 0 01-8-8l8.5-8.5z"/></svg>
+              <i class="fa-solid fa-pills" style="font-size:40px;line-height:1;opacity:.3;" aria-hidden="true"></i>
             <?php endif; ?>
           </a>
           <div class="lp-p-body">
@@ -977,7 +985,7 @@ $lp_hero_slides = [
       <div class="lp-hero2-btns">
         <a href="<?php echo esc_url( get_permalink( wc_get_page_id('shop') ) ); ?>" class="lp-hero2-btn-white">
           Shop Now
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <i class="fa-solid fa-arrow-right" style="font-size:15px;line-height:1;" aria-hidden="true"></i>
         </a>
         <a href="<?php echo esc_url( home_url('/submit-prescription') ); ?>" class="lp-hero2-btn-ghost">Upload Prescription</a>
       </div>
@@ -1018,19 +1026,19 @@ $lp_hero_slides = [
 <section class="lp-strip">
   <div class="lp-wrap lp-strip-grid">
     <div class="lp-strip-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <i class="fa-solid fa-truck" aria-hidden="true"></i>
       <div><div class="lp-strip-title">Same Day Delivery</div><div class="lp-strip-sub">In selected areas</div></div>
     </div>
     <div class="lp-strip-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20z"/></svg>
+      <i class="fa-solid fa-globe" aria-hidden="true"></i>
       <div><div class="lp-strip-title">Nationwide Delivery</div><div class="lp-strip-sub">Across Kenya</div></div>
     </div>
     <div class="lp-strip-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
       <div><div class="lp-strip-title">Secure Payments</div><div class="lp-strip-sub">M-Pesa &amp; Cards</div></div>
     </div>
     <div class="lp-strip-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <i class="fa-regular fa-clock" aria-hidden="true"></i>
       <div><div class="lp-strip-title">24/7 Support</div><div class="lp-strip-sub">We're here to help</div></div>
     </div>
   </div>
@@ -1039,7 +1047,7 @@ $lp_hero_slides = [
 <!-- POPULAR CATEGORIES -->
 <?php
 $lp_categories = get_terms(['taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>12]);
-$lp_fallback   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="7"/><circle cx="15" cy="15" r="7"/></svg>';
+$lp_fallback   = '<i class="fa-solid fa-capsules" aria-hidden="true"></i>';
 ?>
 <section class="lp-popcat">
   <div class="lp-wrap">
@@ -1164,7 +1172,7 @@ $lp_sale_ids = wc_get_product_ids_on_sale();
                 <div class="lp-disc-card">
                   <div class="lp-disc-badge">-<?php echo $reg ? round( ( ( $reg - $cur ) / $reg ) * 100 ) : ''; ?>% OFF</div>
                   <button class="lp-disc-wish" aria-label="Wishlist" onclick="event.preventDefault();">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    <i class="fa-regular fa-heart" aria-hidden="true"></i>
                   </button>
                   <a href="<?php the_permalink(); ?>" class="lp-disc-img">
                     <?php if ( $img ) : ?><img src="<?php echo esc_url( $img ); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy"><?php endif; ?>

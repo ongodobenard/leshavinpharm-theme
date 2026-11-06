@@ -63,6 +63,7 @@ get_header();
 .cp-breadcrumb a{color:var(--cp-blue-dark);text-decoration:none;font-weight:600;}
 .cp-breadcrumb a:hover{color:var(--cp-green-dark);}
 .cp-breadcrumb svg{width:12px;height:12px;color:var(--cp-text-light);flex-shrink:0;}
+.cp-breadcrumb i{font-size:10px;line-height:1}
 .cp-breadcrumb span.current{color:var(--cp-navy);font-weight:700;}
 
 /* ============================================================
@@ -114,6 +115,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
   text-decoration:none;transition:background .18s,color .18s,border-color .18s;
 }
 .cp-remove-btn svg{width:15px;height:15px;}
+.cp-remove-btn i{font-size:13px;line-height:1}
 .cp-remove-btn:hover{background:#fbeceb;color:var(--cp-red);border-color:#e8b6b0;}
 
 /* Qty stepper */
@@ -143,6 +145,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
   font-family:var(--cp-font-head);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.02em;
 }
 .cp-continue svg{width:14px;height:14px;}
+.cp-continue i{font-size:12px;line-height:1}
 .cp-continue:hover{color:var(--cp-green-dark);}
 
 /* ============================================================
@@ -171,6 +174,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
   display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--cp-blue-dark);
 }
 .cp-empty-icon svg{width:28px;height:28px;}
+.cp-empty-icon i{font-size:24px;line-height:1}
 .cp-empty h3{font-family:var(--cp-font-head);font-weight:700;font-size:1.15rem;color:var(--cp-navy);text-transform:uppercase;margin:0 0 8px;}
 .cp-empty p{font-size:.86rem;color:var(--cp-text-light);margin:0 0 22px;}
 .cp-empty-btn{
@@ -180,6 +184,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
 }
 .cp-empty-btn:hover{background:#5b8e26;transform:translateY(-2px);}
 .cp-empty-btn svg{width:14px;height:14px;}
+.cp-empty-btn i{font-size:12px;line-height:1}
 
 /* ============================================================
    ORDER SUMMARY SIDEBAR
@@ -207,9 +212,11 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
 }
 .cp-checkout-btn:hover{background:#5b8e26;transform:translateY(-2px);}
 .cp-checkout-btn svg{width:16px;height:16px;}
+.cp-checkout-btn i{font-size:14px;line-height:1}
 .cp-checkout-btn:disabled{opacity:.7;cursor:wait;transform:none;}
 .cp-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.72rem;color:var(--cp-text-light);padding:0 22px 20px;}
 .cp-secure svg{width:12px;height:12px;flex-shrink:0;}
+.cp-secure i{font-size:10px;line-height:1}
 
 /* ============================================================
    TRUST STRIP
@@ -226,6 +233,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
   display:flex;align-items:center;justify-content:center;color:var(--cp-blue-dark);
 }
 .cp-trust-icon svg{width:19px;height:19px;}
+.cp-trust-icon i{font-size:16px;line-height:1}
 .cp-trust-title{font-family:var(--cp-font-head);font-weight:600;font-size:.85rem;color:var(--cp-text);}
 .cp-trust-sub{font-size:.78rem;color:var(--cp-text-light);line-height:1.5;}
 
@@ -251,6 +259,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
   .cp-summary-total span:last-child,
   .cp-summary-total .amount{font-size:1.1rem !important;}
 }
+i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
 </style>
 
 <div class="cp-page">
@@ -259,7 +268,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
     <h1 class="cp-title">Your Cart</h1>
     <nav class="cp-breadcrumb">
       <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
       <span class="current">Cart</span>
     </nav>
   </div>
@@ -329,7 +338,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
                   <td class="cp-subtotal"><?php echo WC()->cart->get_product_subtotal( $cp_product, $cp_item['quantity'] ); ?></td>
                   <td class="cp-action-cell">
                     <a href="<?php echo esc_url( wc_get_cart_remove_url( $cp_key ) ); ?>" class="cp-remove-btn" aria-label="Remove this item" data-product_id="<?php echo esc_attr( $cp_pid ); ?>">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                      <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
                     </a>
                   </td>
                 </tr>
@@ -353,7 +362,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
             ?>
             <div class="cp-mitem" data-key="<?php echo esc_attr( $cp_key ); ?>" data-price="<?php echo esc_attr( (float) $cp_product->get_price() ); ?>">
               <a href="<?php echo esc_url( wc_get_cart_remove_url( $cp_key ) ); ?>" class="cp-remove-btn cp-mitem-remove" aria-label="Remove this item" data-product_id="<?php echo esc_attr( $cp_pid ); ?>">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
               </a>
               <div class="cp-prod-thumb"><?php echo $cp_product->get_image( 'thumbnail' ); ?></div>
               <div class="cp-mitem-info">
@@ -380,7 +389,7 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
 
           <div class="cp-continue-row">
             <a href="<?php echo esc_url( function_exists('wc_get_page_id') ? get_permalink( wc_get_page_id('shop') ) : home_url('/shop') ); ?>" class="cp-continue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
               Continue Shopping
             </a>
           </div>
@@ -390,13 +399,13 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
 
         <div class="cp-empty">
           <div class="cp-empty-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
+            <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
           </div>
           <h3>Your Cart Is Empty</h3>
           <p>You haven't added anything to your cart yet.</p>
           <a href="<?php echo esc_url( function_exists('wc_get_page_id') ? get_permalink( wc_get_page_id('shop') ) : home_url('/shop') ); ?>" class="cp-empty-btn">
             Start Shopping
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
 
@@ -440,11 +449,11 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
           <div class="cp-checkout-wrap">
             <button type="button" class="cp-checkout-btn" id="cpCheckoutBtn" data-checkout-url="<?php echo esc_url( wc_get_checkout_url() ); ?>">
               Proceed to Checkout
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
           <div class="cp-secure">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
             Secure Checkout
           </div>
         </div>
@@ -458,19 +467,19 @@ table.cp-table tbody tr:last-child td{border-bottom:none;}
   <div class="cp-wrap cp-trust-wrap">
     <div class="cp-trust">
       <div class="cp-trust-item">
-        <div class="cp-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="cp-trust-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
         <div><div class="cp-trust-title">100% Authentic Products</div><div class="cp-trust-sub">We guarantee genuine and high-quality products.</div></div>
       </div>
       <div class="cp-trust-item">
-        <div class="cp-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <div class="cp-trust-icon"><i class="fa-solid fa-truck" aria-hidden="true"></i></div>
         <div><div class="cp-trust-title">Fast Delivery</div><div class="cp-trust-sub">Get your medicines delivered fast to your doorstep.</div></div>
       </div>
       <div class="cp-trust-item">
-        <div class="cp-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></div>
+        <div class="cp-trust-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
         <div><div class="cp-trust-title">Expert Support</div><div class="cp-trust-sub">Our team is always here to assist you.</div></div>
       </div>
       <div class="cp-trust-item">
-        <div class="cp-trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="cp-trust-icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
         <div><div class="cp-trust-title">Secure Shopping</div><div class="cp-trust-sub">Your data and payments are always protected.</div></div>
       </div>
     </div>

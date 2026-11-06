@@ -89,6 +89,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
   box-shadow:0 16px 34px rgba(14,35,88,.14);
 }
 .lc-hero-badge svg{width:52px;height:52px;color:var(--lc-blue);}
+.lc-hero-badge i{font-size:44px;line-height:1}
 
 /* decorative soft wave at hero base */
 .lc-hero-wave{
@@ -138,6 +139,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
   display:flex;align-items:center;justify-content:center;color:var(--lc-blue-dark);flex-shrink:0;
 }
 .lc-info-icon svg{width:19px;height:19px;}
+.lc-info-icon i{font-size:16px;line-height:1}
 .lc-info-label{font-size:.78rem;color:var(--lc-text-light);margin-bottom:3px;}
 .lc-info-value{font-family:var(--lc-font-head);font-weight:700;font-size:.94rem;color:var(--lc-navy);line-height:1.4;word-break:break-word;}
 .lc-info-sub{font-size:.78rem;color:var(--lc-text-light);margin-top:3px;line-height:1.5;}
@@ -183,6 +185,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
 .lc-submit-btn:hover{background:#5b8e26;transform:translateY(-1px);}
 .lc-submit-btn:disabled{opacity:.65;cursor:default;transform:none;}
 .lc-submit-btn svg{width:16px;height:16px;}
+.lc-submit-btn i{font-size:14px;line-height:1}
 
 .lc-toast{
   display:flex;gap:9px;align-items:flex-start;border-radius:10px;font-size:.82rem;font-weight:600;
@@ -232,6 +235,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
   .lc-form-card{margin-top:100px;}
   .lc-map-frame{height:280px;}
 }
+i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
 </style>
 
 <div class="lc-page">
@@ -246,7 +250,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
       </div>
       <div class="lc-hero-media">
         <div class="lc-hero-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5.5-3.5 9.7-8 11-4.5-1.3-8-5.5-8-11V5l8-3z"/><line x1="12" y1="8" x2="12" y2="14"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
         </div>
       </div>
     </div>
@@ -260,7 +264,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
       <!-- INFO CARDS -->
       <div class="lc-info-grid">
         <div class="lc-info-card">
-          <div class="lc-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div class="lc-info-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
           <div>
             <div class="lc-info-label">Phone / WhatsApp</div>
             <div class="lc-info-value"><a href="tel:+<?php echo esc_attr( $lc_wa ); ?>"><?php echo esc_html( $lc_phone ); ?></a></div>
@@ -269,7 +273,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
         </div>
 
         <div class="lc-info-card">
-          <div class="lc-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="lc-info-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
           <div>
             <div class="lc-info-label">Email Us</div>
             <div class="lc-info-value"><a href="mailto:<?php echo esc_attr( $lc_email ); ?>"><?php echo esc_html( $lc_email ); ?></a></div>
@@ -278,7 +282,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
         </div>
 
         <div class="lc-info-card">
-          <div class="lc-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="lc-info-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></div>
           <div>
             <div class="lc-info-label">Our Location</div>
             <div class="lc-info-value"><?php echo esc_html( $lc_addr ); ?></div>
@@ -287,7 +291,7 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
         </div>
 
         <div class="lc-info-card">
-          <div class="lc-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="lc-info-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></div>
           <div>
             <div class="lc-info-label">Business Hours</div>
             <div class="lc-info-value">Mon - Sat: 8:00 AM - 8:00 PM</div>
@@ -338,17 +342,17 @@ $lc_map_src  = 'https://www.google.com/maps?q=' . rawurlencode( $lc_addr ) . '&o
           </div>
 
           <button type="button" class="lc-submit-btn" id="lcSubmitBtn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
             Send Message
           </button>
 
           <div class="lc-toast lc-toast-success" id="lcSuccess" role="alert" aria-live="polite">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <i class="fa-solid fa-check" style="font-size:16px;line-height:1;" aria-hidden="true"></i>
             <span>Thanks for reaching out to Leshavin Pharmacy! Our team will get back to you shortly. For urgent matters, WhatsApp us on <a href="https://wa.me/<?php echo esc_attr( $lc_wa ); ?>" style="color:inherit;text-decoration:underline;font-weight:800;" target="_blank" rel="noopener"><?php echo esc_html( $lc_phone ); ?></a>.</span>
           </div>
 
           <div class="lc-toast lc-toast-error" id="lcError" role="alert" aria-live="polite">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+            <i class="fa-solid fa-circle-exclamation" style="font-size:16px;line-height:1;" aria-hidden="true"></i>
             <span id="lcErrorText"></span>
           </div>
         </form>

@@ -101,6 +101,7 @@ body{font-family:var(--lph-font-body);}
 .lph-topbar-info{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
 .lph-topbar-item{display:flex;align-items:center;gap:7px;white-space:nowrap;}
 .lph-topbar-item svg{width:13px;height:13px;flex-shrink:0;color:var(--lph-green);}
+.lph-topbar-item i{font-size:11px;line-height:1}
 .lph-topbar-item a{color:inherit;text-decoration:none;}
 .lph-topbar-item a:hover{color:#fff;}
 .lph-topbar-phone-only{display:none;}
@@ -113,6 +114,7 @@ body{font-family:var(--lph-font-body);}
 }
 .lph-tsoc:hover{background:var(--lph-green-dark);transform:translateY(-1px);}
 .lph-tsoc svg{width:11px;height:11px;}
+.lph-tsoc i{font-size:9px;line-height:1}
 
 /* ============================================================
    STICKY WRAP — holds main header + desktop navbar.
@@ -196,12 +198,14 @@ body{font-family:var(--lph-font-body);}
 .lph-search button{background:var(--lph-blue-dark);color:#fff;border:none;padding:0 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0;}
 .lph-search button:hover{background:var(--lph-navy);}
 .lph-search button svg{width:16px;height:16px;}
+.lph-search button i{font-size:14px;line-height:1}
 
 .lph-header-actions{display:flex;align-items:center;gap:22px;flex-shrink:0;margin-left:auto;}
 
 .lph-call{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--lph-text);white-space:nowrap;}
 .lph-call-icon{width:38px;height:38px;border-radius:50%;background:var(--lph-blue-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .lph-call-icon svg{width:17px;height:17px;color:var(--lph-blue-dark);}
+.lph-call-icon i{font-size:14px;line-height:1}
 .lph-call-text{display:flex;flex-direction:column;line-height:1.2;}
 .lph-call-label{font-size:.68rem;color:var(--lph-text-light);}
 .lph-call-num{font-family:var(--lph-font-head);font-size:.92rem;font-weight:600;color:var(--lph-blue-dark);}
@@ -213,6 +217,7 @@ body{font-family:var(--lph-font-body);}
 .lph-cart{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--lph-text);white-space:nowrap;position:relative;}
 .lph-cart-icon-wrap{width:38px;height:38px;border-radius:50%;background:var(--lph-green-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
 .lph-cart-icon-wrap svg{width:17px;height:17px;color:var(--lph-green-dark);}
+.lph-cart-icon-wrap i{font-size:14px;line-height:1}
 .lph-cart-badge{position:absolute;top:-4px;right:-4px;background:var(--lph-green-dark);color:#fff;font-size:.62rem;font-weight:700;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #fff;}
 .lph-cart-text{display:flex;flex-direction:column;justify-content:center;line-height:1.2;min-width:0;}
 .lph-cart-label{font-size:.68rem;color:var(--lph-text-light);}
@@ -253,6 +258,7 @@ body{font-family:var(--lph-font-body);}
 
 .lph-cart-empty{padding:18px 4px;text-align:center;font-size:.82rem;color:var(--lph-text-light);}
 .lph-cart-empty svg{width:30px;height:30px;color:var(--lph-border);margin-bottom:8px;}
+.lph-cart-empty i{font-size:26px;line-height:1}
 
 .lph-cart-subtotal-row{
   display:flex;align-items:center;justify-content:space-between;
@@ -306,6 +312,7 @@ body{font-family:var(--lph-font-body);}
   background:rgba(0,0,0,.16);color:var(--lph-green);border-bottom-color:var(--lph-green);
 }
 .lph-navbar-list > li > a svg{width:11px;height:11px;flex-shrink:0;transition:transform .2s;}
+.lph-navbar-list > li > a i{font-size:9px;line-height:1}
 .lph-navbar-list > li.lph-drop:hover > a svg{transform:rotate(180deg);}
 
 .lph-nav-spacer{flex:1;}
@@ -388,6 +395,7 @@ body{font-family:var(--lph-font-body);}
 }
 .lph-mnav summary::-webkit-details-marker{display:none;}
 .lph-mnav summary svg{width:11px;height:11px;transition:transform .2s;flex-shrink:0;color:var(--lph-text-light);}
+.lph-mnav summary i{font-size:9px;line-height:1}
 .lph-mnav details[open] summary svg{transform:rotate(180deg);}
 .lph-mnav details[open] summary{background:var(--lph-green-pale);color:var(--lph-green-dark);}
 .lph-mnav-sub{padding:4px 0 8px;background:#fafbfc;}
@@ -539,8 +547,10 @@ body{font-family:var(--lph-font-body);}
   .lph-header-actions{gap:6px;padding:0 8px;}
   .lph-cart-total{font-size:.64rem;max-width:56px;}
 }
+i.fa-solid,i.fa-regular,i.fa-brands{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
 </style>
 <?php wp_head(); ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
@@ -568,7 +578,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
   <details>
     <summary>
       Shop
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
     </summary>
     <div class="lph-mnav-sub">
       <?php if ( $lph_categories && ! is_wp_error( $lph_categories ) && count( $lph_categories ) ) : ?>
@@ -585,7 +595,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
   <details>
     <summary>
       Brands
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
     </summary>
     <div class="lph-mnav-sub">
       <?php foreach ( $lph_brands as $lph_brand ) : ?>
@@ -606,31 +616,31 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
 <div class="lph-topbar" id="lphTopbar">
   <div class="lph-topbar-info">
     <span class="lph-topbar-item lph-topbar-phone-only">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      <i class="fa-solid fa-phone" aria-hidden="true"></i>
       <a href="tel:+<?php echo esc_attr( leshavin_phone() ); ?>"><?php echo esc_html( leshavin_phone_display() ); ?></a>
     </span>
     <span class="lph-topbar-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <i class="fa-solid fa-envelope" aria-hidden="true"></i>
       <a href="mailto:<?php echo esc_attr( leshavin_email() ); ?>"><?php echo esc_html( leshavin_email() ); ?></a>
     </span>
     <span class="lph-topbar-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
       <?php echo esc_html( leshavin_location() ); ?>
     </span>
     <span class="lph-topbar-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <i class="fa-regular fa-clock" aria-hidden="true"></i>
       <?php echo esc_html( leshavin_hours() ); ?>
     </span>
   </div>
   <div class="lph-topbar-socials">
     <a href="<?php echo esc_url( get_option('leshavin_facebook','#') ); ?>" target="_blank" rel="noopener noreferrer" class="lph-tsoc" aria-label="Facebook">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
     </a>
     <a href="<?php echo esc_url( get_option('leshavin_instagram','#') ); ?>" target="_blank" rel="noopener noreferrer" class="lph-tsoc" aria-label="Instagram">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+      <i class="fa-brands fa-instagram" aria-hidden="true"></i>
     </a>
     <a href="https://wa.me/<?php echo esc_attr( leshavin_wa() ); ?>" target="_blank" rel="noopener noreferrer" class="lph-tsoc" aria-label="WhatsApp">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
     </a>
   </div>
 </div>
@@ -659,7 +669,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
         <input class="lph-search-input" type="search" name="s" placeholder="Search for medicines, health products..." value="<?php echo get_search_query(); ?>">
         <input type="hidden" name="post_type" value="product">
         <button type="submit" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         </button>
       </form>
     </div>
@@ -667,7 +677,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
     <div class="lph-header-actions">
       <a href="https://wa.me/<?php echo esc_attr( leshavin_wa() ); ?>" target="_blank" rel="noopener noreferrer" class="lph-call">
         <span class="lph-call-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <i class="fa-solid fa-phone" aria-hidden="true"></i>
         </span>
         <span class="lph-call-text">
           <span class="lph-call-label">Call / WhatsApp</span>
@@ -685,7 +695,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
       <div class="lph-cart-wrap">
         <a href="<?php echo esc_url( $lph_cart_url ); ?>" class="lph-cart" aria-label="View cart, total <?php echo esc_attr( wp_strip_all_tags( $lph_cart_total ) ); ?>">
           <span class="lph-cart-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 00 1.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
+            <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
             <?php if ( $lph_cart_count > 0 ) : ?>
               <span class="lph-cart-badge"><?php echo intval( $lph_cart_count ); ?></span>
             <?php endif; ?>
@@ -721,7 +731,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
                     <?php if ( $lph_ci_img ) : ?>
                       <img src="<?php echo esc_url( $lph_ci_img ); ?>" alt="<?php echo esc_attr( $lph_ci_name ); ?>">
                     <?php else : ?>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--lph-blue-dark);opacity:.4;"><path d="M10.5 3.5a6 6 0 018 8l-8.5 8.5a6 6 0 01-8-8l8.5-8.5z"/></svg>
+                      <i class="fa-solid fa-pills" style="font-size:18px;line-height:1;color:var(--lph-blue-dark);opacity:.4;" aria-hidden="true"></i>
                     <?php endif; ?>
                   </div>
                   <div class="lph-cart-item-info">
@@ -745,7 +755,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
 
             <?php else : ?>
               <div class="lph-cart-empty">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.97 1.61h9.72a2 2 0 001.97-1.67L23 6H6"/></svg>
+                <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
                 <div>Your cart is empty.</div>
               </div>
               <div class="lph-cart-dropdown-btns lph-cart-dropdown-btns-single">
@@ -767,7 +777,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
       <li class="lph-drop">
         <a href="<?php echo esc_url( $lph_shop_url ); ?>">
           Shop
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
         </a>
         <div class="lph-dropdown">
           <?php if ( $lph_categories && ! is_wp_error( $lph_categories ) && count( $lph_categories ) ) : ?>
@@ -784,7 +794,7 @@ $lph_has_brands  = $lph_brands && ! is_wp_error( $lph_brands ) && count( $lph_br
       <li class="lph-drop">
         <a href="#" onclick="return false;">
           Brands
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
         </a>
         <div class="lph-dropdown">
           <?php foreach ( $lph_brands as $lph_brand ) : ?>
