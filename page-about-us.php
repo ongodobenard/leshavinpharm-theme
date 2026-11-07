@@ -130,7 +130,7 @@ $ab_shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_
 .ab-offer-head p{font-size:.92rem;line-height:1.75;color:var(--ab-text-light);margin:0;}
 .ab-offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 .ab-offer-card{
-  background:#fff;border:1.5px solid var(--ab-border);border-top:4px solid var(--ab-green);
+  background:#fff;border:1.5px solid var(--ab-border);
   border-radius:12px;padding:26px 24px;
 }
 .ab-offer-icon{
