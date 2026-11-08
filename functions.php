@@ -1024,3 +1024,73 @@ add_action('wp_head', function() {
 // ─── MISC ─────────────────────────────────────
 add_filter('excerpt_length', fn() => 18, 999);
 add_filter('excerpt_more', fn() => '…');
+
+// ---- Header cart: live refresh after AJAX add/remove ----
+if ( ! function_exists('leshavin_header_cart_html') ) {
+function leshavin_header_cart_html() {
+  if ( ! function_exists('WC') || ! WC()->cart ) return '';
+  $count    = WC()->cart->get_cart_contents_count();
+  $total    = WC()->cart->get_cart_total();
+  $cart_url = wc_get_cart_url();
+  $chk_url  = wc_get_checkout_url();
+  $shop_url = get_permalink( wc_get_page_id('shop') );
+  $items    = WC()->cart->get_cart();
+  ob_start(); ?>
+  <div class="lph-cart-wrap">
+    <a href="<?php echo esc_url( $cart_url ); ?>" class="lph-cart" aria-label="View cart, total <?php echo esc_attr( wp_strip_all_tags( $total ) ); ?>">
+      <span class="lph-cart-icon-wrap">
+        <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+        <?php if ( $count > 0 ) : ?><span class="lph-cart-badge"><?php echo intval( $count ); ?></span><?php endif; ?>
+      </span>
+      <span class="lph-cart-text">
+        <span class="lph-cart-label">My Cart</span>
+        <span class="lph-cart-total"><?php echo $total; ?></span>
+      </span>
+    </a>
+    <div class="lph-cart-dropdown"><div class="lph-cart-dropdown-inner">
+      <div class="lph-cart-dropdown-head">Shopping Cart (<?php echo intval( $count ); ?>)</div>
+      <?php if ( ! empty( $items ) ) : ?>
+        <div class="lph-cart-items">
+          <?php foreach ( $items as $ci ) :
+            $p = $ci['data']; if ( ! $p ) continue;
+            $img = $p->get_image_id() ? wp_get_attachment_image_url( $p->get_image_id(), 'thumbnail' ) : '';
+          ?>
+          <div class="lph-cart-item">
+            <div class="lph-cart-item-img">
+              <?php if ( $img ) : ?><img src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $p->get_name() ); ?>">
+              <?php else : ?><i class="fa-solid fa-pills" style="font-size:18px;opacity:.4;" aria-hidden="true"></i><?php endif; ?>
+            </div>
+            <div class="lph-cart-item-info">
+              <div class="lph-cart-item-name"><?php echo esc_html( $p->get_name() ); ?></div>
+              <div class="lph-cart-item-meta">Qty: <?php echo intval( $ci['quantity'] ); ?></div>
+            </div>
+            <div class="lph-cart-item-price"><?php echo WC()->cart->get_product_subtotal( $p, $ci['quantity'] ); ?></div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        <div class="lph-cart-subtotal-row"><span>Subtotal</span><span><?php echo WC()->cart->get_cart_subtotal(); ?></span></div>
+        <div class="lph-cart-dropdown-btns">
+          <a href="<?php echo esc_url( $cart_url ); ?>" class="lph-cart-btn-view">View Cart</a>
+          <a href="<?php echo esc_url( $chk_url ); ?>" class="lph-cart-btn-checkout">Checkout</a>
+        </div>
+      <?php else : ?>
+        <div class="lph-cart-empty"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><div>Your cart is empty.</div></div>
+        <div class="lph-cart-dropdown-btns lph-cart-dropdown-btns-single">
+          <a href="<?php echo esc_url( $shop_url ); ?>" class="lph-cart-btn-view">Browse Products</a>
+        </div>
+      <?php endif; ?>
+    </div></div>
+  </div>
+  <?php
+  return ob_get_clean();
+}
+}
+
+add_filter( 'woocommerce_add_to_cart_fragments', function ( $fragments ) {
+  $fragments['div.lph-cart-wrap'] = leshavin_header_cart_html();
+  return $fragments;
+} );
+
+add_action( 'wp_enqueue_scripts', function () {
+  if ( function_exists('is_woocommerce') ) wp_enqueue_script( 'wc-cart-fragments' );
+}, 20 );
